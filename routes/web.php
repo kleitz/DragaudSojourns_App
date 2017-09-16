@@ -11,6 +11,8 @@
 |
 */
 
+
+
 // PUBLIC PAGES - BUILD 1.0
 Route::get('/', function () {
     return view('public.index');

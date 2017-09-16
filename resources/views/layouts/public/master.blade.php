@@ -27,6 +27,9 @@
   <link href="{{ url('/assets/public/css/global.css') }}" rel="stylesheet" type="text/css" />
   <!--end css-->
 
+  <!-- DS_App Login Styling -->
+  <link href="{{ url('/css/login.css') }}" rel="stylesheet" type="text/css" />
+
   <!--start cufon-->
   <script src="{{ url('/assets/public/js/cufon-yui.js') }}" type="text/javascript"></script>
 	<script src="{{ url('/assets/public/js/District_100.font.js') }}" type="text/javascript"></script>
@@ -37,15 +40,16 @@
   <!--end cufon-->
 
   <!--start slides-->
+  <script src="/js/jquery.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-  <script src="{{ url('/assets/public/js/slides.min.jquery.js') }}"></script>
+  <script src="/assets/public/js/slides.min.jquery.js"></script>
 
 
   	<script>
   		$(function(){
   			$('#slides').slides({
   				preload: true,
-  				preloadImage: "{{ url('/assets/public/img/loading.gif') }}",
+  				preloadImage: "/assets/public/img/loading.gif",
   				play: 5000,
   				pause: 2500,
     				slideSpeed: 1000,
@@ -120,7 +124,7 @@
   <div class="backgroundtop">
     <img src="{{ url('/assets/public/img/dragoo-top.png') }}"/>
   </div>
-
+  @include('partials.login.button')
   <div class="container">
     <div class="header">
       <a href="{{ url('/') }}" class="studenttoursheader"><h1>Student Tours of Distinction</h1></a>
@@ -131,4 +135,5 @@
   </div><!--close container-->
   @include('layouts.public.footer')
 </body>
+<script src="/js/login.js" type="text/javascript"></script>
 </html>
