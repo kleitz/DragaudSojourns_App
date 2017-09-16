@@ -1,15 +1,15 @@
 <div class="login-container">
   <div>
-    <a id="login-button" class="login-button flex-abs-center" href="javascript:;">
+    <span id="login-button" class="login-button flex-abs-center pointer" href="javascript:;">
       <div class="login-icon">
         <img src="/assets/images/icons/enter_arrow.png"/>
       </div>
       <span id="login-button-context">REGISTER/LOGIN</span>
-    </a>
+    </span>
   </div>
   <div id="login-modal" class="login-modal modal-ds">
     <div class="flex-row-reverse">
-      <a href="javascript:;" id="login-close" class="modal-ds-close">X</a>
+      <span id="login-close" class="modal-ds-close pointer">X</span>
     </div>
     <div class="modal-ds-label">
       <h5>LOG IN</h5>
@@ -28,10 +28,10 @@
         <a href="javascript:;" id="login-attempt" class="modal-ds-button">Continue</a>
       </div>
       <div class="flex-row-between">
-        <a href="javascript:;" id="login-password-reset" class="modal-ds-link">
+        <a href="javascript:;" id="login-pwreset" class="modal-ds-link">
           FORGOT PASSWORD?
         </a>
-        <a href="javascript:;" id="login-password-reset" class="modal-ds-link">
+        <a href="javascript:;" id="login-register" class="modal-ds-link">
           CREATE AN ACCOUNT
         </a>
       </div>

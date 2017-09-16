@@ -30,7 +30,8 @@ $(document).ready(function(){
     $('#login-modal').addClass('login-modal-reveal');
   });
   // Close login form
-  $("#login-close").click(function(){
+
+  function hideLoginForm(){
     $("#login-button").removeClass('login-button-active');
     $('#login-modal').removeClass('login-modal-reveal');
     $("#login-email").removeClass('ds-form-error');
@@ -38,10 +39,15 @@ $(document).ready(function(){
     $("#login-pass").removeClass('ds-form-error');
     $("#login-pass-err").removeClass('ds-show-errmsg');
     $("#login-pass").removeClass('pass-bullets');
+    $("#login-details-err").addClass('hidden');
     $("#login-email").val("");
     $("#login-pass").val("");
     emailAttempt = 0;
     passAttempt = 0;
+  }
+
+  $("#login-close").click(function(){
+    hideLoginForm()
   })
   // Attempt to login
   $("#login-attempt").click(function(){
@@ -57,17 +63,23 @@ $(document).ready(function(){
       $("#login-pass").addClass('ds-form-error');
     }
     if (emailBool == true && $("#login-pass").val() != "" ) {
-      if ($("#login-email").val() == "jjvannatta88@gmail.com" &&
+      $("#dark-overlay").removeClass('hidden');
+      $("#login-loader").removeClass('hidden');
+      setTimeout(function(){
+        if ($("#login-email").val() == "jjvannatta88@gmail.com" &&
           $("#login-pass").val() == "Quasar88") {
             alert("You did stuffs");
             $('#login-details-err').addClass('hidden');
           } else {
+            $("#dark-overlay").addClass('hidden');
+            $("#login-loader").addClass('hidden');
             $('#login-details-err').removeClass('hidden');
           }
-    }
+        }, 2000);
+      }
   })
 
-  // Validate user login details
+  // Validate user login email
   $("#login-email").keyup(function(){
     $('#login-details-err').addClass('hidden');
     if (emailAttempt == 1) {
@@ -82,6 +94,7 @@ $(document).ready(function(){
     }
   })
 
+  // Validate user login password
   $("#login-pass").keyup(function(){
     $('#login-details-err').addClass('hidden');
     if (passAttempt == 1) {
@@ -99,4 +112,72 @@ $(document).ready(function(){
       $("#login-pass").addClass('pass-bullets');
     }
   })
+
+  // Display reset password box
+  $("#login-pwreset").click(function(){
+    $("#dark-overlay").removeClass('hidden');
+    $("#overlay-public-pwreset").removeClass('hidden');
+  })
+
+  // Display registration box
+  $("#login-register").click(function(){
+      hideLoginForm();
+    $("#dark-overlay").removeClass('hidden');
+    $("#msform").removeClass('hidden');
+  })
+
+  // Send password reset email
+
+  let resetEmailAttempt = 0;
+  $("#pwreset-confirm").click(function(){
+    var emailBool = validEmail($("#pwreset-email").val());
+    if (emailBool == false) {
+       $("#pwreset-email").addClass('ds-form-error');
+       $("#pwreset-email-err").addClass('ds-show-errmsg');
+       resetEmailAttempt = 1;
+    } else {
+      // Send email function / display message
+      $("#pwreset-email").removeClass('ds-form-error');
+      $("#pwreset-email-err").removeClass('ds-show-errmsg');
+      $("#overlay-public-pwreset").addClass('hidden');
+      $("#pwreset-email").val('');
+      $("#pwreset-loader").removeClass('hidden');
+      setTimeout(function(){
+          $("#pwreset-loader").addClass('hidden');
+          $("#pwreset-success").removeClass('hidden');
+      }, 2000);
+    }
+  })
+
+  // Validate reset email
+
+  $("#pwreset-email").keyup(function(){
+    if (resetEmailAttempt == 1) {
+      var emailBool = validEmail($("#pwreset-email").val());
+      if (emailBool == false) {
+         $("#pwreset-email").addClass('ds-form-error');
+         $("#pwreset-email-err").addClass('ds-show-errmsg');
+      } else {
+        $("#pwreset-email").removeClass('ds-form-error');
+        $("#pwreset-email-err").removeClass('ds-show-errmsg');
+      }
+    }
+  })
+
+  // Close reset password box
+  $("#pwreset-cancel").click(function(){
+    $("#dark-overlay").addClass('hidden');
+    $("#overlay-public-pwreset").addClass('hidden');
+  })
+
+  // Close pw success box
+  $("#pwreset-success-close").click(function(){
+    $("#dark-overlay").addClass('hidden');
+    $("#pwreset-success").addClass('hidden');
+  })
+  $("#pwreset-success-button").click(function(){
+    $("#dark-overlay").addClass('hidden');
+    $("#pwreset-success").addClass('hidden');
+  })
+
 })

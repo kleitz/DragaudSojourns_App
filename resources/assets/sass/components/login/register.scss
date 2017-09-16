@@ -1,17 +1,17 @@
-
 // ----------------------------------------------- //
 // MULTI-STEP LOGIN
 // ----------------------------------------------- //
 
-/*custom font*/
-@import url(http://fonts.googleapis.com/css?family=Montserrat);
+// /*custom font*/
+// @import url(http://fonts.googleapis.com/css?family=Alegreya Sans);
 
 /*form styles*/
 #msform {
-	width: 400px;
+	width: 450px;
 	margin: 50px auto;
 	text-align: center;
-	position: relative;
+	position: absolute;
+	top: 100px;
 }
 #msform fieldset {
 	background: white;
@@ -33,47 +33,56 @@
 }
 /*inputs*/
 #msform input, #msform textarea {
-	padding: 15px;
+	padding: 14px 12px;
 	border: 1px solid #ccc;
+	max-width: 300px;
+
 	border-radius: 3px;
 	margin-bottom: 10px;
 	width: 100%;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
-	font-family: montserrat;
+	font-family: Alegreya Sans;
 	color: #2C3E50;
-	font-size: 13px;
+	font-size: 16px;
 }
 /*buttons*/
 #msform .action-button {
 	width: 100px;
-	background: #27AE60;
+	background: $blue-med;
 	font-weight: bold;
 	color: white;
 	border: 0 none;
 	border-radius: 1px;
 	cursor: pointer;
 	padding: 10px 5px;
-	margin: 10px 5px;
+	margin: 20px 5px 10px
 }
 #msform .action-button:hover, #msform .action-button:focus {
-	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+	box-shadow: 0 0 0 2px white, 0 0 0 3px $blue-med;
+}
+.msform-close {
+	position: absolute;
+	right: 6px;
+	top: 16px;
 }
 /*headings*/
 .fs-title {
-	font-size: 15px;
+	font-size: 24px;
 	text-transform: uppercase;
-	color: #2C3E50;
-	margin-bottom: 10px;
+	font-weight: 400;
+	color: #444;
+	margin: 25px 0 5px;
 }
 .fs-subtitle {
 	font-weight: normal;
-	font-size: 13px;
+	font-size: 18px;
 	color: #666;
 	margin-bottom: 20px;
 }
 /*progressbar*/
 #progressbar {
-	margin-bottom: 30px;
+	margin: 0 auto 30px;
 	overflow: hidden;
 	/*CSS counters to number the steps*/
 	counter-reset: step;
@@ -82,7 +91,7 @@
 	list-style-type: none;
 	color: white;
 	text-transform: uppercase;
-	font-size: 9px;
+	font-size: 13px;
 	width: 33.33%;
 	float: left;
 	position: relative;
@@ -117,6 +126,6 @@
 /*marking active/completed steps green*/
 /*The number of the step and the connector before it = green*/
 #progressbar li.active:before,  #progressbar li.active:after{
-	background: #27AE60;
+	background: $blue-med;
 	color: white;
 }

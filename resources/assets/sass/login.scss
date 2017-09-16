@@ -1,13 +1,17 @@
-@import "./components/master.css";
-
 // Variables
 @import "./_variables.scss";
+
+// Master classes
+@import "./components/master.scss";
 
 // Login button
 @import "./components/login/register.scss";
 
 // New account
 @import "./components/login/button.scss";
+
+// Partials
+@import "./components/partials/overlay.scss";
 
 // Fonts
 @import "./components/fonts/alegreya_sans.scss";

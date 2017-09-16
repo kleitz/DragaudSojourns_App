@@ -13,6 +13,7 @@
   <link rel="mask-icon" href="{{ url('assets/public/favicon/safari-pinned-tab.svg') }}" color="#cb9753">
   <link rel="shortcut icon" href="{{ url('assets/public/favicon/favicon.ico') }}">
   <meta name="msapplication-config" content="{{ url('assets/public/favicon/browserconfig.xml') }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="theme-color" content="#cb9753">
 
   <META NAME="Author" "VN Web Designs">
@@ -25,6 +26,7 @@
   <!--start css-->
   <link href="{{ url('/assets/public/css/sojournsstyle.css') }}" rel="stylesheet" type="text/css" />
   <link href="{{ url('/assets/public/css/global.css') }}" rel="stylesheet" type="text/css" />
+   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!--end css-->
 
   <!-- DS_App Login Styling -->
@@ -134,6 +136,7 @@
     @include('layouts.public.nav_slider')
   </div><!--close container-->
   @include('layouts.public.footer')
+  @include('layouts.public.overlay')
 </body>
 <script src="/js/login.js" type="text/javascript"></script>
 </html>

@@ -1,4 +1,6 @@
-// Button styling
+// ----------------------------------------------- //
+// LOGIN BUTTON
+// ----------------------------------------------- //
 
 .login-container {
   position: absolute;
@@ -69,7 +71,9 @@
   box-shadow: 2px 2px 1px rgba(0, 0, 0, 0.5);
 }
 
-// Login dialogue
+// ----------------------------------------------- //
+// LOGIN DIALOGE BOX
+// ----------------------------------------------- //
 
 .login-modal {
   border: 1px solid #777;
@@ -79,6 +83,7 @@
   display: none;
   background: white;
   box-shadow: 2px 2px 1px rgba(0,0,0,0.3);
+  min-width: 300px;
 }
 
 .login-modal-reveal {
@@ -116,7 +121,8 @@
 
 .modal-ds-form input {
   transition: 0s;
-  width: 250px;
+  box-sizing: border-box;
+  width: 100%;
   border: 1px solid #ddd;
   font-size: 20px;
   padding: 8px 0 8px 15px;
@@ -173,7 +179,6 @@
     font-weight: 200;
     font-size: 20px;
     padding: 5px;
-    margin: 10px 0 30px;
     color: white;
     background-color: $blue-med;
 }
@@ -219,10 +224,13 @@
   position: relative;
 }
 
+#login-attempt {
+  margin: 10px 0 30px;
+}
+
 .login-details-err {
   font-size: 15px !important;
   padding: 15px 0 15px 34px !important;
-  width: 230px !important;
   color: #cc3636;
   border-radius: 5px;
 }
