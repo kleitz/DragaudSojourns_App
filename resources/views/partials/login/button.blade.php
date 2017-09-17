@@ -17,14 +17,14 @@
     <div class="modal-ds-content">
       <div class="modal-ds-form" id="public-login-form">
         <div id="login-details-err" class="hidden">
-          <input class="ds-form-error login-details-err" readonly type="text" value="Your email or password are incorrect.">
+          <input class="ds-form-error login-details-err" readonly type="text" value="Your email or password is incorrect.">
             <img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
           </input>
         </div>
         <input id="login-email" name="login-email" type="text" placeholder="Email"></input>
         <span id="login-email-err" class="ds-form-errmsg">Please enter a valid email</span>
         <input id="login-pass" class="" name="login-pass" type="password" placeholder="Password"></input>
-        <span id="login-pass-err" class="ds-form-errmsg">Please enter your password</span>
+        <span id="login-pass-err" class="ds-form-errmsg">Password cannot be blank</span>
         <a href="javascript:;" id="login-attempt" class="modal-ds-button">Continue</a>
       </div>
       <div class="flex-row-between">

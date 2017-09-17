@@ -1,6 +1,9 @@
 // Variables
 @import "./_variables.scss";
 
+// Fonts
+@import "./components/fonts/alegreya_sans.scss";
+
 // Master classes
 @import "./components/master.scss";
 
@@ -13,5 +16,5 @@
 // Partials
 @import "./components/partials/overlay.scss";
 
-// Fonts
-@import "./components/fonts/alegreya_sans.scss";
+// Helpers
+@import "./components/partials/helpers.scss";

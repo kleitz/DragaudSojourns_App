@@ -1,0 +1,46 @@
+// ----------------------------------------------
+// HELPERS
+// ----------------------------------------------
+
+.helper-modal {
+  z-index: 20;
+  position: absolute;
+  padding: 10px;
+  background: #ebf0f1;
+  border-radius: 5px;
+  margin-left: -10px;
+  border: 1px solid #c3ced0;
+  box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
+}
+
+.helper-modal::after, .helper-modal::before {
+  bottom: 100%;
+  content: "";
+  left: 15%;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.helper-modal:after {
+  border-color: rgba(0,0,0,0);
+  border-bottom-color: #ebf0f1;
+  border-width: 10px;
+  margin-left: -5px;
+}
+
+.helper-modal:before{
+  border-color: rgba(0,0,0,0);
+  border-bottom-color: #c3ced0;
+  border-width: 11px;
+  margin-left: -6px;
+}
+
+.helper-modal p {
+  font-size: 15px;
+  text-align: left;
+  font-weight: 100;
+  line-height: 1.4;
+}

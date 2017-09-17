@@ -2,13 +2,11 @@
 var current_fs, next_fs, previous_fs; //fieldsets
 var left, opacity, scale; //fieldset properties which we will animate
 var animating; //flag to prevent quick multi-click glitches
+var regSwitch = 0;
 
-$(".next").click(function(){
-	if(animating) return false;
-	animating = true;
-
-	current_fs = $(this).parent();
-	next_fs = $(this).parent().next();
+function nextRegForm(x){
+	current_fs = $(x).parent();
+	next_fs = $(x).parent().next();
 
 	//activate next step on progressbar using the index of next_fs
 	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
@@ -36,7 +34,7 @@ $(".next").click(function(){
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+};
 
 $(".previous").click(function(){
 	if(animating) return false;

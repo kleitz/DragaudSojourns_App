@@ -27,7 +27,7 @@
 									</div>
 									<div class="readmore">
 									<h2>
-										<a href="greece.html">
+										<a href="/greece">
 										read more
 										</a>
 									</h2>
@@ -50,7 +50,7 @@
 									</div>
 									<div class="readmore">
 										<h2>
-											<a href="newyork.html">
+											<a href="/newyork">
 											read more
 											</a>
 										</h2>
@@ -73,7 +73,7 @@
 									</div>
 									<div class="readmore">
 										<h2>
-											<a href="london.html">
+											<a href="/london">
 											read more
 											</a>
 										</h2>
