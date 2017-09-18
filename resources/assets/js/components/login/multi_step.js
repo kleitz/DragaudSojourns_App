@@ -13,6 +13,7 @@ function nextRegForm(x){
 
 	//show the next fieldset
 	next_fs.show();
+
 	//hide the current fieldset with style
 	current_fs.animate({opacity: 0}, {
 		step: function(now, mx) {
@@ -74,3 +75,13 @@ $(".previous").click(function(){
 $(".submit").click(function(){
 	return false;
 })
+
+function resetRegistration() {
+	$('#reg-fs-one').show();
+	document.getElementById('reg-fs-one').style = "";
+	$('#reg-fs-two').hide();
+	$('#reg-fs-three').hide();
+	$("#progressbar li").eq($("fieldset").index($('#reg-fs-one'))).addClass("active");
+	$("#progressbar li").eq($("fieldset").index($('#reg-fs-two'))).removeClass("active");
+	$("#progressbar li").eq($("fieldset").index($('#reg-fs-three'))).removeClass("active");
+}

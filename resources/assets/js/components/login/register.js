@@ -1,15 +1,15 @@
 $(document).ready(function(){
   let registerClose = document.getElementsByClassName('msform-close');
   let registerInput = document.getElementsByClassName('register-input');
-  let regEmail, regPass;
+  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm'];
 
+  // Close registration box
   for (i = 0; i < registerClose.length; i++){
     $(registerClose[i]).click(function(){
       fadeOut("#dark-overlay");
       zoomOut("#msform");
-      for (j = 0; j < registerInput.length; j++){
-        $(registerInput[j]).val('');
-      }
+      validator.hideError(regArray);
+      validator.clearInputs(regArray);
     })
   }
 
@@ -18,9 +18,7 @@ $(document).ready(function(){
       regMatchAttempt = 0;
 
   function matchPass(){
-    let regPass = $("#reg-new-pass"),
-        passCheck = $("#reg-pass-confirm");
-    if (passCheck.val() == regPass.val()) {
+    if ($("#reg-new-pass").val() == $("#reg-pass-confirm").val()) {
       validator.hideError(['reg-pass-confirm']);
       return true;
     } else {
@@ -54,7 +52,7 @@ $(document).ready(function(){
   })
 
   // REGISTRATION FORMATTING : FORM 1
-  $("#reg-new-email").keyup(function(){
+  $("#reg-new-email").bind("change keyup", function(){
     if (regEmailAttempt == 1) validator.isValid([ {elem: 'reg-new-email', type: 'email'} ]);
   })
   $("#reg-new-pass").focus(function(){
@@ -65,14 +63,17 @@ $(document).ready(function(){
     fadeOut('#new-pass-helper');
   })
   $("#reg-new-pass").keyup(function(){
-    matchPass();
     validator.passFormat('reg-new-pass');
-    if (regPassAttempt == 1) validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
+    if (regPassAttempt == 1) {
+      matchPass();
+      validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
+    }
     if ($("#reg-new-pass").val() != "")
       fadeOut('#new-pass-helper');
   })
   $("#reg-pass-confirm").keyup(function(){
-    matchPass();
     validator.passFormat('reg-pass-confirm');
+    if (regPassAttempt == 1)
+      matchPass();
   })
 })

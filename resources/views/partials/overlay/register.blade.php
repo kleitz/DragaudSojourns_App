@@ -7,7 +7,7 @@
 		<li>Personal Details</li>
 	</ul>
 	<!-- fieldsets -->
-	<fieldset class="modal-ds-form">
+	<fieldset id="reg-fs-one" class="modal-ds-form">
     <div class="msform-close">
       <span class="modal-ds-close pointer">X</span>
     </div>
@@ -24,13 +24,13 @@
 		<span id="reg-pass-confirm-err" class="text-left ds-form-errmsg">Passwords do not match</span>
 		<input id="reg-next-acct" type="button" name="next" class="next action-button margin-auto" value="Next" />
 	</fieldset>
-	<fieldset class="modal-ds-form">
+	<fieldset id="reg-fs-two" class="modal-ds-form">
     <div class="msform-close">
       <span class="modal-ds-close pointer">X</span>
     </div>
 		<h4 class="fs-title">Personal Details</h2>
 		<h4 class="fs-subtitle">Tell us about yourself.</h3>
-		<input class="register-input" type="text" name="fullname" placeholder="Twitter" />
+		<input class="register-input" type="text" name="fullname" placeholder="Full name" />
     <div class="flex-row-between">
   		<input class="register-input" type="text" name="cellphone" style="margin-right: 10px" placeholder="Cell phone" />
   		<input class="register-input" type="text" name="homephone" placeholder="Home phone" />
@@ -40,7 +40,7 @@
 		<input type="button" name="previous" class="previous action-button" value="Previous" />
 		<input id="reg-next-det" type="button" name="next" class="next action-button" value="Next" />
 	</fieldset>
-	<fieldset class="modal-ds-form">
+	<fieldset id="reg-fs-three" class="modal-ds-form">
     <div class="msform-close">
       <span class="modal-ds-close pointer">X</span>
     </div>

@@ -50,7 +50,7 @@ $(document).ready(function(){
       }
   })
 
-  // Validate user login email
+  // Validate user login email after failure
   $("#login-email").keyup(function(){
     $('#login-details-err').addClass('hidden');
     if (emailAttempt == 1) {
@@ -58,7 +58,7 @@ $(document).ready(function(){
     }
   })
 
-  // Validate user login password
+  // Validate user login password after failure
   $("#login-pass").keyup(function(){
     $('#login-details-err').addClass('hidden');
     if (passAttempt == 1) {
@@ -79,6 +79,7 @@ $(document).ready(function(){
       validator.passFormat('reg-new-pass');
       validator.passFormat('reg-pass-confirm');
       hideLoginForm();
+      resetRegistration();
       fadeIn("#dark-overlay");
       zoomIn("#msform");
   })
@@ -119,13 +120,8 @@ $(document).ready(function(){
   })
 
   // Close pw success box
-  $("#pwreset-success-close").click(function(){
+  $("#pwreset-success-close, #pwreset-success-button").click(function(){
     fadeOut("#dark-overlay");
     zoomOut("#pwreset-success");
   })
-  $("#pwreset-success-button").click(function(){
-    fadeOut("#dark-overlay");
-    zoomOut("#pwreset-success");
-  })
-
 })

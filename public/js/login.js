@@ -336,6 +336,7 @@ function nextRegForm(x){
 
 	//show the next fieldset
 	next_fs.show();
+
 	//hide the current fieldset with style
 	current_fs.animate({opacity: 0}, {
 		step: function(now, mx) {
@@ -398,6 +399,16 @@ $(".submit").click(function(){
 	return false;
 })
 
+function resetRegistration() {
+	$('#reg-fs-one').show();
+	document.getElementById('reg-fs-one').style = "";
+	$('#reg-fs-two').hide();
+	$('#reg-fs-three').hide();
+	$("#progressbar li").eq($("fieldset").index($('#reg-fs-one'))).addClass("active");
+	$("#progressbar li").eq($("fieldset").index($('#reg-fs-two'))).removeClass("active");
+	$("#progressbar li").eq($("fieldset").index($('#reg-fs-three'))).removeClass("active");
+}
+
 $(document).ready(function(){
 
   let emailAttempt = 0;
@@ -450,7 +461,7 @@ $(document).ready(function(){
       }
   })
 
-  // Validate user login email
+  // Validate user login email after failure
   $("#login-email").keyup(function(){
     $('#login-details-err').addClass('hidden');
     if (emailAttempt == 1) {
@@ -458,7 +469,7 @@ $(document).ready(function(){
     }
   })
 
-  // Validate user login password
+  // Validate user login password after failure
   $("#login-pass").keyup(function(){
     $('#login-details-err').addClass('hidden');
     if (passAttempt == 1) {
@@ -479,6 +490,7 @@ $(document).ready(function(){
       validator.passFormat('reg-new-pass');
       validator.passFormat('reg-pass-confirm');
       hideLoginForm();
+      resetRegistration();
       fadeIn("#dark-overlay");
       zoomIn("#msform");
   })
@@ -519,29 +531,24 @@ $(document).ready(function(){
   })
 
   // Close pw success box
-  $("#pwreset-success-close").click(function(){
+  $("#pwreset-success-close, #pwreset-success-button").click(function(){
     fadeOut("#dark-overlay");
     zoomOut("#pwreset-success");
   })
-  $("#pwreset-success-button").click(function(){
-    fadeOut("#dark-overlay");
-    zoomOut("#pwreset-success");
-  })
-
 })
 
 $(document).ready(function(){
   let registerClose = document.getElementsByClassName('msform-close');
   let registerInput = document.getElementsByClassName('register-input');
-  let regEmail, regPass;
+  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm'];
 
+  // Close registration box
   for (i = 0; i < registerClose.length; i++){
     $(registerClose[i]).click(function(){
       fadeOut("#dark-overlay");
       zoomOut("#msform");
-      for (j = 0; j < registerInput.length; j++){
-        $(registerInput[j]).val('');
-      }
+      validator.hideError(regArray);
+      validator.clearInputs(regArray);
     })
   }
 
@@ -550,9 +557,7 @@ $(document).ready(function(){
       regMatchAttempt = 0;
 
   function matchPass(){
-    let regPass = $("#reg-new-pass"),
-        passCheck = $("#reg-pass-confirm");
-    if (passCheck.val() == regPass.val()) {
+    if ($("#reg-new-pass").val() == $("#reg-pass-confirm").val()) {
       validator.hideError(['reg-pass-confirm']);
       return true;
     } else {
@@ -586,7 +591,7 @@ $(document).ready(function(){
   })
 
   // REGISTRATION FORMATTING : FORM 1
-  $("#reg-new-email").keyup(function(){
+  $("#reg-new-email").bind("change keyup", function(){
     if (regEmailAttempt == 1) validator.isValid([ {elem: 'reg-new-email', type: 'email'} ]);
   })
   $("#reg-new-pass").focus(function(){
@@ -597,14 +602,17 @@ $(document).ready(function(){
     fadeOut('#new-pass-helper');
   })
   $("#reg-new-pass").keyup(function(){
-    matchPass();
     validator.passFormat('reg-new-pass');
-    if (regPassAttempt == 1) validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
+    if (regPassAttempt == 1) {
+      matchPass();
+      validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
+    }
     if ($("#reg-new-pass").val() != "")
       fadeOut('#new-pass-helper');
   })
   $("#reg-pass-confirm").keyup(function(){
-    matchPass();
     validator.passFormat('reg-pass-confirm');
+    if (regPassAttempt == 1)
+      matchPass();
   })
 })
