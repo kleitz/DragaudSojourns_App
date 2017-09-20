@@ -4,7 +4,7 @@ $(function() {
 		var clientKey = "D8Mt2YMqFiVPKeaM0TLtnHh4vH702ySGGE9JDW9if580kiMkbyNzg5DLMLMPjEv0";
 
 		var cache = {};
-		var container = $("#zip-autofill");
+		var container = $(".zip-autofill");
     var errorDiv = $("#zip-dataerror");
 		// var errorDiv = container.find("div.text-error");
 
