@@ -79,6 +79,8 @@ $(".submit").click(function(){
 function resetRegistration() {
 	$('#reg-fs-one').show();
 	document.getElementById('reg-fs-one').style = "";
+	document.getElementById('reg-fs-two').style = "";
+	document.getElementById('reg-fs-three').style = "";
 	$('#reg-fs-two').hide();
 	$('#reg-fs-three').hide();
 	$("#progressbar li").eq($("fieldset").index($('#reg-fs-one'))).addClass("active");

@@ -1,7 +1,9 @@
 $(document).ready(function(){
   let registerClose = document.getElementsByClassName('msform-close');
   let registerInput = document.getElementsByClassName('register-input');
-  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm', 'reg-new-fullname', 'reg-new-phone', 'reg-new-home'];
+  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm',
+                  'reg-new-fullname', 'reg-new-phone', 'reg-new-home',
+                  'reg-new-street', 'reg-new-zip'];
 
   // Close registration box
   for (i = 0; i < registerClose.length; i++){
@@ -10,6 +12,9 @@ $(document).ready(function(){
       zoomOut("#msform");
       validator.hideError(regArray);
       validator.clearInputs(regArray);
+      regEmailAttempt = 0, regPassAttempt = 0, regMatchAttempt = 0,
+      regNameAttempt = 0, regPhoneAttempt = 0, regStreetAttempt = 0,
+      regZipAttempt = 0;
     })
   }
 
@@ -70,8 +75,6 @@ $(document).ready(function(){
       matchPass();
       validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
     }
-    if ($("#reg-new-pass").val() != "")
-      fadeOut('#new-pass-helper');
   })
   $("#reg-pass-confirm").keyup(function(){
     formatter.passFormat('reg-pass-confirm');
@@ -142,13 +145,17 @@ $(document).ready(function(){
       validator.isValid([{elem: 'reg-new-fullname', type: 'string'}]);
   })
   $('.phone-format').mask('(000)000-0000');
-  $('#reg-new-phone').keyup(function(){
+  $('#reg-new-phone, #reg-new-home').keyup(function(){
     if (regPhoneAttempt == 1)
       phoneCombo();
+
   })
-  $('#reg-new-home').keyup(function(){
-    if (regPhoneAttempt == 1)
-      phoneCombo();
+  $("#reg-new-phone").focus(function(){
+    if ($("#reg-new-phone").val() == "")
+      slideLeft('#new-phone-helper');
+  })
+  $("#reg-new-phone").blur(function(){
+    fadeOut('#new-phone-helper');
   })
   $("#reg-new-street").keyup(function(){
     if (regStreetAttempt == 1)
@@ -159,8 +166,11 @@ $(document).ready(function(){
     var reg = /^[0-9]{0,5}$/;
     if (!reg.test(str))
       $("#reg-new-zip").val(str.slice(0, str.length -1));
-    if (str.length == 5)
-      getZipData('reg-new-zip');
+    if (str.length == 5) {
+      getZipData(str, 'reg-zip-autofill');
+    } else {
+      document.getElementById('reg-zip-autofill').innerHTML = '';
+    }
     if (regZipAttempt == 1)
       validator.isValid([{elem: 'reg-new-zip', type: 'zip'}]);
   })

@@ -36,11 +36,14 @@
   		<input id="reg-new-phone" class="register-input phone-format" type="text" name="cellphone" style="margin-right: 10px" placeholder="Cell phone" />
   		<input id="reg-new-home" class="register-input phone-format" type="text" name="homephone" placeholder="Home phone" />
     </div>
+		<div id="new-phone-helper" class="helper-modal hidden">
+			<p>10 digit phone number<br/>We require at least one</p>
+		</div>
 		<span id="reg-new-phone-err" class="text-left ds-form-errmsg"></span>
     <textarea id="reg-new-street" class="register-input" name="address" placeholder="Street address"></textarea>
 		<span id="reg-new-street-err" class="text-left ds-form-errmsg">Please enter your street address</span>
-    <input id="reg-new-zip" class="register-input zip-autofeed" type="number" name="zip" placeholder="Zip" maxlength="5" />
-		<span class="register-zf zip-autofill"></span>
+    <input id="reg-new-zip" class="register-input zip-autofeed" type="text" name="zip" placeholder="Zip" />
+		<span id="reg-zip-autofill" class="register-zf"></span>
 		<span id="reg-new-zip-err" class="text-left ds-form-errmsg">Please enter a valid zip code</span>
 		<input type="button" name="previous" class="previous action-button" value="Previous" />
 		<input id="reg-next-det" type="button" name="next" class="next action-button" value="Next" />

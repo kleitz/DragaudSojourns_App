@@ -664,9 +664,13 @@ input:-webkit-autofill {
 .register-zf {
   position: absolute;
   right: 45px;
-  font-weight: 500;
+  width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 300;
   text-align: right;
-  margin-top: -45px;
+  margin-top: -46px;
   font-size: 18px;
   color: #bbbbbb;
 }
