@@ -1,7 +1,7 @@
 $(document).ready(function(){
   let registerClose = document.getElementsByClassName('msform-close');
   let registerInput = document.getElementsByClassName('register-input');
-  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm'];
+  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm', 'reg-new-fullname', 'reg-new-phone', 'reg-new-home'];
 
   // Close registration box
   for (i = 0; i < registerClose.length; i++){
@@ -13,10 +13,12 @@ $(document).ready(function(){
     })
   }
 
+  // Initiate form one variables
   let regEmailAttempt = 0,
       regPassAttempt = 0,
       regMatchAttempt = 0;
 
+  // Compare passwords
   function matchPass(){
     if ($("#reg-new-pass").val() == $("#reg-pass-confirm").val()) {
       validator.hideError(['reg-pass-confirm']);
@@ -63,7 +65,7 @@ $(document).ready(function(){
     fadeOut('#new-pass-helper');
   })
   $("#reg-new-pass").keyup(function(){
-    validator.passFormat('reg-new-pass');
+    formatter.passFormat('reg-new-pass');
     if (regPassAttempt == 1) {
       matchPass();
       validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
@@ -72,8 +74,89 @@ $(document).ready(function(){
       fadeOut('#new-pass-helper');
   })
   $("#reg-pass-confirm").keyup(function(){
-    validator.passFormat('reg-pass-confirm');
+    formatter.passFormat('reg-pass-confirm');
     if (regPassAttempt == 1)
       matchPass();
   })
+
+  // Initiate form two variables
+  let regNameAttempt = 0,
+      regPhoneAttempt = 0,
+      regStreetAttempt = 0,
+      regZipAttempt = 0;
+
+  //  Test phone numbers
+  function phoneCombo(){
+    if ($("#reg-new-phone").val() == '' && $("#reg-new-home").val() == '') {
+
+      $("#reg-new-phone-err").html('Please enter at least one phone number');
+      validator.showError(['reg-new-phone']);
+      return false;
+
+    } else {
+      validator.hideError(['reg-new-phone', 'reg-new-home']);
+      let phoneArr = [];
+      if ($("#reg-new-phone").val() != '') phoneArr.push({elem: 'reg-new-phone', type: 'phone'});
+      if ($("#reg-new-home").val() != '') phoneArr.push({elem: 'reg-new-home', type: 'phone'});
+      let checkValid = validator.isValid(phoneArr);
+
+      if (checkValid != true) {
+        $("#reg-new-phone-err").html('Please enter a correct phone number');
+        $("#reg-new-phone-err").addClass('ds-show-errmsg');
+        return false;
+      } else {
+        return true;
+      }
+    }
+}
+  // TRY TO MOVE TO FORM 3
+  $("#reg-next-det").click(function(){
+    let checkValid = validator.isValid([
+      {elem: 'reg-new-fullname', type: 'string'},
+      {elem: 'reg-new-street', type: 'string'},
+      {elem: 'reg-new-zip', type: 'zip'}
+    ])
+    checkValid;
+    let comboPhone = false;
+    if (phoneCombo()) {
+      comboPhone = true;
+    } else {
+      regPhoneAttempt = 1;
+    }
+    if (checkValid == true && comboPhone == true) {
+      nextRegForm("#reg-next-det");
+      validator.hideError(['reg-new-fullname', 'reg-new-address', 'reg-new-zip', 'reg-new-phone']);
+    } else {
+      for (i = 0; i < checkValid.length; i++) {
+        if (checkValid[i] == 'reg-new-fullname') regNameAttempt = 1;
+        if (checkValid[i] == 'reg-new-street') regStreetAttempt = 1;
+        if (checkValid[i] == 'reg-new-zip') regZipAttempt = 1;
+      }
+    }
+  })
+
+  // REGISTRATION FORMATTING: FORM 2
+  $('.phone-format').mask('(000)000-0000');
+  $("#reg-new-fullname").keyup(function(){
+    if (regNameAttempt == 1)
+      validator.isValid([{elem: 'reg-new-fullname', type: 'string'}]);
+  })
+  $('.phone-format').mask('(000)000-0000');
+  $('#reg-new-phone').keyup(function(){
+    if (regPhoneAttempt == 1)
+      phoneCombo();
+  })
+  $('#reg-new-home').keyup(function(){
+    if (regPhoneAttempt == 1)
+      phoneCombo();
+  })
+  $("#reg-new-street").keyup(function(){
+    if (regStreetAttempt == 1)
+      validator.isValid([{elem: 'reg-new-street', type: 'string'}]);
+  })
+  $("#reg-new-zip").keyup(function(){
+    if (regZipAttempt == 1)
+      validator.isValid([{elem: 'reg-new-zip', type: 'zip'}]);
+  })
+
 })

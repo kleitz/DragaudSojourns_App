@@ -1,3 +1,17 @@
+// INPUT FORMATTER CLASS
+
+function InputFormatter() {
+  this.passFormat = function(elem){
+    if ($("#" + elem).val() == "") {
+      $("#"  + elem).removeClass('pass-bullets');
+    } else {
+      $("#" + elem).addClass('pass-bullets');
+    }
+  }
+}
+
+let formatter = new InputFormatter();
+
 // Styles payment amount into $0.00 format
 function amtFloat(){
   if (!isNaN(paymentAmt.value) && paymentAmt.value != "") {
@@ -48,72 +62,6 @@ function isNumber(evt, id) {
     	};
     };
     return true;
-};
-
-// Verifies month format (number between 01-12)
-function isMonth(evt, x){
-    evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-    };
-    if (x.value == "1" || x.value == "0"){
-    	if (x.value == "0"){
-        	return true;
-        } else if (x.value == "1" && charCode > 50){
-        	return false;
-        };
-    };
-    if (x.value != "" && parseInt(x.value) > 1){
-    	return false;
-    };
-};
-
-// Verifies year format (number between )
-function isYear(evt, x){
-    evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-    };
-    if (x.value == "1" && charCode < 55){
-        return false;
-    };
-    if (x.value == "" && (charCode > 50 || charCode < 49)){
-    	return false;
-    };
-};
-
-// Clears all placeholder values
-function clearPlaceholder(x){
-    x.placeholder = "";
-};
-
-// Fills & styles placeholder values
-function fillPlaceholder(x){
-    switch (x.id){
-	case "credit-num":
-	    x.placeholder="____-____-____-____";
-	    break;
-	 case "credit-month":
-	    if (parseInt(x.value) < 10 && x.value.length < 2){
-		 x.value = "0" + x.value;
-	    }
-            if (parseInt(x.value) < 1) {
-                 x.value = "";
-            }
-	    x.placeholder="- -";
-	    break;
-	 case "credit-year":
-	    if (parseInt(x.value)< 16){
-		 x.value = "";
-	    }
-	    x.placeholder="- -";
-	    break;
-	 case "credit-cvcode":
-	    x.placeholder="- - -"
-	    break;
-    }
 };
 
 // Check credit card validity via Luhn algorithm check
@@ -173,6 +121,15 @@ function InputValidator() {
         case "strongpass" :
           bool = strongPass(obj[i].elem);
           break;
+        case "string" :
+          bool = validString(obj[i].elem);
+          break;
+        case "phone" :
+          bool = validPhone(obj[i].elem);
+          break;
+        case "zip" :
+          bool = validZip(obj[i].elem);
+          break;
         default:
           bool = false;
           break;
@@ -185,13 +142,6 @@ function InputValidator() {
       }
     }
     if (v.length > 0){ return v } else { return true };
-  }
-  this.passFormat = function(elem){
-    if ($("#" + elem).val() == "") {
-      $("#"  + elem).removeClass('pass-bullets');
-    } else {
-      $("#" + elem).addClass('pass-bullets');
-    }
   }
   this.showError = function(elem) {
     for (let i = 0; i < elem.length; i++){
@@ -256,6 +206,36 @@ function strongPass(input) {
   let str = $("#" + input).val();
   let strong = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
   if (!strong.test(str)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validString(input, type) {
+    let str = $("#" + input).val();
+
+    if (str == undefined || str == "") {
+      return false;
+    } else {
+      return true;
+    }
+}
+
+function validZip(input) {
+  let str = $("#" + input).val();
+  let regX = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+
+  if (!regX.test(str)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validPhone(input) {
+  let num = $("#"+ input).val();
+  if(num.length < 13) {
     return false;
   } else {
     return true;

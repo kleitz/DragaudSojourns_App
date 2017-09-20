@@ -64,7 +64,7 @@ $(document).ready(function(){
     if (passAttempt == 1) {
       validator.isValid([{elem: 'login-pass', type: 'pass'}]);
     }
-    validator.passFormat('login-pass');
+    formatter.passFormat('login-pass');
   })
 
   // Display reset password box
@@ -76,8 +76,8 @@ $(document).ready(function(){
 
   // Display registration box
   $("#login-register").click(function(){
-      validator.passFormat('reg-new-pass');
-      validator.passFormat('reg-pass-confirm');
+      formatter.passFormat('reg-new-pass');
+      formatter.passFormat('reg-pass-confirm');
       hideLoginForm();
       resetRegistration();
       fadeIn("#dark-overlay");

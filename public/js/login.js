@@ -1,3 +1,36 @@
+// jQuery Mask Plugin v0.6.0
+// github.com/igorescobar/jQuery-Mask-Plugin
+
+(function($){"use strict";var e,oValue,oNewValue,keyCode,pMask;var Mask=function(el,mask,options){var plugin=this,$el=$(el),defaults={byPassKeys:[8,9,37,38,39,40],specialChars:{':':191,'-':189,'.':190,'(':57,')':48,'/':191,',':188,'_':189,' ':32,'+':187},translation:{0:'(.)',1:'(.)',2:'(.)',3:'(.)',4:'(.)',5:'(.)',6:'(.)',7:'(.)',8:'(.)',9:'(.)','A':'(.)','S':'(.)',':':'(:)?','-':'(-)?','.':'(\\\.)?','(':'(\\()?',')':'(\\))?','/':'(/)?',',':'(,)?','_':'(_)?',' ':'(\\s)?','+':'(\\\+)?'}};plugin.settings={};plugin.init=function(){plugin.settings=$.extend({},defaults,options);options=options||{};$el.each(function(){mask=resolveDynamicMask(mask,$(this).val(),e,$(this),options);$el.attr('maxlength',mask.length);$el.attr('autocomplete','off');destroyEvents();setOnKeyUp();setOnPaste();});};plugin.remove=function(){destroyEvents();$el.val(onlyNumbers($el.val()));};var resolveDynamicMask=function(mask,oValue,e,currentField,options){return typeof mask=="function"?mask(oValue,e,currentField,options):mask;};var onlyNumbers=function(string){return string.replace(/\W/g,'');};var onPasteMethod=function(){setTimeout(function(){$el.trigger('keyup');},100);};var setOnPaste=function(){(hasOnSupport())?$el.on("paste",onPasteMethod):$el.onpaste=onPasteMethod;};var setOnKeyUp=function(){$el.keyup(maskBehaviour).trigger('keyup');};var hasOnSupport=function(){return $.isFunction($.on);};var destroyEvents=function(){$el.unbind('keyup').unbind('onpaste');};var maskBehaviour=function(e){e=e||window.event;keyCode=e.keyCode||e.which;if($.inArray(keyCode,plugin.settings.byPassKeys)>=0)
+return true;var oCleanedValue=onlyNumbers($el.val());pMask=(typeof options.reverse=="boolean"&&options.reverse===true)?getProportionalReverseMask(oCleanedValue,mask):getProportionalMask(oCleanedValue,mask);oNewValue=applyMask(e,$el,pMask,options);if(oNewValue!==$el.val()){$el.val(oNewValue).trigger('change');}
+return seekCallbacks(e,options,oNewValue,mask,$el);};var applyMask=function(e,fieldObject,mask,options){oValue=onlyNumbers(fieldObject.val()).substring(0,onlyNumbers(mask).length);return oValue.replace(new RegExp(maskToRegex(mask)),function(){oNewValue='';for(var i=1;i<arguments.length-2;i++){if(typeof arguments[i]=="undefined"||arguments[i]===""){arguments[i]=mask.charAt(i-1);}
+oNewValue+=arguments[i];}
+return cleanBullShit(oNewValue,mask);});};var getProportionalMask=function(oValue,mask){var endMask=0,m=0;while(m<=oValue.length-1){while(typeof plugin.settings.specialChars[mask.charAt(endMask)]==="number")
+endMask++;endMask++;m++;}
+return mask.substring(0,endMask);};var getProportionalReverseMask=function(oValue,mask){var startMask=0,endMask=0,m=0;startMask=(mask.length>=1)?mask.length:mask.length-1;endMask=startMask;while(m<=oValue.length-1){while(typeof plugin.settings.specialChars[mask.charAt(endMask-1)]==="number")
+endMask--;endMask--;m++;}
+endMask=(mask.length>=1)?endMask:endMask-1;return mask.substring(startMask,endMask);};var maskToRegex=function(mask){var regex='';for(var i=0;i<mask.length;i++){if(plugin.settings.translation[mask.charAt(i)])
+regex+=plugin.settings.translation[mask.charAt(i)];}
+return regex;};var validDigit=function(nowMask,nowDigit){if(isNaN(parseInt(nowMask,10))===false&&/\d/.test(nowDigit)===false){return false;}else if(nowMask==='A'&&/[a-zA-Z0-9]/.test(nowDigit)===false){return false;}else if(nowMask==='S'&&/[a-zA-Z]/.test(nowDigit)===false){return false;}else if(typeof plugin.settings.specialChars[nowDigit]==="number"&&nowMask!==nowDigit){return false;}
+return true;};var cleanBullShit=function(oNewValue,mask){oNewValue=oNewValue.split('');for(var i=0;i<mask.length;i++){if(validDigit(mask.charAt(i),oNewValue[i])===false)
+oNewValue[i]='';}
+return oNewValue.join('');};var seekCallbacks=function(e,options,oNewValue,mask,currentField){if(options.onKeyPress&&e.isTrigger===undefined&&typeof options.onKeyPress=="function"){options.onKeyPress(oNewValue,e,currentField,options);}
+if(options.onComplete&&e.isTrigger===undefined&&oNewValue.length===mask.length&&typeof options.onComplete=="function"){options.onComplete(oNewValue,e,currentField,options);}};plugin.init();};$.fn.mask=function(mask,options){return this.each(function(){$(this).data('mask',new Mask(this,mask,options));});};})(jQuery);
+
+// INPUT FORMATTER CLASS
+
+function InputFormatter() {
+  this.passFormat = function(elem){
+    if ($("#" + elem).val() == "") {
+      $("#"  + elem).removeClass('pass-bullets');
+    } else {
+      $("#" + elem).addClass('pass-bullets');
+    }
+  }
+}
+
+let formatter = new InputFormatter();
+
 // Styles payment amount into $0.00 format
 function amtFloat(){
   if (!isNaN(paymentAmt.value) && paymentAmt.value != "") {
@@ -48,72 +81,6 @@ function isNumber(evt, id) {
     	};
     };
     return true;
-};
-
-// Verifies month format (number between 01-12)
-function isMonth(evt, x){
-    evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-    };
-    if (x.value == "1" || x.value == "0"){
-    	if (x.value == "0"){
-        	return true;
-        } else if (x.value == "1" && charCode > 50){
-        	return false;
-        };
-    };
-    if (x.value != "" && parseInt(x.value) > 1){
-    	return false;
-    };
-};
-
-// Verifies year format (number between )
-function isYear(evt, x){
-    evt = (evt) ? evt : window.event;
-    var charCode = (evt.which) ? evt.which : evt.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-        return false;
-    };
-    if (x.value == "1" && charCode < 55){
-        return false;
-    };
-    if (x.value == "" && (charCode > 50 || charCode < 49)){
-    	return false;
-    };
-};
-
-// Clears all placeholder values
-function clearPlaceholder(x){
-    x.placeholder = "";
-};
-
-// Fills & styles placeholder values
-function fillPlaceholder(x){
-    switch (x.id){
-	case "credit-num":
-	    x.placeholder="____-____-____-____";
-	    break;
-	 case "credit-month":
-	    if (parseInt(x.value) < 10 && x.value.length < 2){
-		 x.value = "0" + x.value;
-	    }
-            if (parseInt(x.value) < 1) {
-                 x.value = "";
-            }
-	    x.placeholder="- -";
-	    break;
-	 case "credit-year":
-	    if (parseInt(x.value)< 16){
-		 x.value = "";
-	    }
-	    x.placeholder="- -";
-	    break;
-	 case "credit-cvcode":
-	    x.placeholder="- - -"
-	    break;
-    }
 };
 
 // Check credit card validity via Luhn algorithm check
@@ -173,6 +140,15 @@ function InputValidator() {
         case "strongpass" :
           bool = strongPass(obj[i].elem);
           break;
+        case "string" :
+          bool = validString(obj[i].elem);
+          break;
+        case "phone" :
+          bool = validPhone(obj[i].elem);
+          break;
+        case "zip" :
+          bool = validZip(obj[i].elem);
+          break;
         default:
           bool = false;
           break;
@@ -185,13 +161,6 @@ function InputValidator() {
       }
     }
     if (v.length > 0){ return v } else { return true };
-  }
-  this.passFormat = function(elem){
-    if ($("#" + elem).val() == "") {
-      $("#"  + elem).removeClass('pass-bullets');
-    } else {
-      $("#" + elem).addClass('pass-bullets');
-    }
   }
   this.showError = function(elem) {
     for (let i = 0; i < elem.length; i++){
@@ -262,6 +231,36 @@ function strongPass(input) {
   }
 }
 
+function validString(input, type) {
+    let str = $("#" + input).val();
+
+    if (str == undefined || str == "") {
+      return false;
+    } else {
+      return true;
+    }
+}
+
+function validZip(input) {
+  let str = $("#" + input).val();
+  let regX = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+
+  if (!regX.test(str)) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validPhone(input) {
+  let num = $("#"+ input).val();
+  if(num.length < 13) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 /**
  * Bounce.js 0.8.2
  * MIT license
@@ -320,6 +319,75 @@ function zoomOut(elem) {
   zoomMeOut.applyTo($(elem));
   fadeOut(elem);
 }
+
+// STATE AUTOFILL
+$(function() {
+		// IMPORTANT: Fill in your client key
+		var clientKey = "D8Mt2YMqFiVPKeaM0TLtnHh4vH702ySGGE9JDW9if580kiMkbyNzg5DLMLMPjEv0";
+
+		var cache = {};
+		var container = $("#zip-autofill");
+    var errorDiv = $("#zip-dataerror");
+		// var errorDiv = container.find("div.text-error");
+
+		/** Handle successful response */
+		function handleResp(data)
+		{
+			// Check for error
+			if (data.error_msg)
+				errorDiv.text(data.error_msg);
+			else if ("city" in data)
+			{
+				// Set city and state
+				$(".zip-autofill").val(data.city + ", " + data.state);
+			}
+		}
+
+		// Set up event handlers
+		$(".zip-autofeed").keyup(function() {
+			// Get zip code
+			var zipcode = $(this).val().substring(0, 5);
+			if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode))
+			{
+				// Clear error
+				errorDiv.empty();
+
+				// Check cache
+				if (zipcode in cache)
+				{
+					handleResp(cache[zipcode]);
+				}
+				else
+				{
+					// Build url
+					var url = "http://www.zipcodeapi.com/rest/"+clientKey+"/info.json/" + zipcode + "/radians";
+
+					// Make AJAX request
+					$.ajax({
+						"url": url,
+						"dataType": "json"
+					}).done(function(data) {
+						handleResp(data);
+
+						// Store in cache
+						cache[zipcode] = data;
+					}).fail(function(data) {
+						if (data.responseText && (json = $.parseJSON(data.responseText)))
+						{
+							// Store in cache
+							cache[zipcode] = json;
+
+							// Check for error
+							if (json.error_msg)
+								errorDiv.text(json.error_msg);
+						}
+						else
+							errorDiv.text('Request failed.');
+					});
+				}
+			}
+		}).trigger("change");
+	});
 
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets
@@ -475,7 +543,7 @@ $(document).ready(function(){
     if (passAttempt == 1) {
       validator.isValid([{elem: 'login-pass', type: 'pass'}]);
     }
-    validator.passFormat('login-pass');
+    formatter.passFormat('login-pass');
   })
 
   // Display reset password box
@@ -487,8 +555,8 @@ $(document).ready(function(){
 
   // Display registration box
   $("#login-register").click(function(){
-      validator.passFormat('reg-new-pass');
-      validator.passFormat('reg-pass-confirm');
+      formatter.passFormat('reg-new-pass');
+      formatter.passFormat('reg-pass-confirm');
       hideLoginForm();
       resetRegistration();
       fadeIn("#dark-overlay");
@@ -540,7 +608,7 @@ $(document).ready(function(){
 $(document).ready(function(){
   let registerClose = document.getElementsByClassName('msform-close');
   let registerInput = document.getElementsByClassName('register-input');
-  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm'];
+  let regArray = ['reg-new-email', 'reg-new-pass', 'reg-pass-confirm', 'reg-new-fullname', 'reg-new-phone', 'reg-new-home'];
 
   // Close registration box
   for (i = 0; i < registerClose.length; i++){
@@ -552,10 +620,12 @@ $(document).ready(function(){
     })
   }
 
+  // Initiate form one variables
   let regEmailAttempt = 0,
       regPassAttempt = 0,
       regMatchAttempt = 0;
 
+  // Compare passwords
   function matchPass(){
     if ($("#reg-new-pass").val() == $("#reg-pass-confirm").val()) {
       validator.hideError(['reg-pass-confirm']);
@@ -602,7 +672,7 @@ $(document).ready(function(){
     fadeOut('#new-pass-helper');
   })
   $("#reg-new-pass").keyup(function(){
-    validator.passFormat('reg-new-pass');
+    formatter.passFormat('reg-new-pass');
     if (regPassAttempt == 1) {
       matchPass();
       validator.isValid([{elem: 'reg-new-pass', type: 'strongpass'}]);
@@ -611,8 +681,89 @@ $(document).ready(function(){
       fadeOut('#new-pass-helper');
   })
   $("#reg-pass-confirm").keyup(function(){
-    validator.passFormat('reg-pass-confirm');
+    formatter.passFormat('reg-pass-confirm');
     if (regPassAttempt == 1)
       matchPass();
   })
+
+  // Initiate form two variables
+  let regNameAttempt = 0,
+      regPhoneAttempt = 0,
+      regStreetAttempt = 0,
+      regZipAttempt = 0;
+
+  //  Test phone numbers
+  function phoneCombo(){
+    if ($("#reg-new-phone").val() == '' && $("#reg-new-home").val() == '') {
+
+      $("#reg-new-phone-err").html('Please enter at least one phone number');
+      validator.showError(['reg-new-phone']);
+      return false;
+
+    } else {
+      validator.hideError(['reg-new-phone', 'reg-new-home']);
+      let phoneArr = [];
+      if ($("#reg-new-phone").val() != '') phoneArr.push({elem: 'reg-new-phone', type: 'phone'});
+      if ($("#reg-new-home").val() != '') phoneArr.push({elem: 'reg-new-home', type: 'phone'});
+      let checkValid = validator.isValid(phoneArr);
+
+      if (checkValid != true) {
+        $("#reg-new-phone-err").html('Please enter a correct phone number');
+        $("#reg-new-phone-err").addClass('ds-show-errmsg');
+        return false;
+      } else {
+        return true;
+      }
+    }
+}
+  // TRY TO MOVE TO FORM 3
+  $("#reg-next-det").click(function(){
+    let checkValid = validator.isValid([
+      {elem: 'reg-new-fullname', type: 'string'},
+      {elem: 'reg-new-street', type: 'string'},
+      {elem: 'reg-new-zip', type: 'zip'}
+    ])
+    checkValid;
+    let comboPhone = false;
+    if (phoneCombo()) {
+      comboPhone = true;
+    } else {
+      regPhoneAttempt = 1;
+    }
+    if (checkValid == true && comboPhone == true) {
+      nextRegForm("#reg-next-det");
+      validator.hideError(['reg-new-fullname', 'reg-new-address', 'reg-new-zip', 'reg-new-phone']);
+    } else {
+      for (i = 0; i < checkValid.length; i++) {
+        if (checkValid[i] == 'reg-new-fullname') regNameAttempt = 1;
+        if (checkValid[i] == 'reg-new-street') regStreetAttempt = 1;
+        if (checkValid[i] == 'reg-new-zip') regZipAttempt = 1;
+      }
+    }
+  })
+
+  // REGISTRATION FORMATTING: FORM 2
+  $('.phone-format').mask('(000)000-0000');
+  $("#reg-new-fullname").keyup(function(){
+    if (regNameAttempt == 1)
+      validator.isValid([{elem: 'reg-new-fullname', type: 'string'}]);
+  })
+  $('.phone-format').mask('(000)000-0000');
+  $('#reg-new-phone').keyup(function(){
+    if (regPhoneAttempt == 1)
+      phoneCombo();
+  })
+  $('#reg-new-home').keyup(function(){
+    if (regPhoneAttempt == 1)
+      phoneCombo();
+  })
+  $("#reg-new-street").keyup(function(){
+    if (regStreetAttempt == 1)
+      validator.isValid([{elem: 'reg-new-street', type: 'string'}]);
+  })
+  $("#reg-new-zip").keyup(function(){
+    if (regZipAttempt == 1)
+      validator.isValid([{elem: 'reg-new-zip', type: 'zip'}]);
+  })
+
 })
