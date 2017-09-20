@@ -155,6 +155,12 @@ $(document).ready(function(){
       validator.isValid([{elem: 'reg-new-street', type: 'string'}]);
   })
   $("#reg-new-zip").keyup(function(){
+    str = $("#reg-new-zip").val();
+    var reg = /^[0-9]{0,5}$/;
+    if (!reg.test(str))
+      $("#reg-new-zip").val(str.slice(0, str.length -1));
+    if (str.length == 5)
+      getZipData('reg-new-zip');
     if (regZipAttempt == 1)
       validator.isValid([{elem: 'reg-new-zip', type: 'zip'}]);
   })

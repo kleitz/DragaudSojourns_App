@@ -39,10 +39,9 @@
 		<span id="reg-new-phone-err" class="text-left ds-form-errmsg"></span>
     <textarea id="reg-new-street" class="register-input" name="address" placeholder="Street address"></textarea>
 		<span id="reg-new-street-err" class="text-left ds-form-errmsg">Please enter your street address</span>
-    <input id="reg-new-zip" class="register-input zip-autofeed" type="text" name="zip" placeholder="Zip" />
+    <input id="reg-new-zip" class="register-input zip-autofeed" type="number" name="zip" placeholder="Zip" maxlength="5" />
 		<span class="register-zf zip-autofill"></span>
 		<span id="reg-new-zip-err" class="text-left ds-form-errmsg">Please enter a valid zip code</span>
-		<span id="zip-dataerror" class="text-left ds-form-errmsg ds-show-errmsg">No error's</span>
 		<input type="button" name="previous" class="previous action-button" value="Previous" />
 		<input id="reg-next-det" type="button" name="next" class="next action-button" value="Next" />
 	</fieldset>

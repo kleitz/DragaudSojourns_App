@@ -320,74 +320,21 @@ function zoomOut(elem) {
   fadeOut(elem);
 }
 
-// STATE AUTOFILL
-$(function() {
-		// IMPORTANT: Fill in your client key
-		var clientKey = "D8Mt2YMqFiVPKeaM0TLtnHh4vH702ySGGE9JDW9if580kiMkbyNzg5DLMLMPjEv0";
 
-		var cache = {};
-		var container = $(".zip-autofill");
-    var errorDiv = $("#zip-dataerror");
-		// var errorDiv = container.find("div.text-error");
+function getZipData(elem) {
+  $.ajax({
+    url: "http://zip.elevenbasetwo.com",
+    cache: false,
+    dataType: "json",
+    type: "GET",
+    data: "zip=" + $("#" + elem).val(),
+    success: function(result, success) {
 
-		/** Handle successful response */
-		function handleResp(data)
-		{
-			// Check for error
-			if (data.error_msg)
-				errorDiv.text(data.error_msg);
-			else if ("city" in data)
-			{
-				// Set city and state
-				$(".zip-autofill").val(data.city + ", " + data.state);
-			}
-		}
+      $(".zip-autofill").val(result.city + ", " + result.state);
 
-		// Set up event handlers
-		$(".zip-autofeed").keyup(function() {
-			// Get zip code
-			var zipcode = $(this).val().substring(0, 5);
-			if (zipcode.length == 5 && /^[0-9]+$/.test(zipcode))
-			{
-				// Clear error
-				errorDiv.empty();
-
-				// Check cache
-				if (zipcode in cache)
-				{
-					handleResp(cache[zipcode]);
-				}
-				else
-				{
-					// Build url
-					var url = "http://www.zipcodeapi.com/rest/"+clientKey+"/info.json/" + zipcode + "/radians";
-
-					// Make AJAX request
-					$.ajax({
-						"url": url,
-						"dataType": "json"
-					}).done(function(data) {
-						handleResp(data);
-
-						// Store in cache
-						cache[zipcode] = data;
-					}).fail(function(data) {
-						if (data.responseText && (json = $.parseJSON(data.responseText)))
-						{
-							// Store in cache
-							cache[zipcode] = json;
-
-							// Check for error
-							if (json.error_msg)
-								errorDiv.text(json.error_msg);
-						}
-						else
-							errorDiv.text('Request failed.');
-					});
-				}
-			}
-		}).trigger("change");
-	});
+    }
+  });
+}
 
 //jQuery time
 var current_fs, next_fs, previous_fs; //fieldsets
@@ -762,6 +709,12 @@ $(document).ready(function(){
       validator.isValid([{elem: 'reg-new-street', type: 'string'}]);
   })
   $("#reg-new-zip").keyup(function(){
+    str = $("#reg-new-zip").val();
+    var reg = /^[0-9]{0,5}$/;
+    if (!reg.test(str))
+      $("#reg-new-zip").val(str.slice(0, str.length -1));
+    if (str.length == 5)
+      getZipData('reg-new-zip');
     if (regZipAttempt == 1)
       validator.isValid([{elem: 'reg-new-zip', type: 'zip'}]);
   })
