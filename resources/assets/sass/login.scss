@@ -13,8 +13,14 @@
 // New account
 @import "./components/login/button.scss";
 
+// User partials
+@import "./components/partials/user.scss";
+
 // Partials
 @import "./components/partials/overlay.scss";
 
 // Helpers
 @import "./components/partials/helpers.scss";
+
+// Custom animation
+@import "./components/animate/custom_elements";

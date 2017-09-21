@@ -27,4 +27,4 @@ mix.scripts([
   'resources/assets/js/components/login/register.js',
 ], 'public/js/login.js');
 
-mix.js('resources/assets/js/components/jquery.js', 'public/js');
+mix.js('resources/assets/js/components/login/preload.js', 'public/js');

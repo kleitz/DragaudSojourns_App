@@ -120,12 +120,12 @@
   flex-direction: column;
 }
 
-.modal-ds-form input:-webkit-autofill {
+.register-input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px #f5f5f5 inset;
 }
 
 
-.modal-ds-form input, .modal-ds-form textarea{
+.register-input, .modal-ds-form textarea, .register-input{
   transition: 0s;
   box-sizing: border-box;
   width: 100%;
@@ -137,46 +137,46 @@
   margin: 0 0 10px;
 }
 
-.modal-ds-form input:focus,
+.register-input:focus,
 .modal-ds-form textarea:focus{
     outline: 0;
 }
 
-.modal-ds-form input:not(focus)::-webkit-input-placeholder,
+.register-input:not(focus)::-webkit-input-placeholder,
 .modal-ds-form textarea:not(focus)::-webkit-input-placeholder {
     transition: .2s;
     color: #999;
 }
-.modal-ds-form input:focus::-webkit-input-placeholder,
+.register-input:focus::-webkit-input-placeholder,
 .modal-ds-form textarea:focus::-webkit-input-placeholder {
     transition: .2s;
     color: #ddd;
     text-align: right;
     padding: 10px;
 }
-.modal-ds-form input:not(focus)::-moz-placeholder,
+.register-input:not(focus)::-moz-placeholder,
 .modal-ds-form textarea:not(focus)::-moz-placeholder {
     -moz-transition: .2s;
     color: #999;
 }
-.modal-ds-form input:focus::-moz-placeholder,
+.register-input:focus::-moz-placeholder,
 .modal-ds-form textarea:focus::-moz-placeholder {
     -moz-transition: .2s;
     color: #ddd;
     text-align: right;
     padding: 10px;
 }
-.modal-ds-form input:-ms-input-placeholder,
+.register-input:-ms-input-placeholder,
 .modal-ds-form textarea:-ms-input-placeholder {
     transition: .2s !important;
     color: #999 !important;
 }
-.modal-ds-form input:not(focus)::-ms-input-placeholder,
+.register-input:not(focus)::-ms-input-placeholder,
 .modal-ds-form textarea:not(focus)::-ms-input-placeholder {
     transition: .2s;
     color: #999;
 }
-.modal-ds-form input:focus::-ms-input-placeholder,
+.register-input:focus::-ms-input-placeholder,
  .modal-ds-form textarea:focus::-ms-input-placeholder{
     transition: .2s;
     color: #ddd;

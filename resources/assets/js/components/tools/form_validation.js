@@ -1,5 +1,13 @@
-// INPUT FORMATTER CLASS
+// CLASS BASED AUTO FORMATTING
 
+$(document).ready(function(){
+  $(".numbers-only").keypress(function(){
+    return event.charCode >=48 && event.charCode <= 57;
+  })
+  $('.phone-format').mask('(000)000-0000');
+})
+
+// INPUT FORMATTER CLASS
 function InputFormatter() {
   this.passFormat = function(elem){
     if ($("#" + elem).val() == "") {

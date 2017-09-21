@@ -21,9 +21,9 @@
             <img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
           </input>
         </div>
-        <input id="login-email" name="login-email" type="text" placeholder="Email"></input>
+        <input id="login-email" class="register-input" name="login-email" type="text" placeholder="Email"></input>
         <span id="login-email-err" class="ds-form-errmsg">Please enter a valid email</span>
-        <input id="login-pass" class="" name="login-pass" type="password" placeholder="Password"></input>
+        <input id="login-pass" class="register-input" class="" name="login-pass" type="password" placeholder="Password"></input>
         <span id="login-pass-err" class="ds-form-errmsg">Password cannot be blank</span>
         <a href="javascript:;" id="login-attempt" class="modal-ds-button">Continue</a>
       </div>

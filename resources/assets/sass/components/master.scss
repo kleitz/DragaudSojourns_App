@@ -51,6 +51,12 @@
   font-family: Arial !important;
 }
 
+.free-link {
+  font-family: Alegreya Sans;
+  font-size: 14px;
+  color: $blue-med;
+}
+
 .text-left {
   text-align: left;
 }
@@ -119,4 +125,8 @@
 
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+
+.shadow-close {
+  box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
 }

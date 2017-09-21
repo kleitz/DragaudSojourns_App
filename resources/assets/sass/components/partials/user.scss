@@ -1,0 +1,128 @@
+// TRAVELER DROPDOWN
+
+.traveler-modal-container {
+  margin-bottom: 15px;
+  width: 100%;
+  overflow: hidden;
+  background: #f4f4f4;
+  border-radius: 5px;
+  max-height: 400px;
+  box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
+  transition: .5s ease;
+}
+
+.traveler-modal-title , .traveler-modal-add{
+  width: 100%;
+  background: #808285;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  z-index: 2;
+  padding: 5px 10px;
+}
+
+.traveler-modal-add {
+  margin: 0 0 15px;
+  transition: .3s ease;
+  border-radius: 5px;
+  background: #c0c3c7;
+}
+
+.traveler-modal-add:hover {
+  background: #808285;
+}
+
+.traveler-modal-add:not(hover) {
+  transition: .0s;
+  background: #c0c3c7;
+}
+
+.traveler-modal-title span, .traveler-modal-add span {
+    color: white;
+    font-size: 16px;
+    font-weight: 100;
+    text-align: left;
+}
+
+.traveler-modal-details {
+  transition: .5s ease;
+  text-align: left;
+  margin: 15px;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  position: relative;
+  z-index: 1;
+}
+
+.traveler-input {
+  padding: 10px !important;
+}
+
+.traveler-select {
+  /* styling */
+border-radius: 4px;
+display: inline-block;
+font: inherit;
+line-height: 1.5em;
+padding: 0.5em 3.5em 0.5em 1em;
+
+/* reset */
+
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+-webkit-appearance: none;
+-moz-appearance: none;
+
+  padding: 10px !important;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+}
+
+.traveler-select option {
+  background: white;
+  padding: 10px 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 5px;
+}
+
+.traveler-select:focus {
+  background-image:
+    linear-gradient(45deg, #ccc 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%, #ccc 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position:
+    calc(100% - 15px) 1em,
+    calc(100% - 20px) 1em,
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+  outline: 0;
+}
+
+
+.traveler-modal-details h5 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #555;
+  margin: 10px 0 5px;
+}

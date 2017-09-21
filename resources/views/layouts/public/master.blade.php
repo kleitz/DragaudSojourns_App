@@ -42,7 +42,7 @@
   <!--end cufon-->
 
   <!--start slides-->
-  <script src="/js/jquery.js" type="text/javascript"></script>
+  <script src="/js/preload.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
   <script src="/assets/public/js/slides.min.jquery.js"></script>
 
@@ -62,7 +62,7 @@
   					},100);
   					if (window.console && console.log) {
   						// example return of current slide number
-  						console.log('animationStart on slide: ', current);
+
   					};
   				},
   				animationComplete: function(current){
@@ -71,7 +71,6 @@
   					},200);
   					if (window.console && console.log) {
   						// example return of current slide number
-  						console.log('animationComplete on slide: ', current);
   					};
   				},
   				slidesLoaded: function() {

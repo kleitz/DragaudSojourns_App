@@ -1,3 +1,5 @@
+// CUSTOM ANIMATIONS
+
 var zoomMeIn = new Bounce();
 zoomMeIn.scale({
     from: {x: 0.5, y: 0.5},
@@ -50,4 +52,26 @@ function zoomIn(elem) {
 function zoomOut(elem) {
   zoomMeOut.applyTo($(elem));
   fadeOut(elem);
+}
+
+// CUSTOM ELEMENTS
+
+function bindTravelerModal(x){
+  let elemP = x.parent();
+  let elem = elemP.find('.traveler-modal-details');
+  let elemC = elemP.find('.traveler-modal-title').innerHeight();
+  let elemH = elem.height();
+
+  if (elemP.hasClass('active')) {
+    elemP.removeClass('active');
+    elemP.css('max-height', elemC);
+    elem.css('bottom', elemH + 30);
+    $(x).find('.flex-arrow').removeClass('flex-arrow-minus');
+  } else {
+    elemP.addClass('active');
+    elemP.height
+    elemP.css('max-height', elemC + elemH + 30);
+    elem.css('bottom', '0px');
+    $(x).find('.flex-arrow').addClass('flex-arrow-minus');
+  }
 }
