@@ -138,6 +138,9 @@ function InputValidator() {
         case "zip" :
           bool = validZip(obj[i].elem);
           break;
+        case "select" :
+          bool = validSelect(obj[i].elem);
+          break;
         default:
           bool = false;
           break;
@@ -171,7 +174,7 @@ function InputValidator() {
   }
 }
 
-let validator = new InputValidator;
+var validator = new InputValidator;
 
 function validEmail(input){
   userEmail = $('#' + input).val();
@@ -244,6 +247,16 @@ function validZip(input) {
 function validPhone(input) {
   let num = $("#"+ input).val();
   if(num.length < 13) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validSelect(input) {
+  let str = $("#" + input).find(":selected").hasClass('default-option');
+
+  if (str) {
     return false;
   } else {
     return true;

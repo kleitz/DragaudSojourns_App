@@ -68,6 +68,10 @@ function bindTravelerModal(x){
     elem.css('bottom', elemH + 30);
     $(x).find('.flex-arrow').removeClass('flex-arrow-minus');
   } else {
+    $('.traveler-modal-container').find('.traveler-modal-details').css('bottom', elemH + 30);
+    $('.traveler-modal-container').css('max-height', elemC);
+    $('.traveler-modal-container').removeClass('active');
+    $('.traveler-modal-container').find('.flex-arrow').removeClass('flex-arrow-minus');
     elemP.addClass('active');
     elemP.height
     elemP.css('max-height', elemC + elemH + 30);

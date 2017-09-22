@@ -157,6 +157,9 @@ function InputValidator() {
         case "zip" :
           bool = validZip(obj[i].elem);
           break;
+        case "select" :
+          bool = validSelect(obj[i].elem);
+          break;
         default:
           bool = false;
           break;
@@ -190,7 +193,7 @@ function InputValidator() {
   }
 }
 
-let validator = new InputValidator;
+var validator = new InputValidator;
 
 function validEmail(input){
   userEmail = $('#' + input).val();
@@ -263,6 +266,16 @@ function validZip(input) {
 function validPhone(input) {
   let num = $("#"+ input).val();
   if(num.length < 13) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validSelect(input) {
+  let str = $("#" + input).find(":selected").hasClass('default-option');
+
+  if (str) {
     return false;
   } else {
     return true;
@@ -344,6 +357,10 @@ function bindTravelerModal(x){
     elem.css('bottom', elemH + 30);
     $(x).find('.flex-arrow').removeClass('flex-arrow-minus');
   } else {
+    $('.traveler-modal-container').find('.traveler-modal-details').css('bottom', elemH + 30);
+    $('.traveler-modal-container').css('max-height', elemC);
+    $('.traveler-modal-container').removeClass('active');
+    $('.traveler-modal-container').find('.flex-arrow').removeClass('flex-arrow-minus');
     elemP.addClass('active');
     elemP.height
     elemP.css('max-height', elemC + elemH + 30);
@@ -900,11 +917,12 @@ $(document).ready(function(){
       validator.isValid([{elem: 'reg-new-fullname', type: 'string'}]);
   })
   $('#reg-new-phone, #reg-new-home').keyup(function(){
-    if (regPhoneAttempt == 1)
+    if (regPhoneAttempt == 1) {
       phoneCombo();
-    if (validator.isValid([{elem: 'reg-new-phone', type: 'phone'},
-                          {elem: 'reg-new-home', type: 'phone'}]) != false ) {
-      fadeOut('#new-phone-helper');
+      if (validator.isValid([{elem: 'reg-new-phone', type: 'phone'},
+                            {elem: 'reg-new-home', type: 'phone'}]) != false ) {
+        fadeOut('#new-phone-helper');
+      }
     }
   })
   $("#reg-new-phone").focus(function(){
