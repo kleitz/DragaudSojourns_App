@@ -1,7 +1,6 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
+    "/js/login/preload.js": "/js/login/preload.js",
     "/css/login.css": "/css/login.css",
-    "/js/preload.js": "/js/preload.js",
-    "/js/login.js": "/js/login.js"
+    "/js/login/render.js": "/js/login/render.js",
+    "/js/login/app.js": "/js/login/app.js"
 }

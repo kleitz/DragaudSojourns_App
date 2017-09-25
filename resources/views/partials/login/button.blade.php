@@ -17,7 +17,7 @@
     <div class="modal-ds-content">
       <div class="modal-ds-form" id="public-login-form">
         <div id="login-details-err" class="hidden">
-          <input class="ds-form-error login-details-err" readonly type="text" value="Your email or password is incorrect.">
+          <input class="ds-form-error ds-details-err" readonly type="text" value="Your email or password is incorrect.">
             <img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
           </input>
         </div>

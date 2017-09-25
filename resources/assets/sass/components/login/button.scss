@@ -232,6 +232,10 @@
 .ds-form-error {
   border: 1px solid #de8f8f !important;
   background: #f7e9e9 !important;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 10px;
 }
 
 #login-details-err {
@@ -242,8 +246,8 @@
   margin: 10px 0 30px;
 }
 
-.login-details-err {
-  font-size: 15px !important;
+.ds-details-err {
+  font-size: 13px !important;
   padding: 15px 0 15px 34px !important;
   color: #cc3636;
   border-radius: 5px;
@@ -255,4 +259,26 @@
   position: absolute;
   margin: 18px 10px;
   top: 0;
+  left: 0;
+}
+
+.input-add-errparent {
+  border-radius: 3px 3px 0 0 !important;
+  border: 1px solid #de8f8f !important;
+}
+
+.input-add-err {
+  position: relative;
+}
+
+.input-add-err .ds-details-err {
+  font-size: 14px !important;
+  border-radius: 0 0 3px 3px !important;
+  top: -10px;
+  color: #cc3636 !important;
+  margin-bottom: 0 !important;
+}
+
+.input-add-err .input-hazard {
+  top: -15px;
 }

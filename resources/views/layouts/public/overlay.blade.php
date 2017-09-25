@@ -11,7 +11,7 @@
       <h3 class="overlay-wide-header">Forgot your password?</h3>
       <p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a new one</p>
       <div class="modal-ds-form" id="public-pwreset-form">
-        <input id="pwreset-email" name="login-email" type="text" placeholder="Email"></input>
+        <input id="pwreset-email" class="register-input" name="login-email" type="text" placeholder="Email"></input>
         <span id="pwreset-email-err" class="ds-form-errmsg">Please enter a valid email</span>
         <div class="flex-row-center">
           <a href="javascript:;" id="pwreset-confirm" class="overlay-wide-button modal-ds-button">Reset</a>

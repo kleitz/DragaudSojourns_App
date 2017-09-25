@@ -34,9 +34,9 @@ function nextRegForm(x){
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-};
+}
 
-$(".previous").click(function(){
+function prevRegForm(){
 	if(animating) return false;
 	animating = true;
 
@@ -69,7 +69,7 @@ $(".previous").click(function(){
 		//this comes from the custom easing plugin
 		easing: 'easeInOutBack'
 	});
-});
+};
 
 $(".submit").click(function(){
 	return false;

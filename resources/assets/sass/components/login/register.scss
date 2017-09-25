@@ -143,3 +143,12 @@
 	font-size: 18px;
 	color: #bbbbbb;
 }
+
+#register-loader, #register-success {
+	width: 80%;
+	margin: 0 10%;
+}
+
+#register-success .overlay-success {
+	width: auto !important;
+}

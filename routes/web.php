@@ -12,7 +12,6 @@
 */
 
 
-
 // PUBLIC PAGES - BUILD 1.0
 Route::get('/', function () {
     return view('public.index');
@@ -62,4 +61,10 @@ Route::get('/foodandhotels', function () {
     return view('public.foodandhotels');
 });
 
-?>
+Auth::routes();
+
+// Authentication
+
+Route::get('/regPrecheck', 'UsersController@registerCheck');
+Route::post('/regNewUser', 'Auth\RegisterController@create');
+Route::post('/regNewTraveler', 'TravelersController@create');

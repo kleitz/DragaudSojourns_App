@@ -4,4 +4,4 @@ try {
     require('bootstrap-sass');
 } catch (e) {}
 
-window.Vue = require('vue');
+window.axios = require('axios');

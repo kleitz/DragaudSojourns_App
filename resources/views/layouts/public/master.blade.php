@@ -20,6 +20,7 @@
   <META NAME="Description" CONTENT="Dragaud Custom Sojourns has been leading these small group student and private tours worldwide since 1995, working with middle schools, high schools, and universities to provide students a chance to truly embrace new ideas and experiences. Join us in our ongoing quest to seek out those unusual and special places and flavors found in every culture. ">
   <META NAME="Keywords" CONTENT="Student tours, Private tours, Foreign exchange, student travel, custom tours, international travel, educational experiences, class trips, study abroad">
   <META NAME="Robots" CONTENT="All">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!--end meta-->
 
@@ -42,7 +43,7 @@
   <!--end cufon-->
 
   <!--start slides-->
-  <script src="/js/preload.js" type="text/javascript"></script>
+  <script src="/js/login/preload.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
   <script src="/assets/public/js/slides.min.jquery.js"></script>
 
@@ -104,6 +105,7 @@
   <!--end preload-->
 
   <!--start google-->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXe85QiSlNnEDm8kGZI2IFL7WH-KogeHc" type="text/javascript"></script>
   <script type="text/javascript">
   var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-22801025-4']);
@@ -137,5 +139,13 @@
   @include('layouts.public.footer')
   @include('layouts.public.overlay')
 </body>
-<script src="/js/login.js" type="text/javascript"></script>
+<script>
+$.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+});
+</script>
+<script src="/js/login/app.js" type="text/javascript"></script>
+<script src="/js/login/render.js" type="text/javascript"></script>
 </html>

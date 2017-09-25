@@ -511,6 +511,27 @@
   border: 1px solid #939598 !important;
 }
 
+.action-button {
+  font-size: 16px;
+  position: relative;
+  font-family: Alegreya Sans;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.button-locked {
+  background: #aacfd8 !important;
+  cursor: default !important;
+}
+
+.button-locked img {
+  background-image: url(/assets/images/icons/locked-padlock.png);
+  background-size: contain;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+}
+
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
@@ -684,6 +705,16 @@ input:-webkit-autofill {
   margin-top: -46px;
   font-size: 18px;
   color: #bbbbbb;
+}
+
+#register-loader,
+#register-success {
+  width: 80%;
+  margin: 0 10%;
+}
+
+#register-success .overlay-success {
+  width: auto !important;
 }
 
 .login-container {
@@ -944,6 +975,11 @@ input:-webkit-autofill {
 .ds-form-error {
   border: 1px solid #de8f8f !important;
   background: #f7e9e9 !important;
+  position: relative;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0 0 10px;
 }
 
 #login-details-err {
@@ -954,8 +990,8 @@ input:-webkit-autofill {
   margin: 10px 0 30px;
 }
 
-.login-details-err {
-  font-size: 15px !important;
+.ds-details-err {
+  font-size: 13px !important;
   padding: 15px 0 15px 34px !important;
   color: #cc3636;
   border-radius: 5px;
@@ -968,6 +1004,28 @@ input:-webkit-autofill {
   position: absolute;
   margin: 18px 10px;
   top: 0;
+  left: 0;
+}
+
+.input-add-errparent {
+  border-radius: 3px 3px 0 0 !important;
+  border: 1px solid #de8f8f !important;
+}
+
+.input-add-err {
+  position: relative;
+}
+
+.input-add-err .ds-details-err {
+  font-size: 14px !important;
+  border-radius: 0 0 3px 3px !important;
+  top: -10px;
+  color: #cc3636 !important;
+  margin-bottom: 0 !important;
+}
+
+.input-add-err .input-hazard {
+  top: -15px;
 }
 
 .traveler-modal-container {

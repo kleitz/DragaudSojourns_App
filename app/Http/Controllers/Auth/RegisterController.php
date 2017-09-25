@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -60,12 +61,21 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data)
+    protected function create(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+      $name = str_replace('\' ', '\'', ucwords(str_replace('\'', '\' ', strtolower($request->input('user.name')))));
+      $email = strtolower($request->input('user.email'));
+
+        User::create([
+          'name' => $name,
+          'email' => $email,
+          'cell' => $request->input('user.cell'),
+          'home' => $request->input('user.home'),
+          'street' => $request->input('user.street'),
+          'zip' => $request->input('user.zip'),
+          'password' => bcrypt($request->input('user.password'))
         ]);
+
+        return User::where('email', $request->input('user.email'))->first()->id;
     }
 }
