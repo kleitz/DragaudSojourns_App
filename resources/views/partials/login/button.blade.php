@@ -1,4 +1,20 @@
 <div class="login-container">
+  @if (Auth::check())
+  <div>
+    <span id="loggedin-button" class="login-button flex-abs-center pointer" href="javascript:;">
+      <div class="login-icon">
+        <img src="/assets/images/icons/enter_arrow.png"/>
+      </div>
+      <span id="login-button-context">{{ Auth::user()->name }}</span>
+    </span>
+  </div>
+  <div id="login-dropdown" class="login-dropdown hidden">
+    <ul>
+      <li><a href="/userprofile">My profile</a></li>
+      <li><a href="/logout">Log out</a></li>
+    </ul>
+  </div>
+  @else
   <div>
     <span id="login-button" class="login-button flex-abs-center pointer" href="javascript:;">
       <div class="login-icon">
@@ -16,6 +32,7 @@
     </div>
     <div class="modal-ds-content">
       <div class="modal-ds-form" id="public-login-form">
+        {!! csrf_field() !!}
         <div id="login-details-err" class="hidden">
           <input class="ds-form-error ds-details-err" readonly type="text" value="Your email or password is incorrect.">
             <img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
@@ -37,4 +54,5 @@
       </div>
     </div>
   </div>
+  @endif
 </div>

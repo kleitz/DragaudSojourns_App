@@ -54,28 +54,37 @@ class RegisterController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);
     }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(Request $request)
+    
+    // Check whether user exists before registering
+    public function precheck(Request $request)
+    {
+      $query = User::where('email', '=', $request->input('email'))->first();
+      if ($query === null) {
+        return "OPEN";
+      } else {
+        return "TAKEN";
+      }
+    }
+    // Register new account
+    protected function store(Request $request)
     {
       $name = str_replace('\' ', '\'', ucwords(str_replace('\'', '\' ', strtolower($request->input('user.name')))));
       $email = strtolower($request->input('user.email'));
 
-        User::create([
+      $user = User::create([
           'name' => $name,
           'email' => $email,
           'cell' => $request->input('user.cell'),
           'home' => $request->input('user.home'),
           'street' => $request->input('user.street'),
           'zip' => $request->input('user.zip'),
-          'password' => bcrypt($request->input('user.password'))
+          'password' => $request->input('user.password')
         ]);
+
+        auth()->login($user);
 
         return User::where('email', $request->input('user.email'))->first()->id;
     }
-}
+
+
+    }

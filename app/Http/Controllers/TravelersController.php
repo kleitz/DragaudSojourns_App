@@ -7,22 +7,7 @@ use Illuminate\Http\Request;
 
 class TravelersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         for ($i = 0; $i < $request->input('len'); $i++){
           $name = str_replace('\' ', '\'', ucwords(str_replace('\'', '\' ', strtolower($request->input("travelers.$i.name")))));
@@ -38,23 +23,6 @@ class TravelersController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Traveler  $traveler
-     * @return \Illuminate\Http\Response
-     */
     public function show(Traveler $traveler)
     {
         //
@@ -68,7 +36,7 @@ class TravelersController extends Controller
      */
     public function edit(Traveler $traveler)
     {
-        //
+
     }
 
     /**
@@ -80,7 +48,14 @@ class TravelersController extends Controller
      */
     public function update(Request $request, Traveler $traveler)
     {
-        //
+      $this->validate(request(), [
+          'name' => 'required',
+          'gender' => 'required',
+          'relationship' => 'required',
+          'emerg_name' => 'required',
+          'emerg_phone' => 'required'
+      ]);
+
     }
 
     /**

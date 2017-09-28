@@ -34,6 +34,13 @@
   'msg' => 'Please check your inbox for the new password',
   'button' => 'Continue'
 ])
+<!-- Login Successful -->
+@include('partials.overlay.success', [
+  'id' => 'login-success',
+  'header' => 'Welcome back!',
+  'msg' => 'Click my account to continue to your account page or close this box to continue browsing.',
+  'button' => 'Continue'
+])
 <!-- Create new account -->
 @include('partials.overlay.register')
 

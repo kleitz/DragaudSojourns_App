@@ -3,13 +3,23 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use App\User;
 
 class UsersController extends Controller
 {
-  
-    public function registerCheck(Request $request)
+
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
+    // Check whether user exists before registering
+    public function precheck(Request $request)
     {
       $query = User::where('email', '=', $request->input('email'))->first();
       if ($query === null) {
@@ -19,80 +29,63 @@ class UsersController extends Controller
       }
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    // Register new account
+    protected function store(Request $request)
+    {
+      $name = str_replace('\' ', '\'', ucwords(str_replace('\'', '\' ', strtolower($request->input('user.name')))));
+      $email = strtolower($request->input('user.email'));
+
+      $user = User::create([
+          'name' => $name,
+          'email' => $email,
+          'cell' => $request->input('user.cell'),
+          'home' => $request->input('user.home'),
+          'street' => $request->input('user.street'),
+          'zip' => $request->input('user.zip'),
+          'password' => Hash::make($request->input('user.pass'))
+        ]);
+
+        auth()->login($user);
+
+        return User::where('email', $request->input('user.email'))->first()->id;
+    }
+
+    // Login functionality
+    public function login(Request $request){
+      if (!auth()->attempt(request(['email', 'password']))) {
+        return 'INVALID';
+      } else {
+        return "VALID";
+      }
+    }
+
+    public function show(User $user)
     {
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function edit(User $user)
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function update(Request $request, User $user)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Traveler  $traveler
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Traveler $traveler)
+
+    public function destroy(User $user)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Traveler  $traveler
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Traveler $traveler)
-    {
-        //
-    }
+    public function logout(){
+      auth()->logout();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Traveler  $traveler
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Traveler $traveler)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Traveler  $traveler
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Traveler $traveler)
-    {
-        //
+      return redirect()->home();
     }
 
 }

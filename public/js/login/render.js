@@ -60,11 +60,140 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
-/******/ (Array(32).concat([
-/* 32 */
+/******/ ([
+/* 0 */,
+/* 1 */,
+/* 2 */
+/***/ (function(module, exports) {
+
+/* globals __VUE_SSR_CONTEXT__ */
+
+// this module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */
 /***/ (function(module, exports) {
 
 /*
@@ -146,26 +275,26 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(34);
+module.exports = __webpack_require__(35);
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_SuccessModal_vue__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_SuccessModal_vue__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_SuccessModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_SuccessModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue__);
 
-window.Vue = __webpack_require__(35);
+window.Vue = __webpack_require__(36);
 
 
 
@@ -198,6 +327,11 @@ var regApp = new Vue({
       Vue.delete(this.regtravelers, index);
       this.numTravelers--;
     },
+    clearTravelers: function clearTravelers() {
+      this.numTravelers = 0;
+      this.regtravelers = [];
+      this.regIncomplete = false;
+    },
     formTwo: function formTwo() {
       if (this.verifyEmail() == false) regFormTwo();
     },
@@ -207,9 +341,8 @@ var regApp = new Vue({
     canSubmit: function canSubmit() {
       var errTotal = 0;
       for (var i = 0; i < this.numTravelers; i++) {
-        errTotal += this.$children[i].warnings.length;
+        errTotal += this.$refs.traveler[i].warnings.length;
       }
-      console.log(errTotal);
       if (errTotal > 0) {
         this.regIncomplete = true;
       } else {
@@ -221,12 +354,12 @@ var regApp = new Vue({
       if (this.regtravelers.length > 0) {
         this.regIncomplete = false;
         for (var i = 0; i < this.numTravelers; i++) {
-          this.$children[i].hasSubmit = true;
-          this.$children[i].testError({ elem: 'reg-trav' + i + '-fullname', type: 'string' });
-          this.$children[i].testError({ elem: 'reg-trav' + i + '-gender', type: 'select' });
-          this.$children[i].testError({ elem: 'reg-trav' + i + '-relate', type: 'select' });
-          this.$children[i].testError({ elem: 'reg-trav' + i + '-emerg', type: 'string' });
-          this.$children[i].testError({ elem: 'reg-trav' + i + '-ephn', type: 'phone' });
+          this.$refs.traveler[i].hasSubmit = true;
+          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-fullname', type: 'string' });
+          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-gender', type: 'select' });
+          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-relate', type: 'select' });
+          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-emerg', type: 'string' });
+          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-ephn', type: 'phone' });
         }
       }
       if (this.regIncomplete == false) {
@@ -236,14 +369,14 @@ var regApp = new Vue({
         fadeOut("#reg-fs-three");
         $.ajax({
           type: "POST",
-          url: '/regNewUser',
+          url: '/register',
           data: { user: _regApp.reguser },
           success: function success(response) {
             // Save travelers
             if (_regApp.regtravelers.length > 0) {
               $.ajax({
                 type: "POST",
-                url: '/regNewTraveler',
+                url: '/newtraveler',
                 data: { travelers: _regApp.regtravelers, user: response, len: _regApp.numTravelers },
                 success: function success(response) {
                   // Display success message
@@ -253,7 +386,7 @@ var regApp = new Vue({
                   }, 2000);
                 },
                 error: function error(request, status, _error) {
-                  console.log(request.responseText);
+                  // console.log(request.responseText);
                 }
               });
             } else {
@@ -264,7 +397,7 @@ var regApp = new Vue({
             }
           },
           error: function error(request, status, _error2) {
-            console.log(request.responseText);
+            // console.log(request.responseText);
           }
         });
       }
@@ -275,24 +408,19 @@ var regApp = new Vue({
       this.numTravelers = 1;
       this.reguser = { email: "", pass: "", passconf: "", name: "",
         cell: "", home: "", street: "", zip: "" };
-      this.regtravelers = [];
-      this.insertTraveler();
-      this.$children[0].hasWarning = false;
-      this.$children[0].hasSubmit = false;
+      this.regtravelers = [{ name: "", gender: "", relate: "", emerg: "", ephn: "" }];
+      this.$refs.traveler[0].hasWarning = false;
+      this.$refs.traveler[0].hasSubmit = false;
       validator.hideError(['reg-trav0-fullname', 'reg-trav0-gender', 'reg-trav0-relate', 'reg-trav0-emerg', 'reg-trav0-ephn']);
     },
     closeAll: function closeAll() {
-      fadeOut("#register-success");
-      this.clearData();
-      setTimeout(function () {
-        slideLeft("#reg-fs-three");
-      }, 300);
+      window.location.reload();
     },
     verifyEmail: function verifyEmail() {
       var regApp = this;
       $.ajax({
         type: "GET",
-        url: '/regPrecheck',
+        url: '/precheck',
         data: { email: this.reguser.email },
         success: function success(response) {
           if (response === "OPEN") {
@@ -319,7 +447,7 @@ var regApp = new Vue({
 });
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10516,10 +10644,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(36)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37)))
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 var g;
@@ -10546,15 +10674,15 @@ module.exports = g;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(38)
+  __webpack_require__(39)
 }
-var Component = __webpack_require__(42)(
+var Component = __webpack_require__(2)(
   /* script */
   __webpack_require__(43),
   /* template */
@@ -10590,17 +10718,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(40)("e0205a46", content, false);
+var update = __webpack_require__(41)("e0205a46", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -10616,10 +10744,10 @@ if(false) {
 }
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(32)(undefined);
+exports = module.exports = __webpack_require__(33)(undefined);
 // imports
 
 
@@ -10630,7 +10758,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10649,7 +10777,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(41)
+var listToStyles = __webpack_require__(42)
 
 /*
 type StyleObject = {
@@ -10851,7 +10979,7 @@ function applyToTag (styleElement, obj) {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports) {
 
 /**
@@ -10880,103 +11008,6 @@ module.exports = function listToStyles (parentId, list) {
     }
   }
   return styles
-}
-
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// this module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
 }
 
 
@@ -11318,20 +11349,15 @@ if (false) {
 }
 
 /***/ }),
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(42)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(51),
+  __webpack_require__(46),
   /* template */
-  __webpack_require__(52),
+  __webpack_require__(47),
   /* styles */
   null,
   /* scopeId */
@@ -11363,7 +11389,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 51 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11410,7 +11436,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 52 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -11494,15 +11520,15 @@ if (false) {
 }
 
 /***/ }),
-/* 53 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(42)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(54),
+  __webpack_require__(49),
   /* template */
-  __webpack_require__(55),
+  __webpack_require__(50),
   /* styles */
   null,
   /* scopeId */
@@ -11534,7 +11560,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 54 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11569,7 +11595,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 55 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -11611,4 +11637,4 @@ if (false) {
 }
 
 /***/ })
-/******/ ]));
+/******/ ]);

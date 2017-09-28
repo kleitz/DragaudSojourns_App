@@ -15,7 +15,7 @@
 // PUBLIC PAGES - BUILD 1.0
 Route::get('/', function () {
     return view('public.index');
-});
+})->name('home');
 
 Route::get('/studenttours', function () {
     return view('public.studenttours');
@@ -61,10 +61,14 @@ Route::get('/foodandhotels', function () {
     return view('public.foodandhotels');
 });
 
-Auth::routes();
-
 // Authentication
 
-Route::get('/regPrecheck', 'UsersController@registerCheck');
-Route::post('/regNewUser', 'Auth\RegisterController@create');
-Route::post('/regNewTraveler', 'TravelersController@create');
+Route::get('/precheck', 'UsersController@precheck');
+Route::post('/register', 'UsersController@store');
+Route::post('/login', 'UsersController@login');
+Route::get('/logout', 'UsersController@logout');
+Route::post('/newtraveler', 'TravelersController@store');
+
+// User Profile
+
+Route::get('/useraccount', 'AccountsController@create');

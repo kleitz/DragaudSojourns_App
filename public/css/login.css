@@ -761,6 +761,7 @@ input:-webkit-autofill {
 }
 
 .login-button span {
+  text-transform: uppercase;
   font-family: Alegreya Sans;
   font-weight: 400;
   letter-spacing: .2px;
@@ -1026,6 +1027,61 @@ input:-webkit-autofill {
 
 .input-add-err .input-hazard {
   top: -15px;
+}
+
+.login-dropdown {
+  border: 1px solid #999;
+  background: white;
+  padding: 5px 0;
+  border-radius: 2px;
+  -webkit-box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+          box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.login-dropdown li {
+  min-width: 140px;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  border-bottom: .5px solid #eee;
+}
+
+.login-dropdown a {
+  padding: 5px 20px;
+  display: block;
+  color: #555;
+  font-size: 16px;
+  font-family: Alegreya Sans;
+}
+
+.login-dropdown a:hover {
+  background: #559dad;
+  color: white;
+}
+
+.login-dropdown::after,
+.login-dropdown::before {
+  bottom: 100%;
+  content: "";
+  left: 15%;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.login-dropdown:after {
+  border-color: transparent;
+  border-bottom-color: #fff;
+  border-width: 10px;
+  margin-left: -5px;
+}
+
+.login-dropdown:before {
+  border-color: transparent;
+  border-bottom-color: #999;
+  border-width: 11px;
+  margin-left: -6px;
 }
 
 .traveler-modal-container {

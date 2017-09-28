@@ -25,23 +25,42 @@ $(document).ready(function(){
   })
   // Attempt to login
   $("#login-attempt").click(function(){
+    let loginEmail = $("#login-email").val();
+    let loginPass = $("#login-pass").val();
+
     let checkValid = validator.isValid([
       {elem: 'login-email', type: 'email'},
       {elem: 'login-pass', type: 'pass'}
     ]);
     checkValid;
+
     if (checkValid == true) {
       fadeIn("#dark-overlay");
       slideLeft("#login-loader");
       $('#login-details-err').addClass('hidden');
-      setTimeout(function(){
-        if ($("#login-email").val() != "jjvannatta88@gmail.com" &&
-          $("#login-pass").val() != "Quasar88") {
-            fadeOut("#dark-overlay");
-            zoomOut("#login-loader");
-            $('#login-details-err').removeClass('hidden');
-          }
-        }, 2000);
+      $.ajax({
+        type: "POST",
+        url: '/login',
+        data: { email: loginEmail, password: loginPass},
+        success: function(response){
+            console.log(response);
+            if (response== "VALID") {
+              setTimeout(function(){
+                fadeOut("#login-loader");
+                slideLeft("#login-success");
+              },2000);
+            } else if (response== "INVALID") {
+              setTimeout(function(){
+                fadeOut("#dark-overlay");
+                zoomOut("#login-loader");
+                $('#login-details-err').removeClass('hidden');
+              },2000);
+            }
+        },
+        error: function (request, status, error) {
+          console.log(request.responseText);
+        }
+      });
       } else {
         for (i = 0; i < checkValid.length; i++) {
           if (checkValid[i] == 'login-email') emailAttempt = 1;
@@ -124,4 +143,20 @@ $(document).ready(function(){
     fadeOut("#dark-overlay");
     zoomOut("#pwreset-success");
   })
+
+  // User Authenticated
+  $("#loggedin-button").bind("click", function(){
+    slideLeft("#login-dropdown");
+  });
+  $("#login-dropdown").parent().bind("mouseleave", function(){
+    fadeOut("#login-dropdown");
+  });
+
+  // User Logged In
+  $("#login-success-button").click(function(){
+    window.location.replace('/useraccount');
+  });
+  $("#login-success-close").parent().bind("mouseleave", function(){
+    window.location.reload();
+  });
 })

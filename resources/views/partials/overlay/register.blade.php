@@ -14,7 +14,7 @@
 		<h4 class="fs-title">Create your account</h2>
 		<h4 class="fs-subtitle">Login credentials</h3>
 		<!-- NEW EMAIL -->
-		<input v-model="reguser.email" @keyup="verifyEmail" id="reg-new-email" v-bind:class="{'input-add-errparent' : emailExists, 'register-input' : true}" type="text" name="email" placeholder="Email"/>
+		<input v-model="reguser.email" @keyup="verifyEmail" @change="verifyEmail" id="reg-new-email" v-bind:class="{'input-add-errparent' : emailExists, 'register-input' : true}" type="text" name="email" placeholder="Email"/>
 		<div class="input-add-err" v-if="emailExists == true">
 			<input class="ds-form-error ds-details-err" readonly type="text" value="It looks like you already signed up. Please login">
 				<img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
@@ -69,7 +69,7 @@
 		<h4 class="fs-title">Traveler Details</h2>
 		<h4 class="fs-subtitle">Who will be traveling with us?</h3>
 		<!-- NEW TRAVELER(S) -->
-		<traveler-modal :traveler="regtraveler" :submit="submitAttempt" @error="regIncomplete=true" @remove="deleteTraveler(index)" v-for="(regtraveler, index) in regtravelers" v-bind:key="regtraveler.row" :id="index"></traveler-modal>
+		<traveler-modal ref="traveler" :traveler="regtraveler" :submit="submitAttempt" @error="regIncomplete=true" @remove="deleteTraveler(index)" v-for="(regtraveler, index) in regtravelers" v-bind:key="regtraveler.row" :id="index"></traveler-modal>
 		<div class="pointer flex-row-between traveler-modal-add" @click="insertTraveler">
       <span>Add traveler</span>
       <div class="flex-arrow">
@@ -77,7 +77,7 @@
         <div></div>
       </div>
     </div>
-		<a href="javascript:;" id="reg-no-travelers" class="free-link" @click="regtravelers = []; regIncomplete = false">Not sure yet? Click here to add travelers later</a>
+		<a href="javascript:;" id="reg-no-travelers" class="free-link" @click="clearTravelers">Not sure yet? Click here to add travelers later</a>
 		<!-- SUBMIT -->
 		<input id="prevReg3" type="button" name="previous" class="previous action-button" value="Previous" />
 		<button id="reg-submit" type="button" name="submit" :disabled="regIncomplete" v-bind:class="{'button-locked' : regIncomplete, 'submit action-button' : true}" value="Submit" @click="sendData">

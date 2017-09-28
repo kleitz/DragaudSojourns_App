@@ -32,6 +32,11 @@ const regApp = new Vue({
 				Vue.delete(this.regtravelers, index);
 				this.numTravelers--;
 			},
+      clearTravelers(){
+        this.numTravelers=0;
+        this.regtravelers = [];
+        this.regIncomplete = false
+      },
       formTwo() {
         if (this.verifyEmail() == false)
           regFormTwo();
@@ -42,9 +47,8 @@ const regApp = new Vue({
       canSubmit(){
           let errTotal = 0;
           for (let i = 0; i < this.numTravelers; i++){
-            errTotal += this.$children[i].warnings.length;
+            errTotal += this.$refs.traveler[i].warnings.length;
           }
-          console.log(errTotal);
           if (errTotal > 0) {
             this.regIncomplete = true;
           } else {
@@ -56,12 +60,12 @@ const regApp = new Vue({
         if (this.regtravelers.length > 0){
           this.regIncomplete = false;
   				for (let i = 0; i < this.numTravelers; i++){
-  					this.$children[i].hasSubmit = true;
-  					this.$children[i].testError({elem: 'reg-trav' + i + '-fullname', type: 'string'});
-  					this.$children[i].testError({elem: 'reg-trav' + i + '-gender', type: 'select'});
-  					this.$children[i].testError({elem: 'reg-trav' + i + '-relate', type: 'select'});
-  					this.$children[i].testError({elem: 'reg-trav' + i + '-emerg', type: 'string'});
-  					this.$children[i].testError({elem: 'reg-trav' + i + '-ephn', type: 'phone'});
+  					this.$refs.traveler[i].hasSubmit = true;
+  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-fullname', type: 'string'});
+  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-gender', type: 'select'});
+  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-relate', type: 'select'});
+  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-emerg', type: 'string'});
+  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-ephn', type: 'phone'});
   				}
         }
         if (this.regIncomplete == false) {
@@ -71,14 +75,14 @@ const regApp = new Vue({
           fadeOut("#reg-fs-three");
           $.ajax({
             type: "POST",
-            url: '/regNewUser',
+            url: '/register',
             data: { user : regApp.reguser  },
             success: function(response){
               // Save travelers
               if (regApp.regtravelers.length > 0) {
                 $.ajax({
                   type: "POST",
-                  url: '/regNewTraveler',
+                  url: '/newtraveler',
                   data: { travelers : regApp.regtravelers, user : response, len : regApp.numTravelers },
                   success: function(response){
                       // Display success message
@@ -88,7 +92,7 @@ const regApp = new Vue({
                       },2000);
                   },
                   error: function (request, status, error) {
-                    console.log(request.responseText);
+                    // console.log(request.responseText);
                   }
                 });
               } else {
@@ -99,7 +103,7 @@ const regApp = new Vue({
               }
             },
             error: function (request, status, error) {
-              console.log(request.responseText);
+              // console.log(request.responseText);
             }
           });
         }
@@ -110,25 +114,20 @@ const regApp = new Vue({
 				this.numTravelers = 1;
 				this.reguser = {email: "", pass: "", passconf: "", name: "",
 												cell: "", home: "", street: "", zip: ""};
-				this.regtravelers = [];
-        this.insertTraveler();
-				this.$children[0].hasWarning = false;
-				this.$children[0].hasSubmit = false;
+				this.regtravelers = [{name: "", gender: "", relate: "", emerg: "", ephn: ""}];
+				this.$refs.traveler[0].hasWarning = false;
+				this.$refs.traveler[0].hasSubmit = false;
 				validator.hideError(['reg-trav0-fullname', 'reg-trav0-gender', 'reg-trav0-relate',
 			 											'reg-trav0-emerg', 'reg-trav0-ephn',])
 			},
       closeAll(){
-        fadeOut("#register-success");
-        this.clearData();
-        setTimeout(function() {
-          slideLeft("#reg-fs-three");
-        }, 300);
+        window.location.reload();
       },
 			verifyEmail() {
         let regApp = this;
         $.ajax({
           type: "GET",
-          url: '/regPrecheck',
+          url: '/precheck',
           data: {email: this.reguser.email},
           success: function(response){
               if (response === "OPEN"){
