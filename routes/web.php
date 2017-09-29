@@ -13,9 +13,13 @@
 
 
 // PUBLIC PAGES - BUILD 1.0
-Route::get('/', function () {
+Route::get('home', function (){
     return view('public.index');
 })->name('home');
+
+Route::get('/', function () {
+    return view('public.index');
+});
 
 Route::get('/studenttours', function () {
     return view('public.studenttours');
@@ -64,10 +68,24 @@ Route::get('/foodandhotels', function () {
 // Authentication
 
 Route::get('/precheck', 'UsersController@precheck');
-Route::post('/register', 'UsersController@store');
-Route::post('/login', 'UsersController@login');
-Route::get('/logout', 'UsersController@logout');
+Route::post('/register', 'UsersController@store')->name('register');
+Route::post('/login', 'UsersController@login')->name('login');
+Route::get('/logout', 'UsersController@logout')->name('logout');
 Route::post('/newtraveler', 'TravelersController@store');
+
+// Reset password
+
+// Password Reset Routes...
+Route::group(['namespace' => 'Auth'], function() {
+  // Show reset password request form
+  Route::get('/user/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
+  // Send password reset email
+  Route::post('/user/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+  // Link to password reset confirmation
+  Route::get('/user/password/reset/{token}', 'ResetPasswordController@showResetForm');
+  // Password is reset
+  Route::post('/user/password/reset', 'ResetPasswordController@reset')->name('user.password.reset');
+});
 
 // User Profile
 

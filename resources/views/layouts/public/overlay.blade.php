@@ -12,6 +12,11 @@
       <p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a new one</p>
       <div class="modal-ds-form" id="public-pwreset-form">
         <input id="pwreset-email" class="register-input" name="login-email" type="text" placeholder="Email"></input>
+        <div id="pwreset-exists" class="input-add-err hidden">
+    			<input class="ds-form-error ds-details-err" readonly type="text" value="We don't have this email in our records.">
+    				<img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
+    			</input>
+    		</div>
         <span id="pwreset-email-err" class="ds-form-errmsg">Please enter a valid email</span>
         <div class="flex-row-center">
           <a href="javascript:;" id="pwreset-confirm" class="overlay-wide-button modal-ds-button">Reset</a>
@@ -21,6 +26,7 @@
     </div>
   </div>
 </div>
+
 <!-- Loading password reset -->
 @include('partials.overlay.loader', [
   'id' => 'pwreset-loader',
@@ -30,7 +36,7 @@
 <!-- Password successfully reset -->
 @include('partials.overlay.success', [
   'id' => 'pwreset-success',
-  'header' => 'Password reset',
+  'header' => 'New password sent',
   'msg' => 'Please check your inbox for the new password',
   'button' => 'Continue'
 ])
@@ -38,8 +44,8 @@
 @include('partials.overlay.success', [
   'id' => 'login-success',
   'header' => 'Welcome back!',
-  'msg' => 'Click my account to continue to your account page or close this box to continue browsing.',
-  'button' => 'Continue'
+  'msg' => 'You can continue to your account page or close this box to continue browsing.',
+  'button' => 'My account'
 ])
 <!-- Create new account -->
 @include('partials.overlay.register')

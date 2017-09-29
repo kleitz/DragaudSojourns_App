@@ -111,6 +111,7 @@ const regApp = new Vue({
 			clearData() {
         registerClose();
 				this.submitAttempt = false;
+        this.emailExists = false;
 				this.numTravelers = 1;
 				this.reguser = {email: "", pass: "", passconf: "", name: "",
 												cell: "", home: "", street: "", zip: ""};

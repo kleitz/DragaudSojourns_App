@@ -103,19 +103,62 @@ $(document).ready(function(){
       zoomIn("#msform");
   })
 
+  function resetEmailExists(){
+    $.ajax({
+      type: "GET",
+      url: '/precheck',
+      data: {email: resEmail.val()},
+      success: function(response){
+          if (response === "OPEN"){
+            $("#pwreset-exists").removeClass('hidden');
+            resEmail.addClass('input-add-errparent');
+          } else {
+            $("#pwreset-exists").addClass('hidden');
+            resEmail.removeClass('input-add-errparent');
+          }
+      }
+    });
+  }
+
   // Send password reset email
+  let resEmail = $("#pwreset-email");
   let resetEmailAttempt = 0;
   $("#pwreset-confirm").click(function(){
-    var emailBool = validator.isValid([{'elem':'pwreset-email', 'type': 'email'}]);
+    let emailBool = validator.isValid([{'elem':'pwreset-email', 'type': 'email'}]);
     if (emailBool == true) {
       validator.hideError(['pwreset-email']);
-      zoomOut("#overlay-public-pwreset");
-      $("#pwreset-email").val('');
-      slideLeft("#pwreset-loader");
-      setTimeout(function(){
-          zoomOut("#pwreset-loader");
-          slideLeft("#pwreset-success");
-      }, 3000);
+      $("#pwreset-confirm, #pwreset-cancel").addClass('button-locked');
+      $.ajax({
+        type: "GET",
+        url: '/precheck',
+        data: {email: resEmail.val()},
+        success: function(response){
+            if (response === "OPEN"){
+              $("#pwreset-exists").removeClass('hidden');
+              resEmail.addClass('input-add-errparent');
+              resetEmailAttempt = 1;
+              $("#pwreset-confirm, #pwreset-cancel").removeClass('button-locked');
+            } else {
+              $("#pwreset-exists").addClass('hidden');
+              resEmail.removeClass('input-add-errparent');
+              $.ajax({
+                type: "POST",
+                url: '/user/password/email',
+                data: {email: resEmail.val()},
+                success: function(response){
+                  zoomOut("#overlay-public-pwreset");
+                  $("#pwreset-email").val('');
+                  slideLeft("#pwreset-loader");
+                  setTimeout(function(){
+                      zoomOut("#pwreset-loader");
+                      slideLeft("#pwreset-success");
+                      $("#pwreset-confirm, #pwreset-cancel").removeClass('button-locked');
+                  }, 2000);
+                }
+              });
+            }
+        }
+      });
     } else {
       resetEmailAttempt = 1;
     }
@@ -124,7 +167,13 @@ $(document).ready(function(){
   // Validate reset email
   $("#pwreset-email").keyup(function(){
     if (resetEmailAttempt == 1) {
-      validator.isValid([{elem: 'pwreset-email', type: 'email'}]);
+      let check = validator.isValid([{elem: 'pwreset-email', type: 'email'}])
+      if (check == true) {
+        resetEmailExists();
+      } else {
+          $("#pwreset-exists").addClass('hidden');
+          resEmail.removeClass('input-add-errparent');
+      }
     }
   })
 
@@ -136,6 +185,7 @@ $(document).ready(function(){
     validator.clearInputs(['pwreset-email']);
     validator.hideError(['pwreset-email']);
     resetEmailAttempt = 0;
+    resetEmailX = false;
   })
 
   // Close pw success box
@@ -159,4 +209,5 @@ $(document).ready(function(){
   $("#login-success-close").parent().bind("mouseleave", function(){
     window.location.reload();
   });
+
 })

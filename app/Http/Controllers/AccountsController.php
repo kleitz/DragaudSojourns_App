@@ -12,7 +12,7 @@ class AccountsController extends Controller
 
     public function create()
     {
-        return view('user.index');
+        return view('user.index', ['as' => auth()->user()->email]);
     }
 
         /**

@@ -520,8 +520,9 @@
 }
 
 .button-locked {
-  background: #aacfd8 !important;
+  opacity: .6;
   cursor: default !important;
+  pointer-events: none !important;
 }
 
 .button-locked img {
@@ -1258,17 +1259,20 @@ input:-webkit-autofill {
 }
 
 .overlay-loader-msg {
+  text-align: left !important;
   padding: 15px 0;
   max-width: 250px;
 }
 
 .overlay-loader-msg p {
+  text-align: left !important;
   font-weight: 100;
   font-size: 20px;
   margin: 0 30px 0 0;
 }
 
 .overlay-loader-msg h3 {
+  text-align: left !important;
   font-weight: 400;
   font-size: 22px;
   margin: 0 30px 0 0;

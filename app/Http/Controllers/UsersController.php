@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\RegistersUsers;
+
 use App\User;
+use App\Mail\Welcome;
 
 class UsersController extends Controller
 {

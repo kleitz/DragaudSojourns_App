@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Obs\Paypal;
+namespace App\Repositories\Billing;
 
-class Login(){
+class PaypalLogin(){
   public $value;
   public function __construct($input)
   {
