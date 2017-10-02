@@ -59,7 +59,7 @@
       </div>
     </div>
   </div>
-  <div id="traveler-details" class="panel-heading border-panel grey-panel profile-traveler">
+  <div id="traveler-details" class="panel-heading border-panel grey-panel profile-traveler shadow-far">
     <h5 class="font-light profile-details-header">My Travelers</h5>
     <div class="profile-traveler-container" style="margin-top: 15px">
       <traveler-modal  v-for="(userTraveler, index) in userTravelers" ref="traveler" :traveler="userTraveler" @error="alert" @remove="removeNewTraveler" v-bind:key="userTraveler.row" :id="index"></traveler-modal>
