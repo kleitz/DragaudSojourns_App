@@ -72,4 +72,5 @@
       </div>
     </div>
   </div>
+  <a class="waves-effect waves-light btn-large ds-button-large">New Booking #</a>
 </div>

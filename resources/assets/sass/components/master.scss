@@ -153,6 +153,18 @@
   border: 1px solid #939598 !important;
 }
 
+.ds-button-large {
+  background: #49a0b3
+  height: 45px;
+  line-height: 45px;
+  width: 100%;
+  margin-top: 15px;
+}
+.ds-button-large:hover {
+  background: #76c1d2
+  color: white;
+}
+
 .action-button {
   font-size: 16px;
   position: relative;
