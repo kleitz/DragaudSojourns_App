@@ -90,7 +90,7 @@
 			<template slot="message">We're creating your account now</template>
 		</loading-modal>
 		<!-- User successfully registered -->
-		<success-modal :id="'register-success'" :button="'My account'" @close="closeAll" :sub="false" :subxs="false">
+		<success-modal :id="'register-success'" :button="'My account'" :href="reguser.email" :sub="false" :subxs="false">
 			<template slot="header">Account created!</template>
 			<template slot="message">Thanks for registering with Dragaud Sojourns. Visit your account to book a new trip or close this box to continue browsing.</template>
 		</success-modal>

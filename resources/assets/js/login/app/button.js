@@ -43,7 +43,7 @@ $(document).ready(function(){
         url: '/login',
         data: { email: loginEmail, password: loginPass},
         success: function(response){
-            console.log(response);
+            $("#login-success-button").attr('href', '/profile/' + loginEmail);
             if (response== "VALID") {
               setTimeout(function(){
                 fadeOut("#login-loader");
@@ -203,11 +203,6 @@ $(document).ready(function(){
   });
 
   // User Logged In
-  $("#login-success-button").click(function(){
-    window.location.replace('/useraccount');
-  });
-  $("#login-success-close").parent().bind("mouseleave", function(){
-    window.location.reload();
-  });
+  $("#login-success-close").attr("href", window.location);
 
 })

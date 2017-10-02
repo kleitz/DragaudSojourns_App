@@ -2,25 +2,21 @@
 @import "./_variables.scss";
 
 // Fonts
-@import "./components/fonts/alegreya_sans.scss";
+@import "./components/font/alegreya_sans.scss";
 
 // Master classes
 @import "./components/master.scss";
 
-// Login button
+// Partials
+@import "./components/partials/containers.scss";
+@import "./components/partials/forms.scss";
+@import "./components/partials/overlay.scss";
+@import "./components/partials/helpers.scss";
+@import "./components/partials/traveler.scss";
+@import "./components/partials/interactive.scss";
+
+// Registration elements
 @import "./components/login/register.scss";
 
-// New account
+// Login elements
 @import "./components/login/button.scss";
-
-// User partials
-@import "./components/partials/user.scss";
-
-// Partials
-@import "./components/partials/overlay.scss";
-
-// Helpers
-@import "./components/partials/helpers.scss";
-
-// Custom animation
-@import "./components/animate/custom_elements";

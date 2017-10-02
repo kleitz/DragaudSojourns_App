@@ -1,3 +1,19 @@
+// Expanders
+
+.expander {
+  transition: .5s ease;
+  overflow-y: hidden;
+}
+
+.expander-header {
+  border-radius: 5px 5px 0 0;
+}
+
+.expander-content {
+  transition: .5s ease;
+  margin: -1px auto -1px;
+}
+
 // ANIMATED ARROWS
 
 .flex-arrow {
@@ -34,13 +50,3 @@
   left: 0;
   transform: translateY(-50%) rotate(0deg);
 }
-
-// .flex-arrow-plus div:first-child {
-//   transform: translateY(-50%) translateX(-50%) rotate(90deg);
-//   left: 50%;
-// }
-//
-// .flex-arrow-plus div:last-child {
-//   transform: translateY(-50%) translateX(50%) rotate(0deg);
-//   right: 50%;
-// }

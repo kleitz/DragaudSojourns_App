@@ -121,9 +121,6 @@ const regApp = new Vue({
 				validator.hideError(['reg-trav0-fullname', 'reg-trav0-gender', 'reg-trav0-relate',
 			 											'reg-trav0-emerg', 'reg-trav0-ephn',])
 			},
-      closeAll(){
-        window.location.reload();
-      },
 			verifyEmail() {
         let regApp = this;
         $.ajax({

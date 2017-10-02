@@ -1,7 +1,7 @@
 <template id="traveler-modal-template">
   <div id="traveler-modal-app" v-bind:class="{'traveler-warning' : hasWarning}">
     <div class="traveler-modal-container shadow-close active" @click="formatPhone">
-      <div class="traveler-modal-title pointer flex-row-between" @click="expand">
+      <div class="traveler-modal-title pointer flex-row-between">
         <span @click="expandMe">Traveler {{ id + 1 }}: {{ traveler.name }}</span>
         <div class="flex-arrow flex-arrow-minus" @click="expandMe">
           <div></div>

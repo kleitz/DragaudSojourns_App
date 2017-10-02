@@ -46,16 +46,16 @@ class TravelersController extends Controller
      * @param  \App\Traveler  $traveler
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Traveler $traveler)
+    public function update(Request $request)
     {
-      $this->validate(request(), [
-          'name' => 'required',
-          'gender' => 'required',
-          'relationship' => 'required',
-          'emerg_name' => 'required',
-          'emerg_phone' => 'required'
-      ]);
-
+      $curId = $request->input('traveler.id');
+      $traveler = Traveler::find($curId);
+      $traveler->name = $request->input('traveler.name');
+      $traveler->gender = $request->input('traveler.gender');
+      $traveler->relationship = $request->input('traveler.relationship');
+      $traveler->emerg_name = $request->input('traveler.emerg_name');
+      $traveler->emerg_phone = $request->input('traveler.emerg_phone');
+      $traveler->save();
     }
 
     /**

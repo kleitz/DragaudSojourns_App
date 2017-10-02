@@ -10,7 +10,7 @@
   </div>
   <div id="login-dropdown" class="login-dropdown hidden">
     <ul>
-      <li><a href="/useraccount">My profile</a></li>
+      <li><a href="/profile/{{ Auth::user()->email }}">My profile</a></li>
       <li><a href="/logout">Log out</a></li>
     </ul>
   </div>

@@ -1,6 +1,10 @@
 {
+    "/js/user/preload.js": "/js/user/preload.js",
     "/js/login/preload.js": "/js/login/preload.js",
     "/css/login.css": "/css/login.css",
+    "/css/user.css": "/css/user.css",
     "/js/login/render.js": "/js/login/render.js",
-    "/js/login/app.js": "/js/login/app.js"
+    "/js/user/render.js": "/js/user/render.js",
+    "/js/login/app.js": "/js/login/app.js",
+    "/js/user/app.js": "/js/user/app.js"
 }

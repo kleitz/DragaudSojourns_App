@@ -12,6 +12,11 @@
   transition: .5s ease;
 }
 
+.profile-traveler-modal {
+  max-height: 35px;
+  width: 100%;
+}
+
 .traveler-modal-title , .traveler-modal-add{
   width: 100%;
   background: #808285;
@@ -63,6 +68,7 @@
     font-size: 16px;
     font-weight: 100;
     text-align: left;
+    width: 100%;
 }
 
 .traveler-modal-details {
@@ -85,7 +91,8 @@ border-radius: 4px;
 display: inline-block;
 font: inherit;
 line-height: 1.5em;
-padding: 0.5em 3.5em 0.5em 1em;
+font-size: 18px !important;
+padding: 6px 10px !important;
 
 /* reset */
 
@@ -95,8 +102,6 @@ box-sizing: border-box;
 -webkit-appearance: none;
 -moz-appearance: none;
 
-  padding: 10px !important;
-  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 2px;
   background-image:

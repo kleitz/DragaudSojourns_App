@@ -179,9 +179,6 @@ $(document).ready(function(){
   })
 
   // FORM 3: BIND VUE TO TRAVELER ELEMENT
-
-  $("#register-success-button").click(function(){
-    window.location.replace('/account');
-  })
+  $("#register-success-close").attr("href", window.location);
 
 })

@@ -44,3 +44,22 @@
   font-weight: 100;
   line-height: 1.4;
 }
+
+.helper-err p {
+  color: #c62e35;
+  display: inline-block;
+  margin: 0;
+}
+.helper-err {
+  margin-top: 10px;
+  background: #ffeeee;
+  border: 1px solid #c62e35;
+}
+
+.helper-err:after {
+  border-bottom-color: #ffeeee;
+}
+
+.helper-err:before{
+  border-bottom-color: #c62e35;
+}

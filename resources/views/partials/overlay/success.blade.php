@@ -1,6 +1,6 @@
 <div id="{{ $id }}" class="overlay-rounded-wrapper flex-col-center overlay-near-shadow hidden">
   <div class="flex-row-reverse">
-    <span id="{{ $id }}-close" class="modal-ds-close overlay-wide-close pointer">X</span>
+    <a href="#" id="{{ $id }}-close" class="modal-ds-close overlay-wide-close pointer">X</a>
   </div>
   <div class="overlay-content-wide overlay-success flex-col-center text-center">
     <div class="success-check-wrapper flex-row-center">

@@ -1,0 +1,77 @@
+// Dividers
+
+.border-panel {
+  border: 1px solid #ababab !important;
+}
+
+.grey-panel {
+  background: $off-white;
+}
+
+.floating-div {
+  background: white;
+  z-index: 10;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+  width: 100%;
+}
+
+.beveled-div {
+  box-shadow: 0px 0px transparent;
+  z-index: 1;
+  position: relative;
+  border-radius: 0;
+  border: 1px solid #e2e2e2;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-ds-close {
+  text-align: right;
+  padding: 6px 10px;
+  font-size: 16px;
+  color: #777
+}
+
+.modal-ds-content {
+  padding: 20px 25px 15px;
+}
+
+.modal-ds-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-ds-button {
+    transition: .2s;
+    width: 60%;
+    border-radius: 3px;
+    border: #559dad 2px solid;
+    font-family: Alegreya Sans Light;
+    text-align: center;
+    font-weight: 200;
+    font-size: 20px;
+    padding: 5px;
+    color: white;
+    background-color: $blue-med;
+}
+
+.modal-ds-button:hover{
+    transition: .2s;
+    color: #444;
+    background-color: white;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}
+
+.ds-button-err {
+  background-color: #f44;
+  border: 2px solid #f44;
+  color: white;
+}
+
+.modal-ds-link {
+  font-family: Alegreya Sans;
+    font-size: 13px;
+    color: $blue-med;
+}

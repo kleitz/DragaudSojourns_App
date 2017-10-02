@@ -1,7 +1,7 @@
 <template id="success-modal-template">
   <div :id="id" class="overlay-rounded-wrapper flex-col-center overlay-near-shadow hidden">
     <div class="flex-row-reverse">
-      <span :id="id +'-close'" class="modal-ds-close overlay-wide-close pointer"  @click="$emit('close')">X</span>
+      <a :id="id +'-close'" class="modal-ds-close overlay-wide-close pointer"  @click="$emit('close')">X</a>
     </div>
     <div class="overlay-content-wide overlay-success flex-col-center text-center">
       <div class="success-check-wrapper flex-row-center">
@@ -22,7 +22,7 @@
         <p class="overlay-wide-msg"><slot name="message"></slot></p>
         <p class="overlay-subscript" v-if="sub == true"><slot name="subscript"></slot></p>
         <p class="overlay-subscript-xs" v-if="subxs == true"><slot name="subscript-xs"></slot></p>
-        <a href="javascript:;" :id="id + '-button'" class="modal-ds-button success-button">{{ button }}</a>
+        <a :href="'/profile/' + href" :id="id + '-button'" class="modal-ds-button success-button">{{ button }}</a>
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@
 
 export default {
   template: "success-modal-template",
-  props: ['id', 'button', 'sub', 'subxs'],
+  props: ['id', 'button', 'sub', 'subxs', 'href'],
   data() {
     return {
 

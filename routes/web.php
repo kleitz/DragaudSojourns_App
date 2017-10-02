@@ -65,28 +65,25 @@ Route::get('/foodandhotels', function () {
     return view('public.foodandhotels');
 });
 
-// Authentication
-
+// User Routes & Authentication
 Route::get('/precheck', 'UsersController@precheck');
 Route::post('/register', 'UsersController@store')->name('register');
 Route::post('/login', 'UsersController@login')->name('login');
 Route::get('/logout', 'UsersController@logout')->name('logout');
-Route::post('/newtraveler', 'TravelersController@store');
 
-// Reset password
-
-// Password Reset Routes...
+// Password Reset Routes
 Route::group(['namespace' => 'Auth'], function() {
-  // Show reset password request form
   Route::get('/user/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
-  // Send password reset email
   Route::post('/user/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
-  // Link to password reset confirmation
   Route::get('/user/password/reset/{token}', 'ResetPasswordController@showResetForm');
-  // Password is reset
   Route::post('/user/password/reset', 'ResetPasswordController@reset')->name('user.password.reset');
 });
 
-// User Profile
+// Profile Routes
+Route::get('/profile/{email}', 'AccountsController@create')->name('profile.index');
+Route::get('/profile/{email}/payments', 'AccountsController@createPayments')->name('profile.payments');
+Route::post('/profile/user/update', 'AccountsController@userUpdate');
 
-Route::get('/useraccount', 'AccountsController@create');
+// Travelers Routes
+Route::post('/newtraveler', 'TravelersController@store');
+Route::post('/updatetraveler', 'TravelersController@update');

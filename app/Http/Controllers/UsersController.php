@@ -17,7 +17,7 @@ class UsersController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest', ['only' => ['store', 'login']]);
     }
 
     // Check whether user exists before registering
@@ -75,7 +75,7 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
-        //
+
     }
 
 

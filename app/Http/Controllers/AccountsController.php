@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
+use Javascript;
+use App\Traveler;
 
 class AccountsController extends Controller
 {
@@ -10,9 +13,31 @@ class AccountsController extends Controller
       $this->middleware('auth');
     }
 
-    public function create()
+    public function userUpdate(Request $request) {
+      $curUser = auth()->user();
+      $curUser->email = $request->input('user.email');
+      $curUser->street = $request->input('user.street');
+      $curUser->cell = $request->input('user.cell');
+      $curUser->home = $request->input('user.home');
+      $curUser->zip = $request->input('user.zip');
+
+      $curUser->save();
+      return "SUCCESS";
+    }
+
+    public function create($email)
     {
-        return view('user.index', ['as' => auth()->user()->email]);
+        $email =  Auth::user()->email;
+        $authUsr = Auth::user();
+        $authTravs = Traveler::where('user', Auth::user()->id)->get();
+        return view('user.index', compact('authUsr', 'authTravs'));
+    }
+    public function createPayments($email)
+    {
+        $email =  Auth::user()->email;
+        $authUsr = Auth::user();
+        $authTravs = Traveler::where('user', Auth::user()->id)->get();
+        return view('user.payments', compact('authUsr', 'authTravs'));
     }
 
         /**

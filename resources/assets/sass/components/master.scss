@@ -6,6 +6,32 @@
   position: relative;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.fix-fill {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.abs-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.dot-dot-dot{
+    white-space: nowrap;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+}
+
 .flex-abs-center{
   display: flex;
   flex-direction: row;
@@ -30,10 +56,34 @@
   flex-direction: row;
   justify-content: center;
 }
+.flex-row-start {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.flex-row-end {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 
 .flex-row-reverse {
   display: flex;
   flex-direction: row-reverse;
+}
+
+.flex-col-start {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.flex-col-end{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .flex-col-center {
@@ -45,10 +95,6 @@
 .margin-auto {
   margin-left: auto !important;
   margin-right: auto !important;
-}
-
-.pass-bullets {
-  font-family: Arial !important;
 }
 
 .free-link {
@@ -89,22 +135,6 @@
   z-index: 500;
   background-color: rgba(0,0,0,0.4);
   background-image: url('/assets/images/textures/60-lines.png');
-}
-
-.fix-fill {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.abs-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
 }
 
 .button-red {
@@ -150,4 +180,49 @@ input:-webkit-autofill {
 
 .shadow-close {
   box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
+}
+
+.shadow-far {
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+.shadow-mix {
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.2),
+              0px 2px 1px rgba(0,0,0,0.3);;
+}
+
+.font-light {
+  font-weight: 100;
+}
+.font-med {
+  font-weight: 300;
+}
+.font-normal {
+  font-weight: 500;
+}
+.font-heavy {
+  font-weight: 600;
+}
+
+
+.opaque {
+  opacity: 0;
+}
+.visible {
+  display: inline-block;
+  visibility: visible;
+}
+
+.ds-tabs {
+  border-bottom: 1px solid #ccc;
+}
+
+
+.ds-tabs > li > a {
+  font-size: 18px;
+  padding: 10px 20px;
+}
+
+.tab-active {
+  border: 1px solid #ccc !important;
+  border-bottom: 1px solid white !important;
 }

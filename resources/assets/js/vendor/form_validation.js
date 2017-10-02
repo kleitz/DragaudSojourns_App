@@ -5,7 +5,30 @@ $(document).ready(function(){
     return event.charCode >=48 && event.charCode <= 57;
   })
   $('.phone-format').mask('(000)000-0000');
+  $(".zip-format").keyup(function(){
+    zipData($(this));
+  })
+  var zipElems = document.getElementsByClassName('zip-format');
+  for (let i = 0; i < zipElems.length; i++){
+    let el = zipElems[i];
+    zipData($(el));
+  };
 })
+
+// Fill zip data
+
+function zipData(elem){
+  str = elem.val();
+  fill = elem.parent().children('.zip-autofill');
+  var reg = /^[0-9]{0,5}$/;
+  if (!reg.test(str))
+    elem.val(str.slice(0, 5));
+  if (str.length == 5) {
+    fillZipData(str, fill);
+  } else if (str.length < 5) {
+    fill.html('');
+  }
+}
 
 // INPUT FORMATTER CLASS
 function InputFormatter() {

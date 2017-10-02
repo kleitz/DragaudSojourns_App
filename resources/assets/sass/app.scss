@@ -1,9 +1,22 @@
-
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600");
+@import "./components/font/alegreya_sans.scss";
 
 // Variables
 @import "variables";
 
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Materialize
+@import "./components/materialize/materialize.scss";
+
+// Master classes
+@import "./components/master.scss";
+
+// Helpers
+@import "./components/partials/helpers.scss";
+
+// Custom animation
+@import "./components/animate/custom_elements";
