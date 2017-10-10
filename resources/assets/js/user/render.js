@@ -3,14 +3,16 @@ let profileElem = ['usr-email', 'usr-street', 'usr-zip', 'usr-home', 'usr-cell']
 let profileCx = document.getElementsByClassName('profile-success');
 
 import TravelerModal from './components/TravelerModal.vue';
+import ConfidentialModal from './components/ConfidentialModal.vue';
+import LoadingModal from './components/LoadingModal.vue';
+import SuccessModal from './components/SuccessModal.vue';
 
-// import Template from './Template.vue';
-
+// Account view controller
 const accountApp = new Vue({
     el: '#accountApp',
     data: {
       userExpand: false,
-      userErr: {email: {v: false, e: 'usr-email', t: 'email'},
+      userErr: {name: {v: false, e: 'usr-name', t: 'string'},
                 street: {v: false, e: 'usr-street', t: 'string'},
                 zip: {v: false, e: 'usr-zip', t: 'zip'},
                 cell: {v: false, e: 'usr-cell', t: 'phone'},
@@ -21,13 +23,14 @@ const accountApp = new Vue({
     },
     methods: {
       userDetailsExpand(){
+        $("#usr-name").focus();
         for (let i = 0; i < profileCx.length; i++){
           $(profileCx[i]).addClass('opaque');
         }
         let link = $("#profile-expand");
         let el = this.userErr;
         let profileErr = [
-              {elem: el.email.e, type: el.email.t},
+              {elem: el.name.e, type: el.name.t},
               {elem: el.street.e, type: el.street.t},
               {elem: el.zip.e, type: el.zip.t}
             ];
@@ -37,11 +40,7 @@ const accountApp = new Vue({
             profileErr.push({elem: el.cell.e, type: el.cell.t});
         let check = validator.isValid(profileErr);
         if (link.text() == 'Save changes') {
-          if (this.userDetails.email != authUsr.email) {
-            this.updateUserDataEmail(check);
-          } else {
             this.updateUserData(check);
-          }
         } else {
             validator.hideError(profileElem);
             closeExpander($("#profile-details"));
@@ -52,7 +51,6 @@ const accountApp = new Vue({
       updateUserData(check){
         let acctApp = this;
         if (check == true) {
-          acctApp.hideErrEmail();
           $.ajax({
               type: "POST",
               url: '/profile/user/update',
@@ -66,7 +64,7 @@ const accountApp = new Vue({
                     }, 200*i);
                   }
                   setTimeout(function(){
-                  openExpander($("#profile-details"));
+                    openExpander($("#profile-details"));
                     $("#profile-expand").text('Edit your profile');
                     window.location.replace('/profile/' + acctApp.userDetails.email);
                   }, 1200);
@@ -97,12 +95,14 @@ const accountApp = new Vue({
         });
       },
       userDetailsClear(){
-        this.hideErrEmail();
+        let acctApp = this;
         openExpander($("#profile-details"));
         validator.hideError(profileElem);
         this.userExpand = false;
         $("#profile-expand").text('Edit your profile');
-        this.userDetails = {email: authUsr.email, street: authUsr.street, zip: authUsr.zip, cell: authUsr.cell, home: authUsr.home};
+        setTimeout(function(){
+          window.location.replace('/profile/' + acctApp.userDetails.email);
+        }, 400);
       },
       emptyTraveler(){
         let trav = this.userTravelers;
@@ -121,12 +121,6 @@ const accountApp = new Vue({
           trav.pop();
         }, 400);
       },
-      showErrEmail(){
-        slideLeft('#err-email-helper');
-      },
-      hideErrEmail(){
-        fadeOut('#err-email-helper');
-      },
       alert(){
         alert('yay');
       },
@@ -135,6 +129,10 @@ const accountApp = new Vue({
           validator.hideError(profileElem);
           validator.isValid([{elem: el.e, type: el.t}]);
         }
+      },
+      showChangeModal(){
+        fadeIn('#dark-overlay');
+        slideLeft('#confidential-modal');
       }
     },
     mounted() {
@@ -143,6 +141,28 @@ const accountApp = new Vue({
 		components: {
 			TravelerModal,
 		},
+    computed: {
+      // computed data
+    }
+});
+
+// Change email/password view controller
+
+const overlayApp = new Vue({
+    el: '#dark-overlay',
+    data: {
+    },
+    methods: {
+      // app-wise functions
+    },
+    mounted() {
+      // do this when ready
+    },
+    components: {
+      ConfidentialModal,
+      SuccessModal,
+      LoadingModal,
+    },
     computed: {
       // computed data
     }

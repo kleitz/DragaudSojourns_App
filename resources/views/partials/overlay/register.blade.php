@@ -6,7 +6,7 @@
 		<li>Personal Details</li>
 		<li>Traveler Details</li>
 	</ul>
-	<!-- fieldsets -->
+	<!-- REGISTRATION FORM 1  -->
 	<fieldset id="reg-fs-one" class="modal-ds-form">
     <div class="msform-close">
       <span class="modal-ds-close pointer" @click="clearData">X</span>
@@ -33,6 +33,7 @@
 		<!-- TO FORM 2 -->
 		<input id="reg-next-acct" type="button" name="next" class="next action-button margin-auto" @click="formTwo" value="Next"/>
 	</fieldset>
+	<!-- REGISTRATION FORM 2  -->
 	<fieldset id="reg-fs-two" class="modal-ds-form">
     <div class="msform-close">
       <span class="modal-ds-close pointer" @click="clearData">X</span>
@@ -62,6 +63,7 @@
 		<input id="prevReg2" type="button" name="previous" class="previous action-button" value="Previous" />
 		<input id="reg-next-det" @click="formThree" type="button" name="next" class="next action-button" value="Next" />
 	</fieldset>
+	<!-- REGISTRATION FORM 3  -->
 	<fieldset id="reg-fs-three" class="modal-ds-form">
     <div class="msform-close">
       <span class="modal-ds-close pointer"  @click="clearData">X</span>
@@ -69,6 +71,10 @@
 		<h4 class="fs-title">Traveler Details</h2>
 		<h4 class="fs-subtitle">Who will be traveling with us?</h3>
 		<!-- NEW TRAVELER(S) -->
+		<div class="shadow-close empty-default border-panel" v-if="numTravelers == 0">
+			<h4>Adding traveler's later?</h4>
+			<p>You can always register new travelers from your profile under the travelers section</p>
+		</div>
 		<traveler-modal ref="traveler" :traveler="regtraveler" :submit="submitAttempt" @error="regIncomplete=true" @remove="deleteTraveler(index)" v-for="(regtraveler, index) in regtravelers" v-bind:key="regtraveler.row" :id="index"></traveler-modal>
 		<div class="pointer flex-row-between traveler-modal-add" @click="insertTraveler">
       <span>Add traveler</span>

@@ -22,13 +22,7 @@
 				</ul>
 			</div>
 			<div class="col-xs-12">
-				<nav aria-label="...">
-				  <ul class="pagination pagination-sm">
-				    <li class="page-item"><a class="page-link" href="#">1</a></li>
-				    <!-- <li class="page-item"><a class="page-link" href="#">2</a></li>
-				    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-				  </ul>
-				</nav>
+				@include('layouts.user.trips')
 			</div>
 		</div>
 	</div>

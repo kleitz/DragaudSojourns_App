@@ -27,6 +27,22 @@ $(document).ready(function(){
   $(".zip-format").keyup(function(){
     zipData($(this));
   })
+  $('.pass-format').bind('keyup click', function(){
+    $(this).attr('type', 'password');
+    if ($(this).val() != ""){
+      $(this).addClass('pass-bullets');
+    } else {
+      $(this).removeClass('pass-bullets');
+    }
+  });
+  $('.pass-reveal').bind('mouseenter click focus', function(){
+    $(this).parent().children('.form-control').removeClass('pass-format');
+    $(this).parent().children('.form-control').attr('type', 'text');
+  });
+  $('.pass-reveal').bind('mouseleave blur', function(){
+    $(this).parent().children('.form-control').addClass('pass-format');
+    $(this).parent().children('.form-control').attr('type', 'password');
+  });
   var zipElems = document.getElementsByClassName('zip-format');
   for (let i = 0; i < zipElems.length; i++){
     let el = zipElems[i];
@@ -373,21 +389,20 @@ function zoomOut(elem) {
 function bindTravelerModal(x){
   let elemP = x.parent();
   let elem = elemP.find('.traveler-modal-details');
-  let elemC = elemP.find('.traveler-modal-title').innerHeight();
-  let elemH = elem.height();
+  let elemC = elemP.find('.traveler-modal-title').outerHeight();
+  let elemH = elem.outerHeight();
 
   if (elemP.hasClass('active')) {
     elemP.removeClass('active');
     elemP.css('max-height', elemC);
-    elem.css('bottom', elemH + 30);
+    elem.css('bottom', elemH);
     $(x).find('.flex-arrow').removeClass('flex-arrow-minus');
   } else {
-    $('.traveler-modal-container').find('.traveler-modal-details').css('bottom', elemH + 30);
+    $('.traveler-modal-container').find('.traveler-modal-details').css('bottom', elemH);
     $('.traveler-modal-container').css('max-height', elemC);
     $('.traveler-modal-container').removeClass('active');
     $('.traveler-modal-container').find('.flex-arrow').removeClass('flex-arrow-minus');
     elemP.addClass('active');
-    elemP.height
     elemP.css('max-height', elemC + elemH + 30);
     elem.css('bottom', '0px');
     $(x).find('.flex-arrow').addClass('flex-arrow-minus');
@@ -399,14 +414,14 @@ function bindTravelerModal(x){
 function acctTravelerModal(x){
   let elemP = x.parent();
   let elem = elemP.find('.traveler-modal-details');
-  let elemC = elemP.find('.traveler-modal-title').innerHeight();
-  let elemH = elem.height();
+  let elemC = elemP.find('.traveler-modal-title').outerHeight();
+  let elemH = elem.outerHeight();
 
   if (elemP.hasClass('active')) {
     elemP.removeClass('active');
     elemP.css('max-height', '35px');
     elemP.css('width', '100%');
-    elem.css('bottom', elem.outerHeight());
+    elem.css('bottom', elemH);
     $(x).find('.flex-arrow').removeClass('flex-arrow-minus');
   } else {
     $('.traveler-modal-container').find('.traveler-modal-details').css('bottom', elemH + 30);
@@ -415,49 +430,11 @@ function acctTravelerModal(x){
     $('.traveler-modal-container').removeClass('active');
     $('.traveler-modal-container').find('.flex-arrow').removeClass('flex-arrow-minus');
     elemP.addClass('active');
-    elemP.height
     elemP.css('max-height', elemC + elemH + 30);
     elemP.css('width', '110%');
     elem.css('bottom', '0px');
     $(x).find('.flex-arrow').addClass('flex-arrow-minus');
   }
-}
-
-function closeTravelerModal(x){
-  let elemP = x.parent();
-  let elem = elemP.find('.traveler-modal-details');
-  let elemC = elemP.find('.traveler-modal-title').innerHeight();
-  let elemH = elem.height();
-  elemP.removeClass('active');
-  elemP.css('max-height', '35px');
-  elemP.css('width', '100%');
-  elem.css('bottom', elemH + 30);
-  $(x).find('.flex-arrow').removeClass('flex-arrow-minus');
-}
-
-function openTravelerModal(x){
-  let elemP = x.parent();
-  let elem = elemP.find('.traveler-modal-details');
-  let elemC = elemP.find('.traveler-modal-title').innerHeight();
-  let elemH = elem.height();
-  elemP.addClass('active');
-  elemP.height
-  elemP.css('max-height', elemC + elemH + 30);
-  elemP.css('width', '110%');
-  elem.css('bottom', '0px');
-  $(x).find('.flex-arrow').addClass('flex-arrow-minus');
-}
-
-function closeAllTravelers(x){
-  let elemP = x.parent();
-  let elem = elemP.find('.traveler-modal-details');
-  let elemC = elemP.find('.traveler-modal-title').innerHeight();
-  let elemH = elem.height();
-  $('.traveler-modal-container').find('.traveler-modal-details').css('bottom', elemH + 30);
-  $('.traveler-modal-container').css('max-height', elemC);
-  $('.traveler-modal-container').css('width', '100%');
-  $('.traveler-modal-container').removeClass('active');
-  $('.traveler-modal-container').find('.flex-arrow').removeClass('flex-arrow-minus');
 }
 
 // Expander

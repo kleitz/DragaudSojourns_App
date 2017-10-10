@@ -16,4 +16,5 @@ $(document).ready(function(){
   $('.slick-arrow').addClass('slider-button btn-floating btn-large waves-effect waves-light grey darken-1');
   $('.slick-prev').html('<i class="material-icons">chevron_left</i>');
   $('.slick-next').html('<i class="material-icons">chevron_right</i>');
+
 })

@@ -8,6 +8,22 @@ $(document).ready(function(){
   $(".zip-format").keyup(function(){
     zipData($(this));
   })
+  $('.pass-format').bind('keyup click', function(){
+    $(this).attr('type', 'password');
+    if ($(this).val() != ""){
+      $(this).addClass('pass-bullets');
+    } else {
+      $(this).removeClass('pass-bullets');
+    }
+  });
+  $('.pass-reveal').bind('mouseenter click focus', function(){
+    $(this).parent().children('.form-control').removeClass('pass-format');
+    $(this).parent().children('.form-control').attr('type', 'text');
+  });
+  $('.pass-reveal').bind('mouseleave blur', function(){
+    $(this).parent().children('.form-control').addClass('pass-format');
+    $(this).parent().children('.form-control').attr('type', 'password');
+  });
   var zipElems = document.getElementsByClassName('zip-format');
   for (let i = 0; i < zipElems.length; i++){
     let el = zipElems[i];

@@ -62,6 +62,7 @@
       </div>
     </div>
   @include('layouts.public.footer')
+  @include('layouts.user.overlay')
 </body>
 <script>
 $.ajaxSetup({

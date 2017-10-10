@@ -14,7 +14,7 @@
             <label for="travname">Name</label>
             <div>
               <input :id="'traveler-modal'+ id + '-name'" v-model="traveler.name" @keyup="testError({elem: 'traveler-modal' + id + '-name', type: 'string'})" class="inline-material-input" type="text" name="travname"/>
-              <span :id="'traveler-modal'+ id + '-name-err'" class="text-left ds-form-errmsg">Please enter a name</span>
+              <span :id="'traveler-modal'+ id + '-name-err'" class="text-left ds-form-errmsg">Please enter their legal name</span>
             </div>
           </div>
           <div class="material-form-group flex-row-start">
@@ -24,7 +24,7 @@
                 <option value="" hidden class="default-option">Gender</option>
                 <option v-for="input in genderIn" :value="input" > {{ input }} </option>
               </select>
-              <span :id="'traveler-modal'+ id + '-gender-err'" class="text-left ds-form-errmsg">Select a gender</span>
+              <span :id="'traveler-modal'+ id + '-gender-err'" class="text-left ds-form-errmsg">Select their gender</span>
             </div>
           </div>
           <div class="material-form-group flex-row-start">
@@ -127,10 +127,7 @@ export default {
         }
       },
       undoChanges() {
-        this.closeMe();
-        setTimeout(function () {
-          window.location.reload();
-        }, 400);
+        window.location.reload();
       },
       storeNew() {
         let checkValid = validator.isValid(this.travErr);

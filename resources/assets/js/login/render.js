@@ -33,9 +33,16 @@ const regApp = new Vue({
 				this.numTravelers--;
 			},
       clearTravelers(){
-        this.numTravelers=0;
-        this.regtravelers = [];
-        this.regIncomplete = false
+        for (let i = 0; i < this.numTravelers; i++){
+          let el='#traveler-modal'+ i;
+          $(el).css('max-height', '29px');
+        }
+        let regApp = this;
+        setTimeout(function(){
+          regApp.numTravelers=0;
+          regApp.regtravelers = [];
+          regApp.regIncomplete = false
+        }, 400);
       },
       formTwo() {
         if (this.verifyEmail() == false)
@@ -119,7 +126,10 @@ const regApp = new Vue({
 				this.$refs.traveler[0].hasWarning = false;
 				this.$refs.traveler[0].hasSubmit = false;
 				validator.hideError(['reg-trav0-fullname', 'reg-trav0-gender', 'reg-trav0-relate',
-			 											'reg-trav0-emerg', 'reg-trav0-ephn',])
+			 											'reg-trav0-emerg', 'reg-trav0-ephn',]);
+        $('#traveler-modal0').css('max-height', '450px');
+        $('#traveler-modal0-details').css('bottom', '0px');
+        $('#traveler-modal0').addClass('active');
 			},
 			verifyEmail() {
         let regApp = this;
@@ -143,7 +153,9 @@ const regApp = new Vue({
 			}
 		},
 		mounted() {
-
+      $('#traveler-modal0').css('max-height', '450px');
+      $('#traveler-modal0-details').css('bottom', '0px');
+      $('#traveler-modal0').addClass('active');
 		},
 		components: {
 			TravelerModal,

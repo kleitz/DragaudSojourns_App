@@ -100,7 +100,6 @@
 .free-link {
   font-family: Alegreya Sans;
   font-size: 14px;
-  color: $blue-med;
 }
 
 .text-left {
@@ -134,6 +133,7 @@
   overflow-y: scroll;
   z-index: 500;
   background-color: rgba(0,0,0,0.4);
+  padding: 50px 0;
   background-image: url('/assets/images/textures/60-lines.png');
 }
 
@@ -147,6 +147,21 @@
   border: 2px solid $red-med !important;
 }
 
+.button-gen {
+  background-color: #559dad;
+  border-color: #559dad;
+  width: auto;
+  min-width: 120px;
+  padding: 0px 15px;
+}
+.button-cancel {
+  background-color: transparent;
+  border-color: #ccc;
+  width: auto;
+  color: #333;
+  min-width: 120px;
+}
+
 .button-alt {
   background-color: #d7dcdd !important;
   color: #414042 !important;
@@ -154,14 +169,14 @@
 }
 
 .ds-button-large {
-  background: #49a0b3
+  background: #49a0b3;
   height: 45px;
   line-height: 45px;
   width: 100%;
   margin-top: 15px;
 }
 .ds-button-large:hover {
-  background: #76c1d2
+  background: #76c1d2;
   color: white;
 }
 

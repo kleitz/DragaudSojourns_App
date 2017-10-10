@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Auth;
 use Javascript;
 use App\Traveler;
@@ -15,11 +16,21 @@ class AccountsController extends Controller
 
     public function userUpdate(Request $request) {
       $curUser = auth()->user();
+      $curUser->name = $request->input('user.name');
       $curUser->email = $request->input('user.email');
       $curUser->street = $request->input('user.street');
       $curUser->cell = $request->input('user.cell');
       $curUser->home = $request->input('user.home');
       $curUser->zip = $request->input('user.zip');
+
+      $curUser->save();
+      return "SUCCESS";
+    }
+
+    public function confidentialUpdate(Request $request) {
+      $curUser = auth()->user();
+      $curUser->password = Hash::make($request->input('user.password'));
+      $curUser->email = $request->input('user.email');
 
       $curUser->save();
       return "SUCCESS";

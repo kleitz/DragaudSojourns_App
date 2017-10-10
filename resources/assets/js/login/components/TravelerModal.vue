@@ -1,22 +1,24 @@
 <template id="traveler-modal-template">
   <div id="traveler-modal-app" v-bind:class="{'traveler-warning' : hasWarning}">
-    <div class="traveler-modal-container shadow-close active" @click="formatPhone">
+    <div :id="'traveler-modal'+ id" class="traveler-modal-container shadow-close" @click="formatPhone">
       <div class="traveler-modal-title pointer flex-row-between">
         <span @click="expandMe">Traveler {{ id + 1 }}: {{ traveler.name }}</span>
-        <div class="flex-arrow flex-arrow-minus" @click="expandMe">
+        <div  :id="'traveler-modal'+ id + '-arrow'" class="flex-arrow flex-arrow-minus" @click="expandMe">
           <div></div>
           <div></div>
         </div>
       </div>
-      <div class="traveler-modal-details flex-column-center">
-        <input :id="'reg-trav' + id + '-fullname'" v-model="traveler.name" @keyup="testError({elem: 'reg-trav' + id + '-fullname', type: 'string'})" class="traveler-fullname traveler-input register-input" type="text" name="travelername" placeholder="Full name"/>
-        <span :id="'reg-trav' + id + '-fullname-err'" class="text-left ds-form-errmsg">Please enter the traveler name</span>
-        <span class="text-left ds-form-errmsg">Please enter your full name</span>
+      <div :id="'traveler-modal'+ id + '-details'" class="traveler-modal-details flex-column-center">
+        <input :id="'reg-trav' + id + '-fullname'" v-model="traveler.name" @click="showHelper" @blur="hideHelper" @keyup="testError({elem: 'reg-trav' + id + '-fullname', type: 'string'})" class="traveler-fullname traveler-input register-input" type="text" name="travelername" placeholder="Legal name"/>
+        <span :id="'reg-trav' + id + '-fullname-err'" class="text-left ds-form-errmsg">Please enter travelers legal name</span>
+        <div :id="'trav-' + id + '-helper'" class="helper-modal hidden">
+    			<p>Legal name as it appears<br/>on travelers government issued ID</p>
+    		</div>
         <select  :id="'reg-trav' + id + '-gender'" @click="testError({elem: 'reg-trav' + id + '-gender', type: 'select'})" v-model="traveler.gender" class="traveler-gender register-input traveler-select pointer" name="travgender">
           <option value="" hidden class="default-option">Gender</option>
           <option v-for="input in genderIn" :value="input" > {{ input }} </option>
         </select>
-        <span :id="'reg-trav' + id + '-gender-err'" class="text-left ds-form-errmsg">Please select the travelers gender</span>
+        <span :id="'reg-trav' + id + '-gender-err'" class="text-left ds-form-errmsg">Please select travelers gender</span>
         <select :id="'reg-trav' + id + '-relate'" @click="testError({elem: 'reg-trav' + id + '-relate', type: 'select'})" v-model="traveler.relate" class="traveler-relation register-input traveler-select pointer" name="travrelationship">
           <option value="" hidden class="default-option">Relationship</option>
           <option v-for="input in relateIn" :value="input" > {{ input }} </option>
@@ -27,7 +29,7 @@
         <span :id="'reg-trav' + id + '-emerg-err'" class="text-left ds-form-errmsg">Please enter an emergency contact</span>
         <input :id="'reg-trav' + id + '-ephn'" @keyup="testError({elem: 'reg-trav' + id + '-ephn', type: 'phone'})"  v-model="traveler.ephn" class="travemerg-phone traveler-input register-input phone-format numbers-only" type="text" @click="formatPhone" name="travelercontphone" placeholder="Phone">
         <span :id="'reg-trav' + id + '-ephn-err'" class="text-left ds-form-errmsg">Please enter a correct phone number</span>
-        <a href="javascript:;" id="reg-no-travelers" class="free-link" @click="$emit('remove')" v-if="id != 0">Remove this traveler</a>
+        <a href="javascript:;" id="reg-no-travelers" class="free-link" @click="removeMe" v-if="id != 0">Remove this traveler</a>
       </div>
     </div>
   </div>
@@ -49,6 +51,13 @@ export default {
   	},
   	methods: {
   		testError(obj) {
+        let el='#traveler-modal'+ this.id;
+        if ($(el).hasClass('active')) {
+          $(el).css('max-height', '-webkit-fill-available');
+          setTimeout(function() {
+            $(el).css('max-height', $(el).outerHeight());
+          }, 100)
+        }
   			if (this.submit == true) this.hasSubmit = true;
   				if (this.hasSubmit == true) {
   					let checkValid = validator.isValid([obj]);
@@ -72,10 +81,40 @@ export default {
   		expandMe(event) {
   			bindTravelerModal($(event.target).parent());
   		},
+      showHelper(event){
+        if ($(event.target).val() == ""){
+          let el = "#trav-" + this.id + "-helper";
+          slideLeft(el);
+        }
+      },
+      hideHelper(){
+        let el = "#trav-" + this.id + "-helper";
+        fadeOut(el);
+      },
+      removeMe(){
+        this.closeMe();
+        let travMod = this;
+        setTimeout(function() {
+          travMod.$emit('remove');
+        }, 400);
+      },
+      closeMe(){
+        let el = '#traveler-modal'+ this.id + '-details';
+        let elP = '#traveler-modal'+ this.id + '-arrow';
+        $(elP).removeClass('flex-arrow-minus');
+        bindTravelerModal($(el));
+      },
   		formatPhone() {
   			$('.phone-format').mask('(000)000-0000');
   		}
-  	}
+  	},
+    mounted(){
+      let el = '#traveler-modal'+ this.id + '-details';
+      let elP = '#traveler-modal'+ this.id + '-arrow'
+      $(el).css('bottom', $(el).outerHeight() + 30);
+      bindTravelerModal($(el));
+      $(elP).addClass('flex-arrow-minus');
+    }
   }
 
 

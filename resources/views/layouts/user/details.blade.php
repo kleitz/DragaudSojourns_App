@@ -8,25 +8,21 @@
       </div>
     </div>
     <div class="expander-content beveled-div">
-      <div class="beveled-input {{ $errors->has('email') ? ' has-error' : '' }}">
-        <label for="email" class="control-label">E-Mail Address
-          <img src="/assets/images/icons/hazard_tri.png" id="usr-email-err" class="inline-hazard"/>
+      <div class="beveled-input">
+        <label for="name" class="control-label">Full name
+          <img src="/assets/images/icons/hazard_tri.png" id="usr-name-err" class="inline-hazard"/>
           <img src="/assets/images/icons/success_check.png" class="inline-success profile-success opaque"/>
         </label>
-        <input @click="hideErrEmail" @keyup="validate(userErr.email)" id="usr-email" v-model="userDetails.email" type="email" class="form-control" name="email" required>
-        <div id="err-email-helper" class="helper-modal hidden helper-err">
-    			<p>Error: not available</p><img src="/assets/images/icons/hazard_tri.png" class="inline-hazard visible"/>
-          <p>This email address is already taken</p>
-    		</div>
+        <input @keyup="validate(userErr.name)" id="usr-name" v-model="userDetails.name" type="text" class="form-control" name="name" required autofocus>
       </div>
-      <div class="beveled-input {{ $errors->has('email') ? ' has-error' : '' }}">
+      <div class="beveled-input">
         <label for="street" class="control-label">Address
           <img src="/assets/images/icons/hazard_tri.png" id="usr-street-err" class="inline-hazard"/>
           <img src="/assets/images/icons/success_check.png" class="inline-success profile-success opaque"/>
         </label>
         <input @keyup="validate(userErr.street)" id="usr-street" v-model="userDetails.street" type="text" class="form-control" name="street" required>
       </div>
-      <div class="beveled-input {{ $errors->has('email') ? ' has-error' : '' }}">
+      <div class="beveled-input">
         <label for="zip" class="control-label">ZIP
           <img src="/assets/images/icons/hazard_tri.png" id="usr-zip-err" class="inline-hazard"/>
           <img src="/assets/images/icons/success_check.png" class="inline-success profile-success opaque"/>
@@ -36,7 +32,7 @@
           <div class="zip-autofill"></div>
         </div>
       </div>
-      <div class="beveled-input {{ $errors->has('email') ? ' has-error' : '' }}">
+      <div class="beveled-input">
         <div class="row">
           <div class="col-xs-6">
             <label for="cell" class="control-label">Cell
@@ -54,8 +50,8 @@
           </div>
         </div>
       </div>
-      <div class="beveled-input flex-col-end {{ $errors->has('email') ? ' has-error' : '' }}">
-        <a href="javascript:;">Change your password...</a>
+      <div class="beveled-input flex-col-end">
+        <a href="javascript:;" @click="showChangeModal">Change your email/password...</a>
       </div>
     </div>
   </div>

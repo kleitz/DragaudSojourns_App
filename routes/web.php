@@ -83,6 +83,7 @@ Route::group(['namespace' => 'Auth'], function() {
 Route::get('/profile/{email}', 'AccountsController@create')->name('profile.index');
 Route::get('/profile/{email}/payments', 'AccountsController@createPayments')->name('profile.payments');
 Route::post('/profile/user/update', 'AccountsController@userUpdate');
+Route::post('/profile/user/confidential', 'AccountsController@confidentialUpdate');
 
 // Travelers Routes
 Route::post('/newtraveler', 'TravelersController@store');
