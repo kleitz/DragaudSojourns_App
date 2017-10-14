@@ -131,6 +131,15 @@ function closeExpander(elem){
     xC.css('bottom', '0px');
 }
 
+function expanderController(el){
+  let par = $(el).closest('.expander');
+  if (par.hasClass("expander-open")) {
+    closeExpander(par);
+  } else {
+    openExpander(par);
+  }
+}
+
 $(document).ready(function(){
   let expanders = document.getElementsByClassName('expander');
 

@@ -60,12 +60,111 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 60);
+/******/ 	return __webpack_require__(__webpack_require__.s = 62);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */,
+/* 1 */
+/***/ (function(module, exports) {
 
-/***/ 30:
+/* globals __VUE_SSR_CONTEXT__ */
+
+// this module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports) {
 
 /*
@@ -147,8 +246,254 @@ function toComment(sourceMap) {
 
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 31:
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+var listToStyles = __webpack_require__(34)
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+module.exports = function (parentId, list, _isProduction) {
+  isProduction = _isProduction
+
+  var styles = listToStyles(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = listToStyles(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10345,11 +10690,10 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
 
 /***/ }),
-
-/***/ 32:
+/* 33 */
 /***/ (function(module, exports) {
 
 var g;
@@ -10376,230 +10720,7 @@ module.exports = g;
 
 
 /***/ }),
-
-/***/ 33:
-/***/ (function(module, exports, __webpack_require__) {
-
-/*
-  MIT License http://www.opensource.org/licenses/mit-license.php
-  Author Tobias Koppers @sokra
-  Modified by Evan You @yyx990803
-*/
-
-var hasDocument = typeof document !== 'undefined'
-
-if (typeof DEBUG !== 'undefined' && DEBUG) {
-  if (!hasDocument) {
-    throw new Error(
-    'vue-style-loader cannot be used in a non-browser environment. ' +
-    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
-  ) }
-}
-
-var listToStyles = __webpack_require__(34)
-
-/*
-type StyleObject = {
-  id: number;
-  parts: Array<StyleObjectPart>
-}
-
-type StyleObjectPart = {
-  css: string;
-  media: string;
-  sourceMap: ?string
-}
-*/
-
-var stylesInDom = {/*
-  [id: number]: {
-    id: number,
-    refs: number,
-    parts: Array<(obj?: StyleObjectPart) => void>
-  }
-*/}
-
-var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
-var singletonElement = null
-var singletonCounter = 0
-var isProduction = false
-var noop = function () {}
-
-// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
-// tags it will allow on a page
-var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
-
-module.exports = function (parentId, list, _isProduction) {
-  isProduction = _isProduction
-
-  var styles = listToStyles(parentId, list)
-  addStylesToDom(styles)
-
-  return function update (newList) {
-    var mayRemove = []
-    for (var i = 0; i < styles.length; i++) {
-      var item = styles[i]
-      var domStyle = stylesInDom[item.id]
-      domStyle.refs--
-      mayRemove.push(domStyle)
-    }
-    if (newList) {
-      styles = listToStyles(parentId, newList)
-      addStylesToDom(styles)
-    } else {
-      styles = []
-    }
-    for (var i = 0; i < mayRemove.length; i++) {
-      var domStyle = mayRemove[i]
-      if (domStyle.refs === 0) {
-        for (var j = 0; j < domStyle.parts.length; j++) {
-          domStyle.parts[j]()
-        }
-        delete stylesInDom[domStyle.id]
-      }
-    }
-  }
-}
-
-function addStylesToDom (styles /* Array<StyleObject> */) {
-  for (var i = 0; i < styles.length; i++) {
-    var item = styles[i]
-    var domStyle = stylesInDom[item.id]
-    if (domStyle) {
-      domStyle.refs++
-      for (var j = 0; j < domStyle.parts.length; j++) {
-        domStyle.parts[j](item.parts[j])
-      }
-      for (; j < item.parts.length; j++) {
-        domStyle.parts.push(addStyle(item.parts[j]))
-      }
-      if (domStyle.parts.length > item.parts.length) {
-        domStyle.parts.length = item.parts.length
-      }
-    } else {
-      var parts = []
-      for (var j = 0; j < item.parts.length; j++) {
-        parts.push(addStyle(item.parts[j]))
-      }
-      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
-    }
-  }
-}
-
-function createStyleElement () {
-  var styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  head.appendChild(styleElement)
-  return styleElement
-}
-
-function addStyle (obj /* StyleObjectPart */) {
-  var update, remove
-  var styleElement = document.querySelector('style[data-vue-ssr-id~="' + obj.id + '"]')
-
-  if (styleElement) {
-    if (isProduction) {
-      // has SSR styles and in production mode.
-      // simply do nothing.
-      return noop
-    } else {
-      // has SSR styles but in dev mode.
-      // for some reason Chrome can't handle source map in server-rendered
-      // style tags - source maps in <style> only works if the style tag is
-      // created and inserted dynamically. So we remove the server rendered
-      // styles and inject new ones.
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  if (isOldIE) {
-    // use singleton mode for IE9.
-    var styleIndex = singletonCounter++
-    styleElement = singletonElement || (singletonElement = createStyleElement())
-    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
-    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
-  } else {
-    // use multi-style-tag mode in all other cases
-    styleElement = createStyleElement()
-    update = applyToTag.bind(null, styleElement)
-    remove = function () {
-      styleElement.parentNode.removeChild(styleElement)
-    }
-  }
-
-  update(obj)
-
-  return function updateStyle (newObj /* StyleObjectPart */) {
-    if (newObj) {
-      if (newObj.css === obj.css &&
-          newObj.media === obj.media &&
-          newObj.sourceMap === obj.sourceMap) {
-        return
-      }
-      update(obj = newObj)
-    } else {
-      remove()
-    }
-  }
-}
-
-var replaceText = (function () {
-  var textStore = []
-
-  return function (index, replacement) {
-    textStore[index] = replacement
-    return textStore.filter(Boolean).join('\n')
-  }
-})()
-
-function applyToSingletonTag (styleElement, index, remove, obj) {
-  var css = remove ? '' : obj.css
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = replaceText(index, css)
-  } else {
-    var cssNode = document.createTextNode(css)
-    var childNodes = styleElement.childNodes
-    if (childNodes[index]) styleElement.removeChild(childNodes[index])
-    if (childNodes.length) {
-      styleElement.insertBefore(cssNode, childNodes[index])
-    } else {
-      styleElement.appendChild(cssNode)
-    }
-  }
-}
-
-function applyToTag (styleElement, obj) {
-  var css = obj.css
-  var media = obj.media
-  var sourceMap = obj.sourceMap
-
-  if (media) {
-    styleElement.setAttribute('media', media)
-  }
-
-  if (sourceMap) {
-    // https://developer.chrome.com/devtools/docs/javascript-debugging
-    // this makes source maps inside style tags work properly in Chrome
-    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
-    // http://stackoverflow.com/a/26603875
-    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
-  }
-
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css
-  } else {
-    while (styleElement.firstChild) {
-      styleElement.removeChild(styleElement.firstChild)
-    }
-    styleElement.appendChild(document.createTextNode(css))
-  }
-}
-
-
-/***/ }),
-
-/***/ 34:
+/* 34 */
 /***/ (function(module, exports) {
 
 /**
@@ -10632,29 +10753,133 @@ module.exports = function listToStyles (parentId, list) {
 
 
 /***/ }),
-
-/***/ 60:
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(61);
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(73),
+  /* template */
+  __webpack_require__(74),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\js\\user\\components\\LoadingModal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] LoadingModal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-000abf6a", Component.options)
+  } else {
+    hotAPI.reload("data-v-000abf6a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
 
 
 /***/ }),
+/* 36 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 61:
+var disposed = false
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(75),
+  /* template */
+  __webpack_require__(76),
+  /* styles */
+  null,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\js\\user\\components\\SuccessModal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] SuccessModal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-58871083", Component.options)
+  } else {
+    hotAPI.reload("data-v-58871083", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 37 */,
+/* 38 */,
+/* 39 */,
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */,
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */,
+/* 62 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(63);
+
+
+/***/ }),
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_TravelerModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConfidentialModal_vue__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConfidentialModal_vue__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_ConfidentialModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__components_ConfidentialModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_SuccessModal_vue__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_SuccessModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_SuccessModal_vue__);
-window.Vue = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_NewBookingModal_vue__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_NewBookingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_NewBookingModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NewPaymentModal_vue__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NewPaymentModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_NewPaymentModal_vue__);
+window.Vue = __webpack_require__(32);
+
 var profileElem = ['usr-email', 'usr-street', 'usr-zip', 'usr-home', 'usr-cell'];
 var profileCx = document.getElementsByClassName('profile-success');
 
@@ -10662,6 +10887,8 @@ var profileCx = document.getElementsByClassName('profile-success');
 
 
 
+
+var bus = new Vue();
 
 // Account view controller
 var accountApp = new Vue({
@@ -10734,18 +10961,6 @@ var accountApp = new Vue({
         }
       }
     },
-    updateUserDataEmail: function updateUserDataEmail(check) {
-      var acctApp = this;
-      $.ajax({
-        type: "GET",
-        url: '/precheck',
-        data: { email: acctApp.userDetails },
-        success: function success(data) {
-          if (data == "OPEN") acctApp.updateUserData(check);
-          if (data == "TAKEN") acctApp.showErrEmail();
-        }
-      });
-    },
     userDetailsClear: function userDetailsClear() {
       var acctApp = this;
       openExpander($("#profile-details"));
@@ -10792,9 +11007,21 @@ var accountApp = new Vue({
         validator.isValid([{ elem: el.e, type: el.t }]);
       }
     },
-    showChangeModal: function showChangeModal() {
+    showConfidentModal: function showConfidentModal() {
+      bus.$emit("CONFIDENTIAL");
       fadeIn('#dark-overlay');
       slideLeft('#confidential-modal');
+    },
+    showBookingModal: function showBookingModal() {
+      bus.$emit("BOOKING");
+      fadeIn('#dark-overlay');
+      slideLeft('#new-booking-modal');
+    },
+    showPaymentModal: function showPaymentModal(elem) {
+      tripPayment = elem;
+      bus.$emit("PAYMENT");
+      fadeIn('#dark-overlay');
+      slideLeft('#new-payment-modal');
     }
   },
   mounted: function mounted() {
@@ -10813,18 +11040,42 @@ var accountApp = new Vue({
 
 var overlayApp = new Vue({
   el: '#dark-overlay',
-  data: {},
+  data: {
+    newPayment: false,
+    newBooking: false,
+    newConfidential: false
+  },
   methods: {
     // app-wise functions
+    paymentClose: function paymentClose() {
+      this.newPayment = false;
+    },
+    bookingClose: function bookingClose() {
+      this.newBooking = false;
+    },
+    confidentialClose: function confidentialClose() {
+      this.newConfidential = false;
+    }
   },
   mounted: function mounted() {
+    var _this = this;
+
     // do this when ready
+    bus.$on('PAYMENT', function () {
+      return _this.newPayment = true;
+    });
+    bus.$on('BOOKING', function () {
+      return _this.newBooking = true;
+    });
+    bus.$on('CONFIDENTIAL', function () {
+      return _this.newConfidential = true;
+    });
   },
 
   components: {
     ConfidentialModal: __WEBPACK_IMPORTED_MODULE_1__components_ConfidentialModal_vue___default.a,
-    SuccessModal: __WEBPACK_IMPORTED_MODULE_3__components_SuccessModal_vue___default.a,
-    LoadingModal: __WEBPACK_IMPORTED_MODULE_2__components_LoadingModal_vue___default.a
+    NewBookingModal: __WEBPACK_IMPORTED_MODULE_2__components_NewBookingModal_vue___default.a,
+    NewPaymentModal: __WEBPACK_IMPORTED_MODULE_3__components_NewPaymentModal_vue___default.a
   },
   computed: {
     // computed data
@@ -10832,20 +11083,19 @@ var overlayApp = new Vue({
 });
 
 /***/ }),
-
-/***/ 62:
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(63)
+  __webpack_require__(65)
 }
-var Component = __webpack_require__(8)(
+var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(65),
+  __webpack_require__(67),
   /* template */
-  __webpack_require__(66),
+  __webpack_require__(68),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -10877,18 +11127,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-
-/***/ 63:
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(64);
+var content = __webpack_require__(66);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(33)("4e9fd9d7", content, false);
+var update = __webpack_require__(5)("4e9fd9d7", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -10904,11 +11153,10 @@ if(false) {
 }
 
 /***/ }),
-
-/***/ 64:
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(30)(undefined);
+exports = module.exports = __webpack_require__(4)(undefined);
 // imports
 
 
@@ -10919,8 +11167,7 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 
 /***/ }),
-
-/***/ 65:
+/* 67 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11095,8 +11342,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-
-/***/ 66:
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -11110,13 +11356,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": 'traveler-modal' + _vm.id
     }
   }, [_c('div', {
-    staticClass: "traveler-modal-title pointer flex-row-between"
+    staticClass: "traveler-modal-title pointer flex-row-between waves-effect waves-light"
   }, [_c('span', {
     staticClass: "dot-dot-dot",
     on: {
       "click": _vm.expandMe
     }
-  }, [_vm._v("Traveler " + _vm._s(_vm.id + 1) + ": " + _vm._s(_vm.traveler.name))]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s((_vm.traveler.name == "") ? 'Traveler ' + (_vm.id + 1) + ': ' : '') + _vm._s(_vm.traveler.name))]), _vm._v(" "), _c('div', {
     staticClass: "flex-arrow",
     attrs: {
       "id": 'traveler-modal' + _vm.id + '-arrow'
@@ -11401,118 +11647,19 @@ if (false) {
 }
 
 /***/ }),
-
-/***/ 8:
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// this module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
-
-/***/ 86:
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(87)
+  __webpack_require__(70)
 }
-var Component = __webpack_require__(8)(
+var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(89),
+  __webpack_require__(72),
   /* template */
-  __webpack_require__(90),
+  __webpack_require__(77),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -11544,18 +11691,17 @@ module.exports = Component.exports
 
 
 /***/ }),
-
-/***/ 87:
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(88);
+var content = __webpack_require__(71);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(33)("254d47da", content, false);
+var update = __webpack_require__(5)("254d47da", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -11571,23 +11717,258 @@ if(false) {
 }
 
 /***/ }),
-
-/***/ 88:
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(30)(undefined);
+exports = module.exports = __webpack_require__(4)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
 
 /***/ }),
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-/***/ 89:
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  template: "#confidential-modal-template",
+  props: [],
+  data: function data() {
+    return {
+      hasErrors: false,
+      hasSubmit: false,
+      emailExists: false,
+      confPass: "",
+      resetData: {
+        email: authUsr.email,
+        password: ''
+      }
+    };
+  },
+
+  methods: {
+    closeMe: function closeMe() {
+      this.$emit('close');
+      fadeOut("#dark-overlay");
+      zoomOut("#confidential-modal");
+    },
+    testErrors: function testErrors() {
+      if (this.hasSubmit == true) {
+        var checkErr = validator.isValid([{ elem: "conf-email", type: 'email' }, { elem: "conf-password", type: 'strongpass' }]);
+        if (checkErr != true || this.resetData.password != this.confPass) {
+          this.hasErrors = true;
+        } else {
+          this.hasErrors = false;
+        }
+        if (this.resetData.password != this.confPass) {
+          validator.showError(['conf-passwordconf']);
+        } else {
+          validator.hideError(['conf-passwordconf']);
+        }
+      }
+    },
+    verifyEmail: function verifyEmail() {
+      this.testErrors();
+      var confApp = this;
+      if (this.resetData.email !== authUsr.email) {
+        $.ajax({
+          type: "GET",
+          url: '/precheck',
+          data: { email: confApp.resetData.email },
+          success: function success(response) {
+            if (response === "TAKEN") {
+              confApp.emailExists = true;
+            } else {
+              confApp.emailExists = false;
+            }
+          }
+        });
+      }
+    },
+    saveChanges: function saveChanges() {
+      this.hasSubmit = true;
+      var confApp = this;
+      this.testErrors();
+      if (this.hasErrors == false && this.emailExists == false) {
+        zoomOut("#confidential-wrapper");
+        slideLeft("#confidential-loader");
+        $("#confidential-success-close, #confidential-success-button").attr("href", '/profile/' + confApp.resetData.email);
+        $.ajax({
+          type: "POST",
+          url: '/profile/user/confidential',
+          data: { user: confApp.resetData },
+          success: function success(response) {
+            setTimeout(function () {
+              zoomOut("#confidential-loader");
+              slideLeft("#confidential-success");
+            }, 2000);
+          }
+        });
+      }
+    }
+  },
+  mounted: function mounted() {
+    bindFormatters();
+  },
+
+  components: {
+    SuccessModal: __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default.a,
+    LoadingModal: __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default.a
+  }
+});
+
+/***/ }),
+/* 73 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  template: "loading-modal-template",
+  props: ['id'],
+  data: function data() {
+    return {};
+  },
+
+  methods: {}
+});
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "overlay-rounded-wrapper flex-row-between overlay-near-shadow hidden",
+    attrs: {
+      "id": _vm.id
+    }
+  }, [_c('div', {
+    staticClass: "overlay-loader flex-col-center"
+  }, [_c('svg', {
+    staticClass: "spinner",
+    attrs: {
+      "width": "45px",
+      "height": "45px",
+      "viewBox": "0 0 66 66",
+      "xmlns": "http://www.w3.org/2000/svg"
+    }
+  }, [_c('circle', {
+    staticClass: "circle",
+    attrs: {
+      "fill": "none",
+      "stroke-width": "6",
+      "stroke-linecap": "round",
+      "cx": "33",
+      "cy": "33",
+      "r": "30"
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "overlay-loader-msg flex-col-center"
+  }, [_c('h3', [_vm._t("header")], 2), _vm._v(" "), _c('p', [_vm._t("message")], 2)])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-000abf6a", module.exports)
+  }
+}
+
+/***/ }),
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11621,117 +12002,116 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  template: "#confidential-modal-template",
-  props: [],
+  template: "success-modal-template",
+  props: ['id', 'button', 'sub', 'subxs', 'href'],
   data: function data() {
     return {
-      hasErrors: false,
-      hasSubmit: false,
-      emailExists: false,
-      confPass: "",
-      resetData: {
-        email: authUsr.email,
-        password: ''
-      }
+      subActive: false,
+      subxsActive: false
     };
   },
 
-  methods: {
-    closeMe: function closeMe() {
-      this.hasSubmit = false;
-      this.confPass = "";
-      this.resetData = {
-        email: authUsr.email,
-        pass: ''
-      };
-      validator.hideError(['conf-passwordconf', 'conf-password', 'conf-email']);
-      fadeOut("#dark-overlay");
-      zoomOut("#confidential-modal");
-    },
-    testErrors: function testErrors() {
-      if (this.hasSubmit == true) {
-        var checkErr = validator.isValid([{ elem: "conf-email", type: 'email' }, { elem: "conf-password", type: 'strongpass' }]);
-        if (checkErr != true) this.hasErrors = true;
-        if (this.resetData.password != this.confPass) {
-          validator.showError(['conf-passwordconf']);
-          this.hasErrors = true;
-        } else {
-          validator.hideError(['conf-passwordconf']);
-        }
-      }
-    },
-    verifyEmail: function verifyEmail() {
-      this.testErrors();
-      var confApp = this;
-      if (this.resetData.email !== authUsr.email) {
-        $.ajax({
-          type: "GET",
-          url: '/precheck',
-          data: { email: confApp.resetData.email },
-          success: function success(response) {
-            if (response === "TAKEN") {
-              confApp.emailExists = true;
-            } else {
-              confApp.emailExists = false;
-            }
-          }
-        });
-      }
-    },
-    saveChanges: function saveChanges() {
-      this.hasSubmit = true;
-      var confApp = this;
-      this.testErrors();
-      if (this.hasErrors == false && this.emailExists == false) {
-        zoomOut("#confidential-modal");
-        slideLeft("#confidential-loader");
-        $("#confidential-success-close, #confidential-success-button").attr("href", '/profile/' + confApp.resetData.email);
-        $.ajax({
-          type: "POST",
-          url: '/profile/user/confidential',
-          data: { user: confApp.resetData },
-          success: function success(response) {
-            setTimeout(function () {
-              zoomOut("#confidential-loader");
-              slideLeft("#confidential-success");
-            }, 2000);
-          }
-        });
-      }
-    }
-  },
-  mounted: function mounted() {}
+  methods: {},
+  mounted: function mounted() {
+    if (this.sub == true) this.subActive = true;
+    if (this.subxs == true) this.subxsActive = true;
+  }
 });
 
 /***/ }),
-
-/***/ 90:
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "panel panel-secure"
+    staticClass: "overlay-rounded-wrapper flex-col-center overlay-near-shadow hidden",
+    attrs: {
+      "id": _vm.id
+    }
+  }, [_c('div', {
+    staticClass: "flex-row-reverse"
+  }, [_c('a', {
+    staticClass: "modal-ds-close overlay-wide-close pointer",
+    attrs: {
+      "id": _vm.id + '-close'
+    }
+  }, [_vm._v("X")])]), _vm._v(" "), _c('div', {
+    staticClass: "overlay-content-wide overlay-success flex-col-center text-center"
+  }, [_c('div', {
+    staticClass: "success-check-wrapper flex-row-center"
+  }, [_c('div', {
+    staticClass: "success-check-bubble"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "checkmark"
+  }, [_c('svg', {
+    attrs: {
+      "version": "1.1",
+      "id": "Layer_1",
+      "xmlns": "http://www.w3.org/2000/svg",
+      "xmlns:xlink": "http://www.w3.org/1999/xlink",
+      "x": "0px",
+      "y": "0px",
+      "viewBox": "0 0 161.2 161.2",
+      "enable-background": "new 0 0 161.2 161.2",
+      "xml:space": "preserve"
+    }
+  }, [_c('path', {
+    staticClass: "check-path",
+    attrs: {
+      "fill": "none",
+      "stroke": "#fff",
+      "stroke-miterlimit": "10",
+      "d": "M425.9,52.1L425.9,52.1c-2.2-2.6-6-2.6-8.3-0.1l-42.7,46.2l-14.3-16.4\n          \tc-2.3-2.7-6.2-2.7-8.6-0.1c-1.9,2.1-2,5.6-0.1,7.7l17.6,20.3c0.2,0.3,0.4,0.6,0.6,0.9c1.8,2,4.4,2.5,6.6,1.4c0.7-0.3,1.4-0.8,2-1.5\n          \tc0.3-0.3,0.5-0.6,0.7-0.9l46.3-50.1C427.7,57.5,427.7,54.2,425.9,52.1z"
+    }
+  }), _vm._v(" "), _c('polyline', {
+    staticClass: "check-path",
+    attrs: {
+      "fill": "none",
+      "stroke": "#fff",
+      "stroke-width": "6",
+      "stroke-linecap": "round",
+      "stroke-miterlimit": "10",
+      "points": "113,52.8\n          \t74.1,108.4 48.2,86.4 "
+    }
+  })])])]), _vm._v(" "), _c('h3', {
+    staticClass: "overlay-wide-header"
+  }, [_vm._t("header")], 2), _vm._v(" "), _c('p', {
+    staticClass: "overlay-wide-msg"
+  }, [_vm._t("message")], 2), _vm._v(" "), (_vm.subActive == true) ? _c('p', {
+    staticClass: "overlay-subscript"
+  }, [_vm._t("subscript")], 2) : _vm._e(), _vm._v(" "), (_vm.subxsActive == true) ? _c('p', {
+    staticClass: "overlay-subscript-xs"
+  }, [_vm._t("subscript-xs")], 2) : _vm._e(), _vm._v(" "), _c('a', {
+    staticClass: "ds-button button-gen success-button",
+    attrs: {
+      "href": '/profile/' + _vm.href,
+      "id": _vm.id + '-button'
+    }
+  }, [_vm._v(_vm._s(_vm.button))])])])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-58871083", module.exports)
+  }
+}
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "flex-abs-center abs-fill"
+  }, [_c('div', {
+    staticClass: "panel panel-secure",
+    attrs: {
+      "id": "confidential-wrapper"
+    }
   }, [_c('div', {
     staticClass: "panel-heading flex-row-between"
   }, [_c('h2', {
@@ -11880,7 +12260,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "margin-top": "20px"
     }
   }, [_c('button', {
-    staticClass: "modal-ds-button button-gen waves-effect",
+    staticClass: "ds-button button-gen waves-effect",
     attrs: {
       "id": "reg-submit",
       "type": "button",
@@ -11890,8 +12270,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.saveChanges
     }
-  }, [_vm._v("\n    \t\t\tSave changes\n    \t\t")]), _vm._v(" "), _c('button', {
-    staticClass: "modal-ds-button button-cancel waves-effect",
+  }, [_vm._v("\n      \t\t\tSave changes\n      \t\t")]), _vm._v(" "), _c('button', {
+    staticClass: "ds-button button-cancel waves-effect",
     attrs: {
       "id": "reg-submit",
       "type": "button",
@@ -11901,7 +12281,38 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.closeMe
     }
-  }, [_vm._v("\n    \t\t\tCancel\n    \t\t")])])])])])
+  }, [_vm._v("\n      \t\t\tCancel\n      \t\t")])])])])]), _vm._v(" "), _c('loading-modal', {
+    attrs: {
+      "id": 'confidential-loader'
+    }
+  }, [_c('template', {
+    attrs: {
+      "slot": "header"
+    },
+    slot: "header"
+  }, [_vm._v("Please wait...")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "message"
+    },
+    slot: "message"
+  }, [_vm._v("We're updating your information")])], 2), _vm._v(" "), _c('success-modal', {
+    attrs: {
+      "id": 'confidential-success',
+      "button": 'Continue',
+      "sub": false,
+      "subxs": false
+    }
+  }, [_c('template', {
+    attrs: {
+      "slot": "header"
+    },
+    slot: "header"
+  }, [_vm._v("Account updated!")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "message"
+    },
+    slot: "message"
+  }, [_vm._v("Close this box or press continue to proceed.")])], 2)], 1)
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "input-group-addon pass-reveal"
@@ -11928,26 +12339,29 @@ if (false) {
 }
 
 /***/ }),
-
-/***/ 91:
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var Component = __webpack_require__(8)(
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(79)
+}
+var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(92),
+  __webpack_require__(81),
   /* template */
-  __webpack_require__(93),
+  __webpack_require__(82),
   /* styles */
-  null,
+  injectStyle,
   /* scopeId */
   null,
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\js\\user\\components\\LoadingModal.vue"
+Component.options.__file = "C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\js\\user\\components\\NewBookingModal.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] LoadingModal.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] NewBookingModal.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -11956,9 +12370,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-000abf6a", Component.options)
+    hotAPI.createRecord("data-v-46783e0b", Component.options)
   } else {
-    hotAPI.reload("data-v-000abf6a", Component.options)
+    hotAPI.reload("data-v-46783e0b", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -11969,132 +12383,55 @@ module.exports = Component.exports
 
 
 /***/ }),
-
-/***/ 92:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  template: "loading-modal-template",
-  props: ['id'],
-  data: function data() {
-    return {};
-  },
-
-  methods: {}
-});
-
-/***/ }),
-
-/***/ 93:
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "overlay-rounded-wrapper flex-row-between overlay-near-shadow hidden",
-    attrs: {
-      "id": _vm.id
-    }
-  }, [_c('div', {
-    staticClass: "overlay-loader flex-col-center"
-  }, [_c('svg', {
-    staticClass: "spinner",
-    attrs: {
-      "width": "45px",
-      "height": "45px",
-      "viewBox": "0 0 66 66",
-      "xmlns": "http://www.w3.org/2000/svg"
-    }
-  }, [_c('circle', {
-    staticClass: "circle",
-    attrs: {
-      "fill": "none",
-      "stroke-width": "6",
-      "stroke-linecap": "round",
-      "cx": "33",
-      "cy": "33",
-      "r": "30"
-    }
-  })])]), _vm._v(" "), _c('div', {
-    staticClass: "overlay-loader-msg flex-col-center"
-  }, [_c('h3', [_vm._t("header")], 2), _vm._v(" "), _c('p', [_vm._t("message")], 2)])])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-000abf6a", module.exports)
-  }
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(80);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("625bf35c", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-46783e0b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewBookingModal.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-46783e0b\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewBookingModal.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
 }
 
 /***/ }),
-
-/***/ 94:
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var disposed = false
-var Component = __webpack_require__(8)(
-  /* script */
-  __webpack_require__(95),
-  /* template */
-  __webpack_require__(96),
-  /* styles */
-  null,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\js\\user\\components\\SuccessModal.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] SuccessModal.vue: functional components are not supported with templates, they should use render functions.")}
+exports = module.exports = __webpack_require__(4)(undefined);
+// imports
 
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-58871083", Component.options)
-  } else {
-    hotAPI.reload("data-v-58871083", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
 
-module.exports = Component.exports
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
 
 
 /***/ }),
-
-/***/ 95:
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__);
 //
 //
 //
@@ -12124,98 +12461,1498 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  template: "success-modal-template",
-  props: ['id', 'button', 'sub', 'subxs', 'href'],
+  template: "#new-booking-modal-template",
+  props: [],
   data: function data() {
-    return {};
+    return {
+      tripDetails: false,
+      groupExists: false,
+      spotTaken: true,
+      userTravelers: authTravs,
+      groupInit: { id: "", number: "", destination: "", depart: "", return: "",
+        school: "", packages: "", icon: "", itinerary: "", release: "",
+        message: "" },
+      groupDetails: "",
+      newTrip: { group: "", group_name: "", user: authUsr.id, traveler: "", trav_name: "", insurance: "No", package: "", total: "" }
+    };
   },
 
-  methods: {}
+  methods: {
+    closeMe: function closeMe() {
+      this.$emit('close');
+      fadeOut("#dark-overlay");
+      zoomOut("#new-booking-modal");
+    },
+    findGroup: function findGroup() {
+      var bookApp = this;
+      $.ajax({
+        type: "GET",
+        url: '/groups/specific',
+        data: { bookingNum: bookApp.newTrip.group_name },
+        success: function success(data) {
+          if (data != "") {
+            bookApp.groupExists = true;
+            bookApp.groupDetails = data;
+          } else {
+            bookApp.groupExists = false;
+            bookApp.groupDetails = bookApp.groupInit;
+          }
+        }
+      });
+      this.detailsProceed();
+    },
+    detailsProceed: function detailsProceed() {
+      this.newTrip.package = $("#booking-package option:selected").text();
+      this.newTrip.trav_name = $("#booking-traveler option:selected").text();
+      this.tripPrecheck();
+      if (this.groupExists == true && this.newTrip.group_name != "" && this.newTrip.traveler != "" && this.newTrip.package != "" && $("#release-agree").prop("checked") == true && this.spotTaken == false) {
+        this.tripDetails = true;
+        $("#booking-details-button").prop('disabled', false);
+        this.newTrip.group = this.groupDetails.id;
+      } else {
+        this.tripDetails = false;
+        $("#booking-details-button").prop('disabled', true);
+        this.newTrip.group = "";
+      }
+    },
+    insuranceConfirm: function insuranceConfirm() {
+      if ($("#insurance-agree").prop("checked") == true) {
+        this.newTrip.insurance = 'Yes';
+      } else {
+        this.newTrip.insurance = 'No';
+      }
+    },
+    saveNewTrip: function saveNewTrip() {
+      var bookApp = this;
+      $.ajax({
+        type: "POST",
+        url: '/trips/store',
+        data: { trip: bookApp.newTrip },
+        success: function success(response) {
+          zoomOut("#new-booking-confirm");
+          slideLeft("#booking-loader");
+          setTimeout(function () {
+            zoomOut("#booking-loader");
+            slideLeft("#booking-success");
+          }, 2000);
+        }
+      });
+    },
+    tripPrecheck: function tripPrecheck() {
+      var bookApp = this;
+      $.ajax({
+        type: "GET",
+        url: '/trips/precheck',
+        data: { group: bookApp.groupDetails.id, traveler: bookApp.newTrip.traveler },
+        success: function success(data) {
+          if (data == "TAKEN") {
+            validator.showError(['booking-traveler']);
+            bookApp.spotTaken = true;
+          } else {
+            validator.hideError(['booking-traveler']);
+            bookApp.spotTaken = false;
+          }
+        }
+      });
+    },
+    showInsurance: function showInsurance() {
+      zoomOut("#new-booking-details");
+      slideLeft("#new-booking-insurance");
+    },
+    backToDetails: function backToDetails() {
+      zoomOut("#new-booking-insurance");
+      slideLeft("#new-booking-details");
+    },
+    showConfirmation: function showConfirmation() {
+      zoomOut("#new-booking-insurance");
+      slideLeft("#new-booking-confirm");
+    },
+    backToInsurance: function backToInsurance() {
+      zoomOut("#new-booking-confirm");
+      slideLeft("#new-booking-insurance");
+    }
+  },
+  mounted: function mounted() {
+    // do this when ready
+    bindFormatters();
+    $("#booking-success-close, #booking-success-button").attr("href", '/profile/' + authUsr.email);
+    $("#release-agree").prop("checked", false);
+    this.groupDetails = this.groupInit;
+  },
+
+  computed: {
+    // computed data
+  },
+  components: {
+    SuccessModal: __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default.a,
+    LoadingModal: __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default.a
+  }
 });
 
 /***/ }),
-
-/***/ 96:
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "overlay-rounded-wrapper flex-col-center overlay-near-shadow hidden",
+  return _c('div', [_c('div', {
+    staticClass: "rounded-wrapper flex-col-center overlay-near-shadow full-width",
     attrs: {
-      "id": _vm.id
+      "id": "new-booking-details"
     }
   }, [_c('div', {
     staticClass: "flex-row-reverse"
   }, [_c('a', {
-    staticClass: "modal-ds-close overlay-wide-close pointer",
-    attrs: {
-      "id": _vm.id + '-close'
+    staticClass: "modal-ds-close rounded-close pointer",
+    on: {
+      "click": _vm.closeMe
     }
   }, [_vm._v("X")])]), _vm._v(" "), _c('div', {
-    staticClass: "overlay-content-wide overlay-success flex-col-center text-center"
+    staticClass: "rounded-content"
+  }, [_c('h3', {
+    staticClass: "rounded-title text-center"
+  }, [_vm._v("Booking a new trip with us?")]), _vm._v(" "), _c('h4', {
+    staticClass: "rounded-subtitle text-center"
+  }, [_vm._v("That’s great! Please enter your booking number and select the traveler that will join us")]), _vm._v(" "), _c('form', [_c('div', {
+    staticClass: "form-group row"
+  }, [_vm._m(0), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-10 material-input-group"
+  }, [_c('label', {
+    staticClass: "material-label",
+    attrs: {
+      "for": "bookingnumber"
+    }
+  }, [_vm._v("Booking Number")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newTrip.group_name),
+      expression: "newTrip.group_name"
+    }],
+    staticClass: "form-control numbers-only material-input",
+    attrs: {
+      "type": "text",
+      "name": "bookingnumber",
+      "id": "booking-number"
+    },
+    domProps: {
+      "value": (_vm.newTrip.group_name)
+    },
+    on: {
+      "keyup": _vm.findGroup,
+      "change": _vm.findGroup,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.newTrip.group_name = $event.target.value
+      }
+    }
+  })])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group row"
+  }, [_vm._m(1), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-10 material-input-group"
+  }, [_c('label', {
+    staticClass: "material-label",
+    attrs: {
+      "for": "bookingtraveler"
+    }
+  }, [_vm._v("Traveler")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newTrip.traveler),
+      expression: "newTrip.traveler"
+    }],
+    staticClass: "custom-select form-control material-input",
+    attrs: {
+      "name": "bookingtraveler",
+      "id": "booking-traveler"
+    },
+    on: {
+      "change": [function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newTrip.traveler = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }, _vm.detailsProceed]
+    }
+  }, [_c('option', {
+    attrs: {
+      "selected": ""
+    }
+  }), _vm._v(" "), _vm._l((_vm.userTravelers), function(traveler) {
+    return _c('option', {
+      domProps: {
+        "value": traveler.id
+      }
+    }, [_vm._v(" " + _vm._s(traveler.name) + " ")])
+  })], 2), _vm._v(" "), _c('span', {
+    staticClass: "text-left ds-form-errmsg",
+    attrs: {
+      "id": "booking-traveler-err"
+    }
+  }, [_vm._v("This traveler is already booked in group " + _vm._s(_vm.groupDetails.number))])])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group row"
+  }, [_vm._m(2), _vm._v(" "), _c('div', {
+    staticClass: "col-sm-10 material-input-group"
+  }, [_c('label', {
+    staticClass: "material-label",
+    attrs: {
+      "for": "bookingpackage"
+    }
+  }, [_vm._v("Package")]), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.newTrip.total),
+      expression: "newTrip.total"
+    }],
+    staticClass: "custom-select form-control material-input",
+    attrs: {
+      "name": "bookingpackage",
+      "id": "booking-package"
+    },
+    on: {
+      "change": [function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.newTrip.total = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }, _vm.detailsProceed]
+    }
+  }, [_c('option', {
+    attrs: {
+      "selected": ""
+    }
+  }), _vm._v(" "), _vm._l((_vm.groupDetails.packages), function(packages) {
+    return _c('option', {
+      domProps: {
+        "value": packages.cost
+      }
+    }, [_vm._v(" " + _vm._s(packages.name) + " ")])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "new-booking-display"
+  }, [(_vm.groupExists == false) ? _c('div', {
+    staticClass: "new-booking-default full-width full-height flex-col-center"
+  }, [_c('img', {
+    attrs: {
+      "src": "/assets/images/icons/plane.png"
+    }
+  }), _vm._v(" "), _c('p', [_vm._v("Your group's travel details will appear here")])]) : _vm._e(), _vm._v(" "), (_vm.groupExists == true) ? _c('div', {
+    staticClass: "new-booking-filled"
   }, [_c('div', {
-    staticClass: "success-check-wrapper flex-row-center"
+    staticClass: "booking-filled-header flex-row-between"
+  }, [_c('h4', {
+    staticClass: "full-width dot-dot-dot",
+    staticStyle: {
+      "padding-right": "5px"
+    }
+  }, [_vm._v(_vm._s(_vm.groupDetails.number + ": " + _vm.groupDetails.destination))]), _vm._v(" "), _c('h4', {
+    staticClass: "booking-filled-amount"
+  }, [_vm._v(_vm._s("$" + Math.round(_vm.newTrip.total)))])]), _vm._v(" "), _c('div', {
+    staticClass: "booking-filled-details flex-row-between row"
   }, [_c('div', {
-    staticClass: "success-check-bubble"
-  }), _vm._v(" "), _c('div', {
-    staticClass: "checkmark"
-  }, [_c('svg', {
-    attrs: {
-      "version": "1.1",
-      "id": "Layer_1",
-      "xmlns": "http://www.w3.org/2000/svg",
-      "xmlns:xlink": "http://www.w3.org/1999/xlink",
-      "x": "0px",
-      "y": "0px",
-      "viewBox": "0 0 161.2 161.2",
-      "enable-background": "new 0 0 161.2 161.2",
-      "xml:space": "preserve"
+    staticClass: "col-xs-4",
+    staticStyle: {
+      "padding-right": "0"
     }
-  }, [_c('path', {
-    staticClass: "check-path",
+  }, [_c('img', {
     attrs: {
-      "fill": "none",
-      "stroke": "#fff",
-      "stroke-miterlimit": "10",
-      "d": "M425.9,52.1L425.9,52.1c-2.2-2.6-6-2.6-8.3-0.1l-42.7,46.2l-14.3-16.4\n          \tc-2.3-2.7-6.2-2.7-8.6-0.1c-1.9,2.1-2,5.6-0.1,7.7l17.6,20.3c0.2,0.3,0.4,0.6,0.6,0.9c1.8,2,4.4,2.5,6.6,1.4c0.7-0.3,1.4-0.8,2-1.5\n          \tc0.3-0.3,0.5-0.6,0.7-0.9l46.3-50.1C427.7,57.5,427.7,54.2,425.9,52.1z"
+      "src": '/' + _vm.groupDetails.icon
     }
-  }), _vm._v(" "), _c('polyline', {
-    staticClass: "check-path",
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "col-xs-8 flex-col-start"
+  }, [_c('h5', {
+    staticClass: "full-width dot-dot-dot"
+  }, [_vm._v(_vm._s(_vm.groupDetails.school))]), _vm._v(" "), _c('div', {
+    staticClass: "row"
+  }, [_vm._m(3), _vm._v(" "), _c('div', {
+    staticClass: "col-xs-8"
+  }, [_c('p', [_c('strong', [_vm._v(_vm._s(_vm.groupDetails.depart))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "row booking-filled-controw"
+  }, [_vm._m(4), _vm._v(" "), _c('div', {
+    staticClass: "col-xs-8"
+  }, [_c('p', [_c('strong', [_vm._v(_vm._s(_vm.groupDetails.return))])])])])])])]) : _vm._e()]), _vm._v(" "), (_vm.groupExists == true) ? _c('div', [_c('label', {
+    staticClass: "custom-control custom-checkbox"
+  }, [_c('div', {
+    staticClass: "flex-row-between"
+  }, [_c('input', {
+    staticClass: "custom-control-input booking-checkbox",
     attrs: {
-      "fill": "none",
-      "stroke": "#fff",
-      "stroke-width": "6",
-      "stroke-linecap": "round",
-      "stroke-miterlimit": "10",
-      "points": "113,52.8\n          \t74.1,108.4 48.2,86.4 "
+      "id": "release-agree",
+      "type": "checkbox"
+    },
+    on: {
+      "change": _vm.detailsProceed
     }
-  })])])]), _vm._v(" "), _c('h3', {
-    staticClass: "overlay-wide-header"
-  }, [_vm._t("header")], 2), _vm._v(" "), _c('p', {
-    staticClass: "overlay-wide-msg"
-  }, [_vm._t("message")], 2), _vm._v(" "), (_vm.sub == true) ? _c('p', {
-    staticClass: "overlay-subscript"
-  }, [_vm._t("subscript")], 2) : _vm._e(), _vm._v(" "), (_vm.subxs == true) ? _c('p', {
-    staticClass: "overlay-subscript-xs"
-  }, [_vm._t("subscript-xs")], 2) : _vm._e(), _vm._v(" "), _c('a', {
-    staticClass: "modal-ds-button success-button",
+  }), _vm._v(" "), _c('span', {
+    staticClass: "custom-control-indicator"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "custom-control-description booking-checkbox-description"
+  }, [_vm._v("I have read and agree to the terms of Dragaud Custom Sojourn’s\n                "), _c('a', {
     attrs: {
-      "href": '/profile/' + _vm.href,
-      "id": _vm.id + '-button'
+      "href": '/' + _vm.groupDetails.release,
+      "target": "_blank"
     }
-  }, [_vm._v(_vm._s(_vm.button))])])])
-},staticRenderFns: []}
+  }, [_vm._v("Release of Liability and Cancellation Policy")])])])])]) : _vm._e(), _vm._v(" "), _c('button', {
+    class: {
+      'button-locked': _vm.tripDetails == false, 'ds-button button-gen waves-effect waves-dark full-width': true
+    },
+    staticStyle: {
+      "margin-top": "15px"
+    },
+    attrs: {
+      "id": "booking-details-button",
+      "type": "button",
+      "name": "submitdetails",
+      "disabled": "disabled"
+    },
+    on: {
+      "click": _vm.showInsurance
+    }
+  }, [(_vm.tripDetails == false) ? _c('img', {
+    attrs: {
+      "src": "/assets/images/icons/locked-padlock.png"
+    }
+  }) : _vm._e(), _vm._v("Book now!\n    \t\t")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "rounded-wrapper flex-col-center overlay-near-shadow full-width hidden",
+    attrs: {
+      "id": "new-booking-insurance"
+    }
+  }, [_c('div', {
+    staticClass: "flex-row-reverse"
+  }, [_c('a', {
+    staticClass: "modal-ds-close rounded-close pointer",
+    on: {
+      "click": _vm.closeMe
+    }
+  }, [_vm._v("X")])]), _vm._v(" "), _c('div', {
+    staticClass: "rounded-content"
+  }, [_c('h3', {
+    staticClass: "rounded-title text-center"
+  }, [_vm._v("Do you want traveler’s insurance?")]), _vm._v(" "), _c('h4', {
+    staticClass: "rounded-subtitle text-center"
+  }, [_vm._v("We offer coverage for all custom packages. To opt in select the option below and we'll be in touch to provide a quote.\n      ")]), _vm._v(" "), _c('div', {
+    staticClass: "new-booking-display",
+    staticStyle: {
+      "margin-top": "0px"
+    }
+  }, [_c('div', {
+    staticStyle: {
+      "padding": "20px"
+    }
+  }, [_c('label', {
+    staticClass: "custom-control custom-checkbox"
+  }, [_c('div', {
+    staticClass: "flex-row-between"
+  }, [_c('input', {
+    staticClass: "custom-control-input booking-checkbox",
+    attrs: {
+      "id": "insurance-agree",
+      "type": "checkbox"
+    },
+    on: {
+      "change": _vm.insuranceConfirm
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "custom-control-indicator"
+  }), _vm._v(" "), _c('span', {
+    staticClass: "custom-control-description booking-checkbox-description"
+  }, [_vm._v("I am interested in purchasing traveling insurance through Dragaud Custom Sojourns\n              ")])])])])]), _vm._v(" "), _c('div', {
+    staticClass: "flex-row-center"
+  }, [_c('a', {
+    staticClass: "overlay-wide-button ds-button button-cancel",
+    attrs: {
+      "href": "javascript:;",
+      "id": "pwreset-confirm"
+    },
+    on: {
+      "click": _vm.backToDetails
+    }
+  }, [_vm._v("Previous")]), _vm._v(" "), _c('a', {
+    staticClass: "overlay-wide-button ds-button button-gen",
+    attrs: {
+      "href": "javascript:;",
+      "id": "pwreset-cancel"
+    },
+    on: {
+      "click": _vm.showConfirmation
+    }
+  }, [_vm._v("Continue")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "rounded-wrapper flex-col-center overlay-near-shadow full-width hidden",
+    attrs: {
+      "id": "new-booking-confirm"
+    }
+  }, [_c('div', {
+    staticClass: "flex-row-reverse"
+  }, [_c('a', {
+    staticClass: "modal-ds-close rounded-close pointer",
+    on: {
+      "click": _vm.closeMe
+    }
+  }, [_vm._v("X")])]), _vm._v(" "), _c('div', {
+    staticClass: "rounded-content"
+  }, [_c('h3', {
+    staticClass: "rounded-title text-center"
+  }, [_vm._v("Confirm your selection")]), _vm._v(" "), _c('h4', {
+    staticClass: "rounded-subtitle text-center"
+  }, [_vm._v(_vm._s(_vm.newTrip.trav_name) + " will be traveling with us for our trip to " + _vm._s(_vm.groupDetails.destination) + " on " + _vm._s(_vm.groupDetails.depart) + "?\n      ")]), _vm._v(" "), _c('div', {
+    staticClass: "flex-row-center"
+  }, [_c('a', {
+    staticClass: "overlay-wide-button ds-button button-cancel",
+    attrs: {
+      "href": "javascript:;",
+      "id": "pwreset-confirm"
+    },
+    on: {
+      "click": _vm.backToInsurance
+    }
+  }, [_vm._v("Previous")]), _vm._v(" "), _c('a', {
+    staticClass: "overlay-wide-button ds-button button-gen",
+    attrs: {
+      "href": "javascript:;",
+      "id": "pwreset-cancel"
+    },
+    on: {
+      "click": _vm.saveNewTrip
+    }
+  }, [_vm._v("Confirm")])])])]), _vm._v(" "), _c('div', {
+    staticClass: "flex-abs-center abs-fill"
+  }, [_c('loading-modal', {
+    attrs: {
+      "id": 'booking-loader'
+    }
+  }, [_c('template', {
+    attrs: {
+      "slot": "header"
+    },
+    slot: "header"
+  }, [_vm._v("Please wait...")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "message"
+    },
+    slot: "message"
+  }, [_vm._v("We're booking your new trip")])], 2), _vm._v(" "), _c('success-modal', {
+    attrs: {
+      "id": 'booking-success',
+      "button": 'Continue',
+      "sub": false,
+      "subxs": false
+    }
+  }, [_c('template', {
+    attrs: {
+      "slot": "header"
+    },
+    slot: "header"
+  }, [_vm._v("Trip booked!")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "message"
+    },
+    slot: "message"
+  }, [_vm._v("You can review travel details and make a payment from your trips tab.")])], 2)], 1)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-sm-2 flex-col-end",
+    staticStyle: {
+      "min-height": "50px"
+    }
+  }, [_c('div', {
+    staticClass: "new-booking-icon flex-row-center"
+  }, [_c('img', {
+    attrs: {
+      "src": "/assets/images/icons/suitcase.png"
+    }
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-sm-2 flex-col-end",
+    staticStyle: {
+      "min-height": "50px"
+    }
+  }, [_c('div', {
+    staticClass: "new-booking-icon flex-row-center"
+  }, [_c('img', {
+    attrs: {
+      "src": "/assets/images/icons/person.png"
+    }
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-sm-2 flex-col-end",
+    staticStyle: {
+      "min-height": "50px"
+    }
+  }, [_c('div', {
+    staticClass: "new-booking-icon flex-row-center"
+  }, [_c('img', {
+    attrs: {
+      "src": "/assets/images/icons/bed.png"
+    }
+  })])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-xs-4"
+  }, [_c('p', [_vm._v("Departs")])])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "col-xs-4"
+  }, [_c('p', [_vm._v("Returns")])])
+}]}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-58871083", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-46783e0b", module.exports)
+  }
+}
+
+/***/ }),
+/* 83 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(84)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(86),
+  /* template */
+  __webpack_require__(87),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\js\\user\\components\\NewPaymentModal.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] NewPaymentModal.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-a9d2b204", Component.options)
+  } else {
+    hotAPI.reload("data-v-a9d2b204", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 84 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(85);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(5)("decf94a8", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a9d2b204\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewPaymentModal.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-a9d2b204\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./NewPaymentModal.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(4)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  template: "#payment-modal-template",
+  props: [],
+  data: function data() {
+    return {
+      tripDetails: true,
+      paymentValid: false,
+      processingErr: false,
+      selectMonth: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+      selectYear: [],
+      paymentMethod: 'credit',
+      receiptCode: '',
+      paymentDetails: { amount: '0.00', cardholder: '', cardnumber: '', exp_m: '', exp_y: '', cvv2: '', method: '' },
+      paymentSave: { amount: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit' }
+    };
+  },
+
+  methods: {
+    closeMe: function closeMe() {
+      fadeOut('#dark-overlay');
+      zoomOut('#new-payment-modal');
+      this.$emit('close');
+    },
+    updatePayment: function updatePayment() {
+      var amt = $('#payment-amount').val();
+      this.getMethod();
+      this.hideHelper();
+      if (parseFloat(amt) > parseFloat(this.tripDetails.trip_balance)) amt = this.tripDetails.trip_balance;
+      this.paymentDetails.amount = amt;
+
+      this.paymentValid = false;
+      if (this.paymentMethod == 'paypal') {
+        if (this.paymentDetails.amount > 0) this.paymentValid = true;
+      } else {
+        var cardNum = this.paymentDetails.cardnumber;
+        var cardStr = cardNum.toString().replace(/-/g, '');
+        if (this.paymentDetails.amount > 0 && this.paymentDetails.cardholder != '' && this.paymentDetails.exp_y != 'YY' && this.paymentDetails.exp_m != 'MM' && this.paymentDetails.cvv2.toString().length > 2 && cardStr.length > 11) this.paymentValid = true;
+      }
+    },
+    getMethod: function getMethod() {
+      var cardNum = this.paymentDetails.cardnumber.toString().replace(/-/g, '');
+      var type = creditCardType(cardNum);
+      if (type[0].type) {
+        this.paymentDetails.method = type[0].type;
+        $("#cvv2-helper").html("<p>Visa, Mastercard, Discover:<br/>The 3 digits on the <i>back</i> of your card</p>");
+        if (type[0].type != 'visa' && type[0].type != 'discover' && type[0].type != 'master-card') $("#cvv2-helper").html("<p>American Express:<br/>The 4 digits on the <i>front</i> of your card</p>");
+      } else {
+        this.paymentDetails.method = 'visa';
+      }
+    },
+    selectPaypal: function selectPaypal(event) {
+      this.paymentMethod = 'paypal';
+      $(event.target).prop("checked", true);
+      $("#radio-credit").prop("checked", false);
+      $("#credit-option").addClass('hidden');
+      $("#paypal-option").removeClass('hidden');
+      this.updatePayment();
+    },
+    selectCredit: function selectCredit(event) {
+      this.paymentMethod = 'credit';
+      $(event.target).prop("checked", true);
+      $("#radio-paypal").prop("checked", false);
+      $("#credit-option").removeClass('hidden');
+      $("#paypal-option").addClass('hidden');
+      this.updatePayment();
+    },
+    showHelper: function showHelper() {
+      slideLeft("#cvv2-helper");
+    },
+    hideHelper: function hideHelper() {
+      fadeOut("#cvv2-helper");
+    },
+    processPayment: function processPayment() {
+      this.updatePayment();
+      zoomOut('#payment-modal');
+      slideLeft('#payment-loader');
+      var valid = true;
+      if (this.paymentMethod == 'paypal') {
+        valid = this.processPaypal();
+      } else if (this.paymentMethod == 'credit') {
+        valid = this.processCredit();
+      }
+    },
+    processPaypal: function processPaypal() {
+      this.savePayment();
+    },
+    processCredit: function processCredit() {
+      this.savePayment();
+    },
+    savePayment: function savePayment() {
+      this.paymentSave.paypal_id = Date.now();
+      this.paymentSave.method = this.paymentMethod;
+      this.paymentSave.amount = this.paymentDetails.amount;
+      var payApp = this;
+      $.ajax({
+        type: "POST",
+        url: '/payments/store',
+        data: { payment: payApp.paymentSave },
+        success: function success(data) {
+          var response = JSON.parse(data);
+          if (response.status == "SUCCESS") {
+            payApp.processingErr = false;
+            payApp.receiptCode = response.verification;
+            $("#payment-success-button").attr("href", "/" + response.receipt);
+            setTimeout(function () {
+              zoomOut('#payment-loader');
+              slideLeft('#payment-success');
+            }, 2000);
+          } else {
+            setTimeout(function () {
+              payApp.processingErr = true;
+              zoomOut('#payment-loader');
+              slideLeft('#payment-modal');
+            }, 2000);
+          }
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.tripDetails = tripPayment;
+    this.paymentSave.trip_id = this.tripDetails.trip_id;
+    this.paymentSave.group_id = this.tripDetails.group_id;
+    var curYear = new Date().getFullYear();
+    for (var i = 0; i <= 10; i++) {
+      this.selectYear[i] = (curYear + i).toString().slice(-2);
+    }
+    $("#payment-success-close").attr("href", window.location.href);
+    $("#payment-success-button").attr("target", '_blank');
+    bindFormatters();
+  },
+
+  computed: {
+    remainingBalance: function remainingBalance() {
+      var val = this.tripDetails.trip_balance - this.paymentDetails.amount;
+      if (parseFloat(val) < 0) val = 0;
+      this.paymentSave.balance = formatCurrency(val);
+      return formatCurrency(val);
+    },
+    formatButton: function formatButton() {
+      return formatCurrency(this.paymentDetails.amount).toString();
+    }
+  },
+  components: {
+    SuccessModal: __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default.a,
+    LoadingModal: __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default.a
+  }
+});
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "full-height"
+  }, [_c('div', {
+    staticClass: "panel panel-secure full-width payment-modal absolute",
+    staticStyle: {
+      "z-index": "2",
+      "overflow": "visible"
+    },
+    attrs: {
+      "id": "payment-modal"
+    }
+  }, [_c('div', {
+    staticClass: "panel-heading flex-row-between"
+  }, [_c('h2', {
+    staticClass: "panel-title flex-col-center"
+  }, [_vm._v("New payment")]), _vm._v(" "), _c('span', {
+    staticClass: "modal-ds-close pointer",
+    on: {
+      "click": _vm.closeMe
+    }
+  }, [_vm._v("X")])]), _vm._v(" "), _c('div', {
+    staticClass: "panel-body grey-panel"
+  }, [_c('div', {
+    staticClass: "payment-type"
+  }, [_c('label', {
+    staticClass: "custom-control custom-radio"
+  }, [_c('input', {
+    staticClass: "custom-control-input",
+    attrs: {
+      "checked": "false",
+      "id": "radio-paypal",
+      "name": "radio",
+      "type": "radio"
+    },
+    on: {
+      "click": _vm.selectPaypal
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "custom-control-indicator"
+  }), _vm._v(" "), _vm._m(0)]), _vm._v(" "), _c('label', {
+    staticClass: "custom-control custom-radio",
+    staticStyle: {
+      "margin-left": "10px"
+    }
+  }, [_c('input', {
+    staticClass: "custom-control-input",
+    attrs: {
+      "checked": "true",
+      "id": "radio-credit",
+      "name": "radio",
+      "type": "radio"
+    },
+    on: {
+      "click": _vm.selectCredit
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "custom-control-indicator"
+  }), _vm._v(" "), _vm._m(1)])]), _vm._v(" "), _c('div', {
+    staticClass: "panel panel-secure-inner border-panel-light"
+  }, [_c('h5', [_vm._v(_vm._s(_vm.tripDetails.traveler) + "'s trip to " + _vm._s(_vm.tripDetails.destination))]), _vm._v(" "), _c('div', {
+    staticClass: "payment-input"
+  }, [_c('label', {
+    attrs: {
+      "for": "amount"
+    }
+  }, [_vm._v("Payment amount")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group payment-input-label"
+  }, [_c('div', {
+    staticClass: "input-group-addon"
+  }, [_vm._v("$")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.paymentDetails.amount),
+      expression: "paymentDetails.amount"
+    }],
+    staticClass: "form-control floats-only currency-format",
+    attrs: {
+      "id": "payment-amount",
+      "type": "text",
+      "value": "0.00"
+    },
+    domProps: {
+      "value": (_vm.paymentDetails.amount)
+    },
+    on: {
+      "keyup": _vm.updatePayment,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.paymentDetails.amount = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticStyle: {
+      "margin-top": "15px"
+    }
+  }, [_c('label', {
+    attrs: {
+      "for": "remainigbalance"
+    }
+  }, [_vm._v("Remaining balance")]), _vm._v(" "), _c('h5', [_vm._v("$" + _vm._s(_vm.remainingBalance))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "panel panel-secure-inner border-panel-light hidden",
+    attrs: {
+      "id": "paypal-option"
+    }
+  }, [(_vm.processingErr == true) ? _c('div', {
+    attrs: {
+      "id": "payment-details-err"
+    }
+  }, [_vm._m(2)]) : _vm._e(), _vm._v(" "), _c('p', [_vm._v("Continue to Paypal and login")]), _vm._v(" "), _c('button', {
+    class: {
+      'button-locked': _vm.paymentValid == false, 'ds-button full-width button-gen waves-effect waves-light': true
+    },
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": _vm.processPayment
+    }
+  }, [(_vm.paymentValid == false) ? _c('img', {
+    attrs: {
+      "src": "/assets/images/icons/locked-padlock.png"
+    }
+  }) : _vm._e(), _vm._v("Pay $" + _vm._s(_vm.formatButton))])]), _vm._v(" "), _c('div', {
+    staticClass: "panel panel-secure-inner border-panel-light",
+    attrs: {
+      "id": "credit-option"
+    }
+  }, [(_vm.processingErr == true) ? _c('div', {
+    attrs: {
+      "id": "payment-details-err"
+    }
+  }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _c('form', {
+    staticClass: "payment-input"
+  }, [_c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    attrs: {
+      "for": "cardholder"
+    }
+  }, [_vm._v("Name on card")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.paymentDetails.cardholder),
+      expression: "paymentDetails.cardholder"
+    }],
+    staticClass: "form-control credit-input",
+    attrs: {
+      "type": "text",
+      "name": "cardholder"
+    },
+    domProps: {
+      "value": (_vm.paymentDetails.cardholder)
+    },
+    on: {
+      "keyup": _vm.updatePayment,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.paymentDetails.cardholder = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "form-group"
+  }, [_c('label', {
+    attrs: {
+      "for": "cardnumber"
+    }
+  }, [_vm._v("Card number")]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.paymentDetails.cardnumber),
+      expression: "paymentDetails.cardnumber"
+    }],
+    staticClass: "form-control credit-input numbers-only credit-format",
+    attrs: {
+      "maxlength": "19",
+      "type": "text",
+      "name": "cardnumber"
+    },
+    domProps: {
+      "value": (_vm.paymentDetails.cardnumber)
+    },
+    on: {
+      "keyup": _vm.updatePayment,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.paymentDetails.cardnumber = $event.target.value
+      }
+    }
+  })]), _vm._v(" "), _c('div', {
+    staticClass: "flex-row-between"
+  }, [_c('div', {
+    staticClass: "form-group",
+    staticStyle: {
+      "margin-bottom": "22px",
+      "width": "120px"
+    }
+  }, [_c('label', {
+    attrs: {
+      "for": "expiry"
+    }
+  }, [_vm._v("Expiry date")]), _vm._v(" "), _c('div', {
+    staticClass: "flex-row-start"
+  }, [_c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.paymentDetails.exp_m),
+      expression: "paymentDetails.exp_m"
+    }],
+    staticClass: "custom-select form-control",
+    staticStyle: {
+      "margin-right": "5px"
+    },
+    attrs: {
+      "name": "expiry"
+    },
+    on: {
+      "change": [function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.paymentDetails.exp_m = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }, _vm.updatePayment]
+    }
+  }, [_c('option', {
+    staticClass: "select-default",
+    attrs: {
+      "selected": ""
+    }
+  }, [_vm._v("MM")]), _vm._v(" "), _vm._l((_vm.selectMonth), function(month) {
+    return _c('option', {
+      domProps: {
+        "value": month
+      }
+    }, [_vm._v(" " + _vm._s(month) + " ")])
+  })], 2), _vm._v(" "), _c('select', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.paymentDetails.exp_y),
+      expression: "paymentDetails.exp_y"
+    }],
+    staticClass: "custom-select form-control",
+    attrs: {
+      "name": "expiry"
+    },
+    on: {
+      "change": [function($event) {
+        var $$selectedVal = Array.prototype.filter.call($event.target.options, function(o) {
+          return o.selected
+        }).map(function(o) {
+          var val = "_value" in o ? o._value : o.value;
+          return val
+        });
+        _vm.paymentDetails.exp_y = $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+      }, _vm.updatePayment]
+    }
+  }, [_c('option', {
+    staticClass: "select-default",
+    attrs: {
+      "selected": ""
+    }
+  }, [_vm._v("YY")]), _vm._v(" "), _vm._l((_vm.selectYear), function(year) {
+    return _c('option', {
+      domProps: {
+        "value": year
+      }
+    }, [_vm._v(" " + _vm._s(year) + " ")])
+  })], 2)])]), _vm._v(" "), _c('div', {
+    staticClass: "form-group",
+    staticStyle: {
+      "margin-bottom": "22px",
+      "width": "120px"
+    }
+  }, [_c('label', {
+    attrs: {
+      "for": "cvv2"
+    }
+  }, [_vm._v("Security code")]), _vm._v(" "), _c('div', {
+    staticClass: "input-group"
+  }, [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.paymentDetails.cvv2),
+      expression: "paymentDetails.cvv2"
+    }],
+    staticClass: "form-control credit-input numbers-only",
+    attrs: {
+      "maxlength": "4",
+      "type": "text",
+      "name": "cvv2"
+    },
+    domProps: {
+      "value": (_vm.paymentDetails.cvv2)
+    },
+    on: {
+      "keyup": _vm.updatePayment,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.paymentDetails.cvv2 = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "input-group-addon pointer",
+    on: {
+      "click": _vm.showHelper
+    }
+  }, [_vm._v("?")])]), _vm._v(" "), _vm._m(4)])])]), _vm._v(" "), _c('button', {
+    class: {
+      'button-locked': _vm.paymentValid == false, 'ds-button full-width button-gen waves-effect waves-light': true
+    },
+    attrs: {
+      "type": "button"
+    },
+    on: {
+      "click": _vm.processPayment
+    }
+  }, [(_vm.paymentValid == false) ? _c('img', {
+    attrs: {
+      "src": "/assets/images/icons/locked-padlock.png"
+    }
+  }) : _vm._e(), _vm._v("Pay $" + _vm._s(_vm.formatButton))])])])]), _vm._v(" "), _c('div', {
+    staticClass: "abs-fill flex-col-center",
+    staticStyle: {
+      "z-index": "1"
+    }
+  }, [_c('loading-modal', {
+    attrs: {
+      "id": 'payment-loader'
+    }
+  }, [_c('template', {
+    attrs: {
+      "slot": "header"
+    },
+    slot: "header"
+  }, [_vm._v("Please wait...")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "message"
+    },
+    slot: "message"
+  }, [_vm._v("We're saving your payment in our system")])], 2), _vm._v(" "), _c('success-modal', {
+    attrs: {
+      "id": 'payment-success',
+      "button": 'View receipt',
+      "sub": true,
+      "subxs": true
+    }
+  }, [_c('template', {
+    attrs: {
+      "slot": "header"
+    },
+    slot: "header"
+  }, [_vm._v("$" + _vm._s(_vm.paymentDetails.amount))]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "message"
+    },
+    slot: "message"
+  }, [_vm._v("Your payment is complete.")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "subscript"
+    },
+    slot: "subscript"
+  }, [_vm._v("Verification code:")]), _vm._v(" "), _c('template', {
+    attrs: {
+      "slot": "subscript-xs"
+    },
+    slot: "subscript-xs"
+  }, [_vm._v(_vm._s(_vm.receiptCode))])], 2)], 1)])
+},staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "custom-control-description"
+  }, [_c('img', {
+    attrs: {
+      "src": "/assets/images/icons/paypal.png",
+      "height": "20px"
+    }
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('span', {
+    staticClass: "custom-control-description"
+  }, [_c('img', {
+    staticClass: "clear-img",
+    attrs: {
+      "src": "/assets/images/icons/credit_option.png",
+      "height": "32px"
+    }
+  })])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ds-form-error ds-details-err flex-row-start",
+    staticStyle: {
+      "padding": "8px 20px !important",
+      "border-radius": "3px 3px 0 0 !important"
+    }
+  }, [_c('img', {
+    staticClass: "input-hazard",
+    attrs: {
+      "src": "/assets/images/icons/hazard_tri.png"
+    }
+  }), _vm._v("There was an error processing your payment."), _c('br'), _vm._v("\n            Please select another payment method or try again.\n          ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "ds-form-error ds-details-err flex-row-start",
+    staticStyle: {
+      "padding": "8px 20px !important",
+      "border-radius": "3px 3px 0 0 !important"
+    }
+  }, [_c('img', {
+    staticClass: "input-hazard",
+    attrs: {
+      "src": "/assets/images/icons/hazard_tri.png"
+    }
+  }), _vm._v("There was an error processing your payment."), _c('br'), _vm._v("\n            Please select another payment method or try again.\n          ")])
+},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "helper-modal hidden",
+    staticStyle: {
+      "margin-top": "10px",
+      "width": "230px"
+    },
+    attrs: {
+      "id": "cvv2-helper"
+    }
+  }, [_c('p', [_vm._v("Visa, Mastercard, Discover"), _c('br'), _vm._v("The 3 digits on the "), _c('i', [_vm._v("back")]), _vm._v(" of your card")])])
+}]}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-a9d2b204", module.exports)
   }
 }
 
 /***/ })
-
-/******/ });
+/******/ ]);

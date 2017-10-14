@@ -10,6 +10,20 @@
   position: absolute;
 }
 
+.abs-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.full-width {
+  width: 100% !important;
+}
+.full-height {
+  height: 100% !important;
+}
+
 .fix-fill {
   position: fixed;
   top: 0;
@@ -30,6 +44,20 @@
     white-space: nowrap;
     overflow:hidden !important;
     text-overflow: ellipsis;
+}
+
+.clear-img {
+  transform: translateZ(0px);
+}
+
+.flex-gen {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
 }
 
 .flex-abs-center{
@@ -100,7 +128,6 @@
 .free-link {
   font-family: Alegreya Sans;
   font-size: 14px;
-  color: #559dad;
 }
 
 .text-left {
@@ -128,13 +155,32 @@
   cursor: pointer;
 }
 
+.page-active {
+  background-color: #f4f4f4 !important;
+  color: #b3b5b7 !important;
+  pointer-events: none;
+}
+
+.page-bottom {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.page-bottom div {
+  padding-bottom: 5px;
+}
+
+.page-bottom a {
+  font-size: 18px;
+}
+
 .dark-overlay-gen {
   font-family: Alegreya Sans, sans-serif;
   overflow: hidden;
   overflow-y: scroll;
   z-index: 500;
   background-color: rgba(0,0,0,0.4);
-  padding: 50px 0;
+  padding: 100px 0;
   background-image: url('/assets/images/textures/60-lines.png');
 }
 
@@ -148,19 +194,51 @@
   border: 2px solid $red-med !important;
 }
 
+.ds-button {
+  transition: .2s;
+  width: auto;
+  min-width: 120px;
+  padding: 5px 15px;
+  border-radius: 3px;
+  font-family: Alegreya Sans Light;
+  text-align: center;
+  font-weight: 200;
+  font-size: 20px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.05), 0 2px 5px 0 rgba(0,0,0,.04);
+  border: 1px solid;
+}
+
+.ds-button:hover {
+  text-decoration: none;
+  background-color: white;
+  color: #333;
+  box-shadow: 0 8px 17px 0 rgba(0,0,0,.15), 0 6px 20px 0 rgba(0,0,0,.14);
+}
+
+.ds-button:active {
+  color: white;
+  text-decoration: none;
+  outline: none !important;
+}
+.ds-button:focus {
+  color: white;
+  text-decoration: none;
+  outline: none !important;
+}
+
+.container {
+  width: 1170px !important;
+}
+
 .button-gen {
   background-color: #559dad;
   border-color: #559dad;
-  width: auto;
-  min-width: 120px;
-  padding: 0px 15px;
+  color: white;
 }
 .button-cancel {
   background-color: transparent;
-  border-color: #ccc;
-  width: auto;
+  border: 1px solid #ccc;
   color: #333;
-  min-width: 120px;
 }
 
 .button-alt {
@@ -169,16 +247,25 @@
   border: 1px solid #939598 !important;
 }
 
-.ds-button-large {
-  background: #49a0b3;
-  height: 45px;
-  line-height: 45px;
-  width: 100%;
-  margin-top: 15px;
+.button-cancel:active {
+  color: #333;
 }
-.ds-button-large:hover {
-  background: #76c1d2;
+.button-alt:active {
+  color: #414042;
+}
+.button-cancel:focus {
+  color: #333;
+}
+.button-alt:focus {
+  color: #414042;
+}
+
+.ds-button-large {
+  background: #559dad;
+  border-color: #559dad;
   color: white;
+  padding: 5px;
+  width: 100%;
 }
 
 .action-button {
@@ -186,6 +273,11 @@
   position: relative;
   font-family: Alegreya Sans;
   box-sizing: border-box;
+}
+
+.success-button {
+    margin: 20px 0;
+    padding: 8px 15px;
 }
 
 .button-locked {
@@ -197,9 +289,10 @@
 .button-locked img {
   background-image: url(/assets/images/icons/locked-padlock.png);
   background-size: contain;
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
+  background-repeat: no-repeat;
+  height: 16px;
+  width: 16px;
+  margin: -4px 5px 0;
 }
 
 input:-webkit-autofill {
@@ -231,6 +324,14 @@ input:-webkit-autofill {
   font-weight: 600;
 }
 
+a {
+    color: #2ea1c5;
+    text-decoration: none;
+}
+
+td, th {
+  font-size: 16px;
+}
 
 .opaque {
   opacity: 0;

@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="beveled-input flex-col-end">
-        <a href="javascript:;" @click="showChangeModal">Change your email/password...</a>
+        <a href="javascript:;" @click="showConfidentModal">Change your email/password...</a>
       </div>
     </div>
   </div>
@@ -59,7 +59,7 @@
     <h5 class="font-light profile-details-header">My Travelers</h5>
     <div class="profile-traveler-container" style="margin-top: 15px">
       <traveler-modal  v-for="(userTraveler, index) in userTravelers" ref="traveler" :traveler="userTraveler" @error="alert" @remove="removeNewTraveler" v-bind:key="userTraveler.row" :id="index"></traveler-modal>
-  		<div class="pointer flex-row-between traveler-modal-add" @click="emptyTraveler">
+  		<div class="pointer flex-row-between traveler-modal-add waves-light waves-effect" @click="emptyTraveler">
         <span>Add traveler</span>
         <div class="flex-arrow">
           <div></div>
@@ -68,5 +68,5 @@
       </div>
     </div>
   </div>
-  <a class="waves-effect waves-light btn-large ds-button-large">New Booking #</a>
+  <a class="waves-effect waves-dark ds-button ds-button-large" @click="showBookingModal">New Booking #</a>
 </div>

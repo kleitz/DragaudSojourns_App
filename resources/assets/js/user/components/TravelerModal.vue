@@ -1,8 +1,8 @@
 <template id="traveler-modal-template">
   <div id="traveler-modal-app">
     <div :id="'traveler-modal'+ id" class="traveler-modal-container profile-traveler-modal shadow-mix">
-      <div class="traveler-modal-title pointer flex-row-between">
-        <span @click="expandMe" class="dot-dot-dot">Traveler {{ id + 1 }}: {{ traveler.name }}</span>
+      <div class="traveler-modal-title pointer flex-row-between waves-effect waves-light">
+        <span @click="expandMe" class="dot-dot-dot">{{ ( traveler.name == "") ? 'Traveler ' + (id + 1)  + ': ': '' }}{{ traveler.name }}</span>
         <div :id="'traveler-modal'+ id + '-arrow'" class="flex-arrow" @click="expandMe">
           <div></div>
           <div></div>

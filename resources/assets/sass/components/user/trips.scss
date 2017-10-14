@@ -1,4 +1,8 @@
 // Trips
+.trips-wrapper {
+  margin: 0 0 15px;
+  min-height: 300px;
+}
 
 .trips-container {
   width: 100%;
@@ -6,9 +10,8 @@
 
 .trips-default {
   width: 100%;
-  padding: 0 0 80px;
-  border-bottom: 1px solid #ccc;
-  margin: 0 0 50px;
+  height: 300px;
+  padding: 0 0 30px;
 }
 .default-container {
   padding: 20px 30px 30px;
@@ -18,4 +21,98 @@
 }
 .default-container p {
   font-size: 18px;
+}
+
+.trip-modal {
+  border-color: #ccc;
+  overflow: hidden;
+  font-size: 18px;
+}
+
+.trip-modal-seperator {
+  margin-bottom: 10px !important;
+}
+
+.trip-modal h5 {
+  margin-bottom: 0px;
+  margin-top: 10px;
+}
+
+.trip-modal-strong {
+  font-weight: 500;
+  font-size: 19px;
+}
+
+.trip-modal p {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.trip-modal .panel-body {
+  padding: 10px 20px;
+}
+
+.trip-modal-details {
+  padding-right: 0px;
+  position: relative;
+  z-index: 2;
+  background: white;
+  box-shadow: 0 1px 0px #ccc;
+}
+
+.trip-modal-payments {
+  padding-left: 0;
+  border-left: 1px solid #ccc;
+  position: relative;
+  z-index: 2;
+  background: white;
+  box-shadow: 0 1px 0px #ccc;
+}
+
+.trip-modal-message {
+  border-top: 0px solid #ccc;
+}
+
+.trip-modal-details img {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.trip-status {
+  border-radius: 3px;
+  padding: 0 10px 0 0;
+  border: 1px solid;
+  margin: -12px 0 0 -5px;
+  position: absolute;
+  z-index: 20;
+  height: 28px;
+}
+
+.trip-status p {
+  margin: 0 !important;
+}
+
+.trip-paid {
+  background: #f4fff4;
+  border-color: #25c173;
+  color: #25c173;
+}
+
+.trip-err {
+  border-color: #ce0004;
+  background: #fff7f7;
+  color: #ce0004;
+}
+
+.trip-warn {
+  border-color: #f0ad4e;
+  background: #fff7f7;
+  color: #f0ad4e
+}
+
+.trip-status img {
+  display: block !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 10px 0 0;
 }

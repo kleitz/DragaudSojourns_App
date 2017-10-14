@@ -71,8 +71,7 @@
 		<h4 class="fs-title">Traveler Details</h2>
 		<h4 class="fs-subtitle">Who will be traveling with us?</h3>
 		<!-- NEW TRAVELER(S) -->
-		<div class="shadow-close empty-default border-panel" v-if="numTravelers == 0">
-			<h4>Adding traveler's later?</h4>
+		<div class="shadow-close empty-default" v-if="numTravelers == 0">
 			<p>You can always register new travelers from your profile under the travelers section</p>
 		</div>
 		<traveler-modal ref="traveler" :traveler="regtraveler" :submit="submitAttempt" @error="regIncomplete=true" @remove="deleteTraveler(index)" v-for="(regtraveler, index) in regtravelers" v-bind:key="regtraveler.row" :id="index"></traveler-modal>

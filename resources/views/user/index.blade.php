@@ -17,7 +17,7 @@
 				    <a class="nav-link tab-active" href="/profile/{{ auth()->user()->email }}">My Trips</a>
 				  </li>
 				  <li class="nav-item">
-				    <a class="nav-link" href="/profile/{{ auth()->user()->email }}/payments">My Payments</a>
+				    <a class="nav-link" href="/profile/{{ auth()->user()->email }}/payments/1">My Payments</a>
 				  </li>
 				</ul>
 			</div>
@@ -28,6 +28,11 @@
 	</div>
 @endsection
 <script>
-var authUsr = {!! json_encode($authUsr->toArray()) !!};
-var authTravs = {!! json_encode($authTravs) !!};
+let authUsr = {!! json_encode($authUsr->toArray()) !!};
+let authTravs = {!! json_encode($authTravs) !!};
+let authTrips = {!! json_encode($authTrips) !!};
+let tripPayment = '';
+
+console.log(authTrips);
+
 </script>

@@ -25,6 +25,6 @@
       @if (isset($subscriptsm))
       <p class="overlay-subscript-xs">{{ $subscript }}</p>
       @endif
-      <a href="javascript:;" id="{{ $id }}-button" class="modal-ds-button success-button">{{ $button }}</a>
+      <a href="javascript:;" id="{{ $id }}-button" class="ds-button button-gen success-button">{{ $button }}</a>
   </div>
 </div>

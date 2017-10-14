@@ -47,7 +47,7 @@
       		@include('layouts.user.navtop')
           <div class="content-main row" id="accountApp">
             <div class="col-xs-12" >
-              <h3 class="font-light account-title">My Account</h3>
+              <h3 class="font-light account-title"><a href="/profile/{{ auth()->user()->email }}">My Account</a></h3>
             </div>
             @yield('content')
           </div>

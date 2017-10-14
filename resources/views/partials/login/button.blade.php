@@ -42,7 +42,7 @@
         <span id="login-email-err" class="ds-form-errmsg">Please enter a valid email</span>
         <input id="login-pass" class="register-input" class="" name="login-pass" type="password" placeholder="Password"></input>
         <span id="login-pass-err" class="ds-form-errmsg">Password cannot be blank</span>
-        <a href="javascript:;" id="login-attempt" class="modal-ds-button">Continue</a>
+        <a href="javascript:;" id="login-attempt" class="ds-button button-gen" style="width: 60%">Continue</a>
       </div>
       <div class="flex-row-between">
         <a href="javascript:;" id="login-pwreset" class="modal-ds-link">

@@ -1,11 +1,14 @@
 window.Vue = require('vue');
+
 let profileElem = ['usr-email', 'usr-street', 'usr-zip', 'usr-home', 'usr-cell'];
 let profileCx = document.getElementsByClassName('profile-success');
 
 import TravelerModal from './components/TravelerModal.vue';
 import ConfidentialModal from './components/ConfidentialModal.vue';
-import LoadingModal from './components/LoadingModal.vue';
-import SuccessModal from './components/SuccessModal.vue';
+import NewBookingModal from './components/NewBookingModal.vue';
+import NewPaymentModal from './components/NewPaymentModal.vue';
+
+const bus = new Vue();
 
 // Account view controller
 const accountApp = new Vue({
@@ -19,7 +22,7 @@ const accountApp = new Vue({
                 home: {v: false, e: 'usr-home', t: 'phone'}
               },
       userDetails: authUsr,
-      userTravelers: authTravs,
+      userTravelers: authTravs
     },
     methods: {
       userDetailsExpand(){
@@ -80,20 +83,6 @@ const accountApp = new Vue({
           }
         }
       },
-      updateUserDataEmail(check){
-        let acctApp = this;
-        $.ajax({
-            type: "GET",
-            url: '/precheck',
-            data: { email : acctApp.userDetails},
-            success: function(data) {
-              if (data == "OPEN")
-                acctApp.updateUserData(check);
-              if (data == "TAKEN")
-                acctApp.showErrEmail();
-            }
-        });
-      },
       userDetailsClear(){
         let acctApp = this;
         openExpander($("#profile-details"));
@@ -130,9 +119,21 @@ const accountApp = new Vue({
           validator.isValid([{elem: el.e, type: el.t}]);
         }
       },
-      showChangeModal(){
+      showConfidentModal(){
+        bus.$emit("CONFIDENTIAL");
         fadeIn('#dark-overlay');
         slideLeft('#confidential-modal');
+      },
+      showBookingModal(){
+        bus.$emit("BOOKING");
+        fadeIn('#dark-overlay');
+        slideLeft('#new-booking-modal');
+      },
+      showPaymentModal(elem){
+        tripPayment = elem;
+        bus.$emit("PAYMENT");
+        fadeIn('#dark-overlay');
+        slideLeft('#new-payment-modal')
       }
     },
     mounted() {
@@ -151,17 +152,32 @@ const accountApp = new Vue({
 const overlayApp = new Vue({
     el: '#dark-overlay',
     data: {
+      newPayment: false,
+      newBooking: false,
+      newConfidential: false,
     },
     methods: {
       // app-wise functions
+      paymentClose(){
+        this.newPayment = false;
+      },
+      bookingClose(){
+        this.newBooking = false;
+      },
+      confidentialClose(){
+        this.newConfidential = false;
+      }
     },
     mounted() {
       // do this when ready
+      bus.$on('PAYMENT', ()=> this.newPayment = true);
+      bus.$on('BOOKING', ()=> this.newBooking = true);
+      bus.$on('CONFIDENTIAL', ()=> this.newConfidential = true);
     },
     components: {
       ConfidentialModal,
-      SuccessModal,
-      LoadingModal,
+      NewBookingModal,
+      NewPaymentModal,
     },
     computed: {
       // computed data

@@ -18,7 +18,7 @@ class TravelersController extends Controller
             'relationship' => $request->input("travelers.$i.relate"),
             'emerg_name' => $emerg,
             'emerg_phone' => $request->input("travelers.$i.ephn"),
-            'user' => $request->input('user')
+            'user_id' => $request->input('user')
           ]);
         }
     }

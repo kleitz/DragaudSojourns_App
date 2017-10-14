@@ -22,7 +22,7 @@
         <p class="overlay-wide-msg"><slot name="message"></slot></p>
         <p class="overlay-subscript" v-if="sub == true"><slot name="subscript"></slot></p>
         <p class="overlay-subscript-xs" v-if="subxs == true"><slot name="subscript-xs"></slot></p>
-        <a :href="'/profile/' + href" :id="id + '-button'" class="modal-ds-button success-button">{{ button }}</a>
+        <a :href="'/profile/' + href" :id="id + '-button'" class="ds-button button-gen success-button">{{ button }}</a>
     </div>
   </div>
 </template>

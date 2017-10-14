@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Traveler extends Model
 {
     protected $fillable = [
-        'name', 'gender', 'relationship','emerg_name', 'emerg_phone', 'user'
+        'name', 'gender', 'relationship','emerg_name', 'emerg_phone', 'user_id'
     ];
 }

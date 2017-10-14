@@ -5,6 +5,9 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\CustomPasswordNotification;
+use App\Trip;
+use App\Payment;
+use App\Traveler;
 
 class User extends Authenticatable
 {
@@ -27,6 +30,21 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function trips()
+    {
+      return $this->hasMany(Trip::class);
+    }
+
+    public function travelers()
+    {
+      return $this->hasMany(Traveler::class);
+    }
+
+    public function payments()
+    {
+      return $this->hasMany(Payment::class);
+    }
 
     public function sendPasswordResetNotification($token)
     {

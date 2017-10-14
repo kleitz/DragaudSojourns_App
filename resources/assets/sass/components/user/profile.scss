@@ -51,6 +51,10 @@
   padding: 0;
   margin-top: -10px;
 }
+.account-title a {
+  color: #6d6d6d !important;
+  text-decoration: none !important;
+}
 
 .profile-details-header {
   margin: 5px 0 !important;
@@ -82,6 +86,7 @@
   top: -1px;
   position: relative;
   z-index: 2;
+  margin-bottom: 15px;
 }
 .profile-traveler .traveler-modal-container {
   background: #fafafa;

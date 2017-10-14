@@ -13,6 +13,41 @@
    border-radius: 10px;
  }
 
+ .rounded-wrapper {
+   position: absolute;
+   box-sizing: border-box;
+   background: white;
+   border-radius: 10px;
+ }
+
+ .rounded-title {
+   font-size: 24px;
+   text-transform: uppercase;
+   font-weight: 400;
+   color: #444;
+   margin: 25px 0 5px;
+ }
+ .rounded-subtitle {
+   font-weight: normal;
+   font-size: 18px;
+   line-height: 1.4;
+   color: #666;
+   margin-bottom: 20px;
+ }
+ .rounded-content {
+  padding: 0 30px 30px;
+ }
+ .rounded-close {
+   font-size: 24px;
+   font-weight: 100;
+   padding: 10px 15px 0;
+   color: #777;
+ }
+ .rounded-close:hover {
+   text-decoration: none;
+   color: #333;
+ }
+
  .overlay-content-wide {
    padding: 30px;
  }
@@ -30,12 +65,14 @@
 .overlay-wide-button {
   margin: 15px 5px 0;
   width: 33%;
+  min-width: 33%;
 }
 
 .overlay-wide-close {
   font-size: 30px;
   font-weight: 100;
   padding: 20px 25px 0;
+  text-decoration: none !important;
 }
 
 
@@ -210,9 +247,11 @@
  font-size: 16px;
   font-weight: 500;
   color: #aaa;
+  margin: 0 !important
 }
 .overlay-subscript-xs {
-  font-size: 15px;
+  font-size: 20px;
+  font-weight: 300;
   color: #aaa;
   margin-bottom: 10px;
 }

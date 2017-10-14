@@ -12,7 +12,7 @@
 */
 
 
-// PUBLIC PAGES - BUILD 1.0
+// PUBLIC ROUTES
 Route::get('home', function (){
     return view('public.index');
 })->name('home');
@@ -65,26 +65,39 @@ Route::get('/foodandhotels', function () {
     return view('public.foodandhotels');
 });
 
-// User Routes & Authentication
+// USER ROUTES & AUTHENTICATION
 Route::get('/precheck', 'UsersController@precheck');
 Route::post('/register', 'UsersController@store')->name('register');
 Route::post('/login', 'UsersController@login')->name('login');
 Route::get('/logout', 'UsersController@logout')->name('logout');
 
-// Password Reset Routes
+// PASSWORD RESET ROUTES
 Route::group(['namespace' => 'Auth'], function() {
   Route::get('/user/password/reset', 'ForgotPasswordController@showLinkRequestForm')->name('password.request');
   Route::post('/user/password/email', 'ForgotPasswordController@sendResetLinkEmail')->name('password.email');
   Route::get('/user/password/reset/{token}', 'ResetPasswordController@showResetForm');
-  Route::post('/user/password/reset', 'ResetPasswordController@reset')->name('user.password.reset');
+  Route::post('/user/password/reset', 'ResetPasswordController@reset');
 });
 
-// Profile Routes
+// ACCOUNTS ROUTES
 Route::get('/profile/{email}', 'AccountsController@create')->name('profile.index');
-Route::get('/profile/{email}/payments', 'AccountsController@createPayments')->name('profile.payments');
+Route::get('/profile/{email}/payments/{page}', 'AccountsController@showPayments')->name('profile.payments');
+Route::get('/profile/{email}/trips/{page}', 'AccountsController@showTrips');
 Route::post('/profile/user/update', 'AccountsController@userUpdate');
 Route::post('/profile/user/confidential', 'AccountsController@confidentialUpdate');
 
-// Travelers Routes
+// TRAVELERS ROUTES
 Route::post('/newtraveler', 'TravelersController@store');
 Route::post('/updatetraveler', 'TravelersController@update');
+
+// GROUPS ROUTES
+Route::get('/groups/create', 'GroupsController@create');
+Route::post('/groups/store', 'GroupsController@store');
+Route::get('/groups/specific', 'GroupsController@specific');
+
+// TRIPS ROUTES
+Route::post('/trips/store', 'TripsController@store');
+Route::get('/trips/precheck', 'TripsController@precheck');
+
+// PAYMENTS ROUTES
+Route::post('/payments/store', 'PaymentsController@store');

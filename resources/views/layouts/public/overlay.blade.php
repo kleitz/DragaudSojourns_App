@@ -19,8 +19,8 @@
     		</div>
         <span id="pwreset-email-err" class="ds-form-errmsg">Please enter a valid email</span>
         <div class="flex-row-center">
-          <a href="javascript:;" id="pwreset-confirm" class="overlay-wide-button modal-ds-button">Reset</a>
-          <a href="javascript:;" id="pwreset-cancel" class="overlay-wide-button modal-ds-button button-alt">Cancel</a>
+          <a href="javascript:;" id="pwreset-confirm" class="overlay-wide-button ds-button button-gen">Reset</a>
+          <a href="javascript:;" id="pwreset-cancel" class="overlay-wide-button ds-button button-cancel">Cancel</a>
         </a>
       </div>
     </div>

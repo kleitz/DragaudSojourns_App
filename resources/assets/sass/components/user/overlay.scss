@@ -1,4 +1,135 @@
+// CHANGE EMAIL/PASS POPUP
+
 .confidential-modal {
   max-width: 600px;
   min-width: 600px;
+}
+
+// NEW BOOKING POPUP
+.new-booking-modal {
+  max-width: 400px;
+  min-width: 400px;
+}
+
+#new-booking-details{
+  position: absolute;
+  z-index: 1;
+}
+#new-booking-insurance{
+  position: absolute;
+  z-index: 2;
+}
+#new-booking-confirm{
+  position: absolute;
+  z-index: 3;
+}
+
+
+.new-booking-icon {
+  width: 25px;
+  height: 25px;
+  box-sizing: content-box;
+}
+.new-booking-icon img {
+  height: 100%;
+  transform: translateZ(0px);
+}
+.new-booking-display {
+  border: 1px solid #ccc;
+  margin: 40px 0 15px;
+}
+.new-booking-default {
+  padding: 50px 30px 30px;
+}
+.new-booking-default img {
+  width: 45px;
+  margin: 0 auto 15px;
+}
+.new-booking-default p {
+  color: #aaa;
+}
+
+.booking-filled-header {
+  padding: 0 15px;
+  border-bottom: 1px solid #ccc;
+}
+.booking-filled-header h4 {
+  font-size: 22px;
+  font-weight: 400;
+  color: #555;
+}
+.booking-filled-amount {
+  font-weight: 500;
+}
+.booking-filled-details {
+  padding: 15px;
+}
+.booking-filled-details img {
+  width: 105%;
+}
+.booking-filled-details h5 {
+  margin: 0 0 5px 0;
+  font-weight: 500;
+  font-size: 18px;
+  color: #555;
+}
+.booking-filled-details p {
+  margin: 0;
+  font-size: 18px;
+}
+.booking-filled-controw {
+  position: relative;
+  top: -5px;
+}
+.booking-checkbox-description {
+  font-size: 14px;
+  font-weight: 400;
+}
+.booking-checkbox {
+  width: 30px;
+  margin-right: 5px !important;
+}
+
+.rounded-wrapper form {
+  padding: 0px 15px 15px !important;
+  margin-top: 0px !important;
+}
+
+.rounded-wrapper .form-group {
+  margin-bottom: 6px !important;
+}
+
+// MAKE PAYMENT POPUP
+
+.new-payment-modal {
+  max-width: 400px;
+  min-width: 400px;
+}
+
+#payment-details-err {
+  position: relative;
+  left: -16px;
+  width: 358px;
+  margin-top: -20px;
+  margin-bottom: 15px;
+}
+
+#payment-details-err .ds-form-err {
+  font-size: 14px !important;
+  border-radius: 0 0 3px 3px !important;
+  top: -1px !important;
+  padding: 10px 20px !important;
+  color: #cc3636 !important;
+  position: relative;
+  margin-bottom: 10px !important;
+}
+
+#payment-details-err img {
+  align-self: center;
+  width: 18px;
+  height: 18px;
+  transform: translateZ(0px);
+  margin: 0 10px 0 0;
+  position: relative !important;
+  top: auto !important;
 }

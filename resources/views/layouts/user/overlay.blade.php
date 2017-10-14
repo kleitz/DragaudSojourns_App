@@ -1,18 +1,18 @@
 <!-- Overlay -->
-<div id="dark-overlay" class="dark-overlay-gen fix-fill flex-abs-center hidden">
-  <!-- Change email / password -->
+<div id="dark-overlay" class="dark-overlay-gen fix-fill flex-row-center hidden">
+  <!-- EMAIL / PASSWORD UPDATE POPUP -->
   <div id="confidential-modal" class="confidential-modal hidden">
-    <confidential-modal></confidential-modal>
+    <confidential-modal v-if="newConfidential == true" @close="confidentialClose"></confidential-modal>
   </div>
-  <!-- Saving updates -->
-  <loading-modal :id="'confidential-loader'">
-    <template slot="header">Please wait...</template>
-    <template slot="message">We're updating your information</template>
-  </loading-modal>
-  <!-- Update successful-->
-  <success-modal :id="'confidential-success'" :button="'Continue'" :sub="false" :subxs="false">
-    <template slot="header">Account updated!</template>
-    <template slot="message">Close this box or press continue to proceed.</template>
-  </success-modal>
+
+  <!-- NEW BOOKING POPUP -->
+  <div id="new-booking-modal" class="new-booking-modal hidden">
+    <new-booking-modal v-if="newBooking == true" @close="bookingClose"></new-booking-modal>
+  </div>
+
+  <!-- MAKE PAYMENT POPUP -->
+  <div id="new-payment-modal" class="new-payment-modal hidden">
+    <new-payment-modal v-if="newPayment == true" @close="paymentClose"></new-payment-modal>
+  </div>
 
 </div>

@@ -16,5 +16,25 @@ $(document).ready(function(){
   $('.slick-arrow').addClass('slider-button btn-floating btn-large waves-effect waves-light grey darken-1');
   $('.slick-prev').html('<i class="material-icons">chevron_left</i>');
   $('.slick-next').html('<i class="material-icons">chevron_right</i>');
+});
 
-})
+function tripModalExpand(el){
+  let elP = $(el).closest('.trip-modal');
+  let min = elP.find('.trip-details-min');
+  let max = elP.find('.trip-details-full');
+  if ($(el).html() == 'Show details') {
+    $('.trip-details-min').removeClass('hidden');
+    $('.trip-details-full').addClass('hidden');
+    openExpander($('.trip-expander'));
+    $('.trip-controller').html('Show details');
+    
+    $(el).html('Hide details');
+    max.removeClass('hidden');
+    min.addClass('hidden');
+  } else {
+    $(el).html('Show details');
+    max.addClass('hidden');
+    min.removeClass('hidden');
+  }
+  expanderController(el);
+}

@@ -18,10 +18,10 @@ const regApp = new Vue({
     methods: {
       // app-wise functions
     },
-    mounted: {
+    mounted() {
       // do this when ready
     },
-    components {
+    components: {
       // all imported / created compenents
       Template
     },

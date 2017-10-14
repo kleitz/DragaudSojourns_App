@@ -20,9 +20,9 @@
         </div>
         <h3 class="overlay-wide-header"><slot name="header"></slot></h3>
         <p class="overlay-wide-msg"><slot name="message"></slot></p>
-        <p class="overlay-subscript" v-if="sub == true"><slot name="subscript"></slot></p>
-        <p class="overlay-subscript-xs" v-if="subxs == true"><slot name="subscript-xs"></slot></p>
-        <a :href="'/profile/' + href" :id="id + '-button'" class="modal-ds-button success-button">{{ button }}</a>
+        <p class="overlay-subscript" v-if="subActive == true"><slot name="subscript"></slot></p>
+        <p class="overlay-subscript-xs" v-if="subxsActive == true"><slot name="subscript-xs"></slot></p>
+        <a :href="'/profile/' + href" :id="id + '-button'" class="ds-button button-gen success-button">{{ button }}</a>
     </div>
   </div>
 </template>
@@ -34,11 +34,18 @@ export default {
   props: ['id', 'button', 'sub', 'subxs', 'href'],
   data() {
     return {
-
+      subActive: false,
+      subxsActive: false
     }
   },
   methods: {
 
+  },
+  mounted() {
+    if (this.sub == true)
+      this.subActive = true;
+    if (this.subxs == true)
+      this.subxsActive = true;
   }
 }
 

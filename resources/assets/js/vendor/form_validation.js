@@ -1,10 +1,23 @@
 // CLASS BASED AUTO FORMATTING
 
 $(document).ready(function(){
+  bindFormatters();
+});
+
+function bindFormatters(){
   $(".numbers-only").keypress(function(){
     return event.charCode >=48 && event.charCode <= 57;
   })
+  $(".floats-only").keypress(function(){
+    return (event.charCode >=48 && event.charCode <= 57) || event.charCode == 46;
+  })
   $('.phone-format').mask('(000)000-0000');
+  $('.credit-format').mask('0000-0000-0000-0000-000');
+  $('.date-format').bind('blur', function(){
+    let num = '00000' + $(this).val().toString();
+    if ($(this).val() == "" || $(this).val() < 1) num = "";
+    $(this).val(num.slice(-2));
+  })
   $(".zip-format").keyup(function(){
     zipData($(this));
   })
@@ -16,6 +29,14 @@ $(document).ready(function(){
       $(this).removeClass('pass-bullets');
     }
   });
+  $('.currency-format').bind('blur change', function(){
+    let str = $(this).val();
+    currArr = str.split('.');
+    correct = currArr[0];
+    if (currArr.length > 1)
+      correct = currArr[0] + '.' + currArr[1];
+    $(this).val(formatCurrency(correct));
+  })
   $('.pass-reveal').bind('mouseenter click focus', function(){
     $(this).parent().children('.form-control').removeClass('pass-format');
     $(this).parent().children('.form-control').attr('type', 'text');
@@ -29,8 +50,25 @@ $(document).ready(function(){
     let el = zipElems[i];
     zipData($(el));
   };
-})
+  $('.material-input').focus(function(){
+    $(this).parent().children('.material-label').addClass('material-label-focus active');
+  });
+  $('.material-input').blur(function(){
+    $(this).parent().children('.material-label').removeClass('active');
+    if ($(this).val() == ""){
+      $(this).parent().children('.material-label').removeClass('material-label-focus');
+    }
+  })
+  $('.ds-button').click(function(){
+    if ($('.material-input').val() == ""){
+      $('.material-input').parent().children('.material-label').removeClass('material-label-focus');
+    }
+  })
+}
 
+function formatCurrency(val){
+  return parseFloat(Math.round(val * 100) / 100).toFixed(2);
+}
 // Fill zip data
 
 function zipData(elem){
@@ -196,6 +234,7 @@ function InputValidator() {
   this.showError = function(elem) {
     for (let i = 0; i < elem.length; i++){
       $("#" + elem[i]).addClass('ds-form-error');
+      $("#" + elem[i]).parent().children('.material-label').addClass('label-err');
       if ($("#" + elem[i] + -"err"))
           $("#" + elem[i] + "-err").addClass('ds-show-errmsg');
     }
@@ -203,6 +242,7 @@ function InputValidator() {
   this.hideError = function(elem) {
     for (let i = 0; i < elem.length; i++){
       $("#" + elem[i]).removeClass('ds-form-error');
+      $("#" + elem[i]).parent().children('.material-label').removeClass('label-err');
       $("#" + elem[i] + "-err").removeClass('ds-show-errmsg');
     }
   }
@@ -301,3 +341,229 @@ function validSelect(input) {
     return true;
   }
 }
+
+
+// CREDIT CARD type
+'use strict';
+
+var types = {};
+var VISA = 'visa';
+var MASTERCARD = 'master-card';
+var AMERICAN_EXPRESS = 'american-express';
+var DINERS_CLUB = 'diners-club';
+var DISCOVER = 'discover';
+var JCB = 'jcb';
+var UNIONPAY = 'unionpay';
+var MAESTRO = 'maestro';
+var CVV = 'CVV';
+var CID = 'CID';
+var CVC = 'CVC';
+var CVN = 'CVN';
+var testOrder = [
+  VISA,
+  MASTERCARD,
+  AMERICAN_EXPRESS,
+  DINERS_CLUB,
+  DISCOVER,
+  JCB,
+  UNIONPAY,
+  MAESTRO
+];
+
+function clone(x) {
+  var prefixPattern, exactPattern, dupe;
+
+  if (!x) { return null; }
+
+  // TODO: in the next major version, we should
+  // consider removing these pattern properties.
+  // They are not useful extnerally and can be
+  // confusing because the exactPattern does not
+  // always match (for instance, Maestro cards
+  // can start with 62, but the exact pattern
+  // does not include that since it would
+  // exclude UnionPay and Discover cards
+  // when it is not sure whether or not
+  // the card is a UnionPay, Discover or
+  // Maestro card).
+  prefixPattern = x.prefixPattern.source;
+  exactPattern = x.exactPattern.source;
+  dupe = JSON.parse(JSON.stringify(x));
+  dupe.prefixPattern = prefixPattern;
+  dupe.exactPattern = exactPattern;
+
+  return dupe;
+}
+
+types[VISA] = {
+  niceType: 'Visa',
+  type: VISA,
+  prefixPattern: /^4$/,
+  exactPattern: /^4\d*$/,
+  gaps: [4, 8, 12],
+  lengths: [16, 18, 19],
+  code: {
+    name: CVV,
+    size: 3
+  }
+};
+
+types[MASTERCARD] = {
+  niceType: 'MasterCard',
+  type: MASTERCARD,
+  prefixPattern: /^(5|5[1-5]|2|22|222|222[1-9]|2[3-6]|27|27[0-2]|2720)$/,
+  exactPattern: /^(5[1-5]|222[1-9]|2[3-6]|27[0-1]|2720)\d*$/,
+  gaps: [4, 8, 12],
+  lengths: [16],
+  code: {
+    name: CVC,
+    size: 3
+  }
+};
+
+types[AMERICAN_EXPRESS] = {
+  niceType: 'American Express',
+  type: AMERICAN_EXPRESS,
+  prefixPattern: /^(3|34|37)$/,
+  exactPattern: /^3[47]\d*$/,
+  isAmex: true,
+  gaps: [4, 10],
+  lengths: [15],
+  code: {
+    name: CID,
+    size: 4
+  }
+};
+
+types[DINERS_CLUB] = {
+  niceType: 'Diners Club',
+  type: DINERS_CLUB,
+  prefixPattern: /^(3|3[0689]|30[0-5])$/,
+  exactPattern: /^3(0[0-5]|[689])\d*$/,
+  gaps: [4, 10],
+  lengths: [14, 16, 19],
+  code: {
+    name: CVV,
+    size: 3
+  }
+};
+
+types[DISCOVER] = {
+  niceType: 'Discover',
+  type: DISCOVER,
+  prefixPattern: /^(6|60|601|6011|65|64|64[4-9])$/,
+  exactPattern: /^(6011|65|64[4-9])\d*$/,
+  gaps: [4, 8, 12],
+  lengths: [16, 19],
+  code: {
+    name: CID,
+    size: 3
+  }
+};
+
+types[JCB] = {
+  niceType: 'JCB',
+  type: JCB,
+  prefixPattern: /^(2|21|213|2131|1|18|180|1800|3|35)$/,
+  exactPattern: /^(2131|1800|35)\d*$/,
+  gaps: [4, 8, 12],
+  lengths: [16],
+  code: {
+    name: CVV,
+    size: 3
+  }
+};
+
+types[UNIONPAY] = {
+  niceType: 'UnionPay',
+  type: UNIONPAY,
+  prefixPattern: /^((6|62|62\d|(621(?!83|88|98|99))|622(?!06)|627[02,06,07]|628(?!0|1)|629[1,2])|622018)$/,
+  exactPattern: /^(((620|(621(?!83|88|98|99))|622(?!06|018)|62[3-6]|627[02,06,07]|628(?!0|1)|629[1,2]))\d*|622018\d{12})$/,
+  gaps: [4, 8, 12],
+  lengths: [16, 17, 18, 19],
+  code: {
+    name: CVN,
+    size: 3
+  }
+};
+
+types[MAESTRO] = {
+  niceType: 'Maestro',
+  type: MAESTRO,
+  prefixPattern: /^(5|5[06-9]|6\d*)$/,
+  exactPattern: /^(5[06-9]|6[37])\d*$/,
+  gaps: [4, 8, 12],
+  lengths: [12, 13, 14, 15, 16, 17, 18, 19],
+  code: {
+    name: CVC,
+    size: 3
+  }
+};
+
+function creditCardType(cardNumber) {
+  var type, value, i;
+  var prefixResults = [];
+  var exactResults = [];
+
+  if (!(typeof cardNumber === 'string' || cardNumber instanceof String)) {
+    return [];
+  }
+
+  for (i = 0; i < testOrder.length; i++) {
+    type = testOrder[i];
+    value = types[type];
+
+    if (cardNumber.length === 0) {
+      prefixResults.push(clone(value));
+      continue;
+    }
+
+    if (value.exactPattern.test(cardNumber)) {
+      exactResults.push(clone(value));
+    } else if (value.prefixPattern.test(cardNumber)) {
+      prefixResults.push(clone(value));
+    }
+  }
+
+  return exactResults.length ? exactResults : prefixResults;
+}
+
+creditCardType.getTypeInfo = function (type) {
+  return clone(types[type]);
+};
+
+creditCardType.types = {
+  VISA: VISA,
+  MASTERCARD: MASTERCARD,
+  AMERICAN_EXPRESS: AMERICAN_EXPRESS,
+  DINERS_CLUB: DINERS_CLUB,
+  DISCOVER: DISCOVER,
+  JCB: JCB,
+  UNIONPAY: UNIONPAY,
+  MAESTRO: MAESTRO
+};
+
+// LUHN test
+// Check credit card validity via Luhn algorithm check
+function luhnValidator(userInput){
+	var backwards = "";
+	var multiplyx2 = "";
+	var total = 0;
+	for(i = userInput.length-2; i >= 0; i-=2){
+		backwards += userInput.charAt(i);
+	}
+	for(i = 0; i < backwards.length; i++){
+		multiplyx2 += backwards.charAt(i)*2;
+	}
+	for(i = 0; i < multiplyx2.length; i++){
+		total += parseInt(multiplyx2.charAt(i));
+	}
+	for(i = userInput.length-3; i >= 0; i-=2){
+		total += parseInt(userInput.charAt(i));
+	}
+	total += parseInt(userInput.charAt(userInput.length-1))
+	if((total % 10) == 0){
+		return true;
+	}
+  return false;
+};
