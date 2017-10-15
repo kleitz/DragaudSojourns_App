@@ -74,7 +74,7 @@
                   <div class="col-xs-7">
                     <div class="flex-row-start">
                         <h5 style="font-size: 1.4rem; padding-right: 5px;"><span class="font-med">Traveler:</span> </h5>
-                        <h5 style="font-size: 1.4rem;">{{ $traveler->name }}</h5>
+                        <h5 style="font-size: 1.4rem;">{{ title_case($traveler->name) }}</h5>
                     </div>
                   </div>
                 </div>
@@ -98,7 +98,7 @@
                     <div class="col-xs-8">
                       <p><strong>{{ $group->depart }}</strong></p>
                       <p><strong>{{ $group->return }}</strong></p>
-                      <p><strong>{{ $traveler->name }}</strong></p>
+                      <p><strong>{{ title_case($traveler->name) }}</strong></p>
                     </div>
                   </div>
                 </div>
@@ -120,8 +120,8 @@
             <div class="panel-body">
               <!-- Expanded trip payments -->
               <div class="trip-details-full hidden">
-                <p>Travel package:</p>
-                <p class="trip-modal-seperator"><strong>{{ $trip->package }}</strong></p>
+                <p>Travel package: <span style="font-style: italic">{{ title_case($trip->package) }}</span></p>
+                <p class="trip-modal-seperator"><strong> ${{ $trip->total }}</strong></p>
                 <p>Remaining balance:</p>
                 <p class="trip-modal-seperator"><strong>
                   {{ '$' . number_format((float)$trip->total - $trip->paid, 2, '.', '' ) }}
@@ -138,7 +138,13 @@
 
                 $tripData = json_encode($tripPayment);
                ?>
+             @if ($trip->total - $trip->paid == 0)
+               <div style="padding: 8px 0">
+                <a href="/trips/receipts/{{ $trip->id }}" target="_blank">Download receipt</a>
+              </div>
+              @else
               <button type="button" name="makepayment" class="ds-button button-gen full-width waves-effect waves-dark" @click="showPaymentModal({{$tripData}})">Make payment</button>
+              @endif
             </div>
           </div>
           <div class="col-xs-12 expander-content">

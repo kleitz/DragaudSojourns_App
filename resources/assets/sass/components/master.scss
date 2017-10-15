@@ -225,6 +225,9 @@
   text-decoration: none;
   outline: none !important;
 }
+.ds-button:focus:hover {
+  color: #333;
+}
 
 .container {
   width: 1170px !important;

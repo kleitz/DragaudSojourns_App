@@ -42,8 +42,8 @@
         ?>
         <tr>
           <th scope="row">{{ \Carbon\Carbon::parse($payment->created_at)->format('d F Y') }}</th>
-          <td><a href="/{{ $payment->receipt }}" target="_blank">{{ $payment->verification }}</a></td>
-          <td>#{{ $group->number }} | {{ $traveler->name }}</td>
+          <td><a href="/payments/receipts/{{ $payment->verification }}" target="_blank">{{ $payment->verification }}</a></td>
+          <td>#{{ $group->number }} | {{ title_case($traveler->name) }}</td>
           <td>${{ $payment->amount }}</td>
           <td>${{ $payment->balance }}</td>
         </tr>

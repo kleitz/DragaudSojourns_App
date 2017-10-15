@@ -57,7 +57,7 @@
 
                         <div class="form-group">
                             <div class="col-md-4 col-md-offset-4">
-                                <button type="submit" class="col-md-12 waves-effect waves-light btn blue-grey lighten-1">
+															<button type="submit" class="col-md-12 waves-effect waves-light ds-button button-gen" style="width: 100%;">
                                     Save Changes
                                 </button>
                             </div>

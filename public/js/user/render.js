@@ -13463,7 +13463,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (response.status == "SUCCESS") {
             payApp.processingErr = false;
             payApp.receiptCode = response.verification;
-            $("#payment-success-button").attr("href", "/" + response.receipt);
+            $("#payment-success-button").attr("href", "/payments/receipts/" + response.verification);
             setTimeout(function () {
               zoomOut('#payment-loader');
               slideLeft('#payment-success');

@@ -101,3 +101,5 @@ Route::get('/trips/precheck', 'TripsController@precheck');
 
 // PAYMENTS ROUTES
 Route::post('/payments/store', 'PaymentsController@store');
+Route::get('/payments/receipts/{verification}', 'PaymentsController@createReceipt');
+Route::get('/trips/receipts/{trip_id}', 'PaymentsController@createTripReceipt');
