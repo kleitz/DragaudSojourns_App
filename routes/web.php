@@ -19,7 +19,7 @@ Route::get('home', function (){
 
 Route::get('/', function () {
     return view('public.index');
-});
+})->middleware('guest');
 
 Route::get('/studenttours', function () {
     return view('public.studenttours');
@@ -64,6 +64,36 @@ Route::get('/london', function () {
 Route::get('/foodandhotels', function () {
     return view('public.foodandhotels');
 });
+
+// ROUTE ALT's
+Route::get('/newtraveler', function(){
+  return redirect('/');
+});
+Route::get('/updatetraveler', function(){
+  return redirect('/');
+});
+Route::get('/login', function(){
+  return redirect('/');
+});
+Route::get('/register', function(){
+  return redirect('/');
+});
+Route::get('/profile/user/update', function(){
+  return redirect('/');
+});
+Route::get('/profile/user/confidential', function(){
+  return redirect('/');
+});
+Route::get('/groups/store', function(){
+  return redirect('/');
+});
+Route::get('/trips/store', function(){
+  return redirect('/');
+});
+Route::get('/payments/store', function(){
+  return redirect('/');
+});
+
 
 // USER ROUTES & AUTHENTICATION
 Route::get('/precheck', 'UsersController@precheck');

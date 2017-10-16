@@ -49,7 +49,11 @@ class AccountsController extends Controller
       $authTrips = $trips->forPage(1, $this->tripsPerPage)->all();
       $authTravs = Auth::user()->travelers()->get();
 
-      return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'tripPages'));
+      if (Auth::user()){
+        return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'tripPages'));
+      } else {
+        return redirect('/');
+      }
     }
 
     public function showPayments($email, $page)

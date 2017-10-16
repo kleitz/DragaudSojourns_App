@@ -17,27 +17,33 @@
 
             <tr >
                 <td colspan="2">
-                    <table>
-                        <tr>
-                            <td style="color: #333">
-                            	<strong>To:</strong><br>
-                                {{ title_case($user->name) }}<br>
-                                {{ title_case($user->street) }}, {{ $user->zip }}<br>
-                                {{ $user->email }}<br>
-                            </td>
-                             <td style="text-align: right;color: #333">
-                            	<strong>From:</strong><br>
-                                Dragaud Custom Sojourns<br>
-                                Austin, Texas<br>
+                  <table>
+                      <tr>
+                          <td style="color: #333">
+                            <strong>To:</strong><br>
+                              {{ title_case($user->name) }}<br>
+                              {{ title_case($user->street) }}, {{ $user->zip }}<br>
+                              {{ $user->email }}<br>
+                          </td>
+                           <td style="text-align: right;color: #333">
+                            <strong>From:</strong><br>
+                              Dragaud Custom Sojourns<br>
+                              Austin, Texas<br>
                                1 (800) 554 7437
-                            </td>
-                        </tr>
-                    </table>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="color: #333;">
+                            <strong>Traveler:</strong>
+                              {{ title_case($traveler->name) }}
+                          </td>
+                      </tr>
+                  </table>
                 </td>
             </tr>
 
             <tr>
-              <td style="height: 10px"></td>
+              <td style="height: 20px"></td>
             </tr>
 
             <table cellpadding="6" cellspacing="0">
@@ -47,17 +53,7 @@
                   </td>
 
                   <td style="background-color: #eee; border-bottom:1px solid #ddd;text-align: right;color: #333">
-                      <strong>Traveler Details</strong>
-                  </td>
-              </tr>
-
-              <tr>
-                  <td style="border-bottom: 1px solid #eee;color: #333">
-                      Traveler
-                  </td>
-
-                  <td style="text-align:right;  border-bottom: 1px solid #eee;color: #333">
-                      {{ title_case($traveler->name) }}
+                      <strong>Details</strong>
                   </td>
               </tr>
 
@@ -124,17 +120,23 @@
 
                     <td width="170" style="border-bottom: 1px solid #eee;color: #333">
                         {{ $payment->verification }}
+                        <a href="{{ URL::to('/') }}/payments/receipts/{{ $payment->verification }}" target="_blank" style="color: #2ea1c5; text-decoration: none"><img width="7px" src="/assets/images/icons/external-link.png"/></a>
                     </td>
 
                     <td width="100" style="border-bottom: 1px solid #eee; text-align: left; color: #333;">
                         ${{ $payment->amount }}
                     </td>
-
                     <td width="80" style="border-bottom: 1px solid #eee; text-align: left; color: #333;">
                         ${{ $payment->balance }}
                     </td>
                 </tr>
                 @endforeach
+                <table cellpadding="6" cellspacing="15">
+                  <tr class="total">
+                  	<td ></td>
+                  	<td style="text-align: right; color: #333; border-bottom: 1px solid #eee; ">Total paid: &nbsp; &nbsp; &nbsp; &nbsp; <strong>${{ $trip->total }}</strong><br></td>
+                  </tr>
+                </table>
               </table>
             </table>
         </table>

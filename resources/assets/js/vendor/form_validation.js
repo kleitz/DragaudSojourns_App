@@ -69,6 +69,11 @@ function bindFormatters(){
 function formatCurrency(val){
   return parseFloat(Math.round(val * 100) / 100).toFixed(2);
 }
+
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
 // Fill zip data
 
 function zipData(elem){

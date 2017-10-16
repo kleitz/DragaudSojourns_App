@@ -14,6 +14,7 @@ use App\Mail\Welcome;
 
 class UsersController extends Controller
 {
+    protected $redirectTo = '/';
 
     public function __construct()
     {

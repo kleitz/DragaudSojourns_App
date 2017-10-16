@@ -33,6 +33,4 @@ let authTravs = {!! json_encode($authTravs) !!};
 let authTrips = {!! json_encode($authTrips) !!};
 let tripPayment = '';
 
-console.log(authTrips);
-
 </script>

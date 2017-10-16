@@ -40,7 +40,7 @@
       @if ($trip->total - $trip->paid == 0)
       <div class="trip-status trip-paid flex-abs-center">
         <img src="/assets/images/icons/success_check.png" class="inline-success">
-        <p>Trip fully paid</p>
+        <p>Fully paid</p>
       </div>
       @endif
       @if($month->gte($depart) == true && $trip->total - $trip->paid != 0)
