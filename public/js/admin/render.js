@@ -10312,8 +10312,38 @@ var bus = new Vue();
 // Account view controller
 var accountApp = new Vue({
   el: '#admin-app',
-  data: {},
+  data: {
+    groupDetails: false,
+    groupPackages: [{ name: 'Single', cost: '' }],
+    group: { number: '', destination: '', depart: '', return: '', school: '',
+      packages: '', icon: '', itinerary: '', release: '', message: '' }
+  },
   methods: {
+    updateItinerary: function updateItinerary(event) {
+      this.group.itinerary = event.target.files[0];
+    },
+    updateIcon: function updateIcon(event) {
+      this.group.icon = event.target.files[0];
+    },
+    updateRelease: function updateRelease(event) {
+      this.group.release = event.target.files[0];
+    },
+    updateDates: function updateDates() {
+      this.group.depart = $("#group-depart").val();
+      this.group.return = $("#group-return").val();
+      this.group.packages = JSON.stringify(this.groupPackages);
+      if (this.group.number != '' && this.group.destination != '' && this.group.depart != '' && this.group.return != '' && this.group.school != '' && this.group.packages != '' && this.group.icon != '' && this.group.itinerary != '' && this.group.release != '' && this.group.message != '') {
+        this.groupDetails = true;
+      } else {
+        this.groupDetails = false;
+      }
+    },
+    insertPackage: function insertPackage() {
+      this.groupPackages.push({ name: '', cost: '' });
+    },
+    removePackage: function removePackage(index) {
+      this.groupPackages.splice(index, 1);
+    }
     // updateUserData(check){
     //     $.ajax({
     //         type: "POST",
@@ -10326,6 +10356,7 @@ var accountApp = new Vue({
     // showPaymentModal(){
     //   bus.$emit("PAYMENT");
     // }
+
   },
   mounted: function mounted() {
     // do this when ready
