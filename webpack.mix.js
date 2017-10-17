@@ -42,3 +42,18 @@ mix.scripts([
 mix.js('resources/assets/js/user/preload.js', 'public/js/user/preload.js')
    .js('resources/assets/js/user/render.js', 'public/js/user/render.js')
    .sass('resources/assets/sass/user.scss', 'public/css');
+
+
+// ADMIN ACCOUNTS MIX
+
+mix.scripts([
+  'resources/assets/js/vendor/jquery.mask.min.js',
+  'resources/assets/js/vendor/form_validation.js',
+  'resources/assets/js/vendor/bounce.min.js',
+  'resources/assets/js/vendor/custom_animations.js',
+  'resources/assets/js/admin/app/admin.js'
+], 'public/js/admin/app.js');
+
+mix.js('resources/assets/js/admin/preload.js', 'public/js/admin/preload.js')
+   .js('resources/assets/js/admin/render.js', 'public/js/admin/render.js')
+   .sass('resources/assets/sass/admin.scss', 'public/css');

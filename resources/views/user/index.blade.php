@@ -1,3 +1,4 @@
+
 @extends('layouts.user.master', [
 	'title' => auth()->user()->name . '\'s Profile | Dragaud Custom Sojourns',
 ])
@@ -32,5 +33,4 @@ let authUsr = {!! json_encode($authUsr->toArray()) !!};
 let authTravs = {!! json_encode($authTravs) !!};
 let authTrips = {!! json_encode($authTrips) !!};
 let tripPayment = '';
-
 </script>

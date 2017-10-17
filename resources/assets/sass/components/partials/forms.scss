@@ -267,3 +267,32 @@
 .select-default {
   color: #aaa;
 }
+
+.material-input-large label {
+  font-size: 18px;
+  font-weight: 300;
+  color: $admin-lightgrey;
+  margin-right: 5px;
+}
+
+.material-input-large .material-label-focus {
+    top: -2px;
+}
+
+.inline-material-large{
+
+}
+.inline-material-large label {
+  font-size: 24px;
+  font-weight: 400;
+  color: $admin-lightgrey;
+  margin-right: 5px;
+}
+
+.inline-material-large input {
+  position: relative;
+  font-size: 32px;
+  color: $admin-medgrey;
+  bottom: 5px;
+  max-width: 150px;
+}

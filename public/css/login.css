@@ -364,6 +364,10 @@
           transform: translateX(-50%) translateY(-50%);
 }
 
+.container-left-align {
+  margin: 0;
+}
+
 .full-width {
   width: 100% !important;
 }
@@ -1328,6 +1332,32 @@ th {
 
 .select-default {
   color: #aaa;
+}
+
+.material-input-large label {
+  font-size: 18px;
+  font-weight: 300;
+  color: #a9a9a9;
+  margin-right: 5px;
+}
+
+.material-input-large .material-label-focus {
+  top: -2px;
+}
+
+.inline-material-large label {
+  font-size: 24px;
+  font-weight: 400;
+  color: #a9a9a9;
+  margin-right: 5px;
+}
+
+.inline-material-large input {
+  position: relative;
+  font-size: 32px;
+  color: #515a5a;
+  bottom: 5px;
+  max-width: 150px;
 }
 
 .overlay-near-shadow {
