@@ -14499,7 +14499,7 @@ module.exports = function spread(callback) {
 /* 46 */
 /***/ (function(module, exports) {
 
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: ModuleBuildError: Module build failed: \r\n  color: $admin-lighblue;\r\n        ^\r\n      Undefined variable: \"$admin-lighblue\".\r\n      in C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\sass\\components\\admin\\dashboard.scss (line 25, column 10)\n    at runLoaders (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\webpack\\lib\\NormalModule.js:195:19)\n    at C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\loader-runner\\lib\\LoaderRunner.js:364:11\n    at C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\loader-runner\\lib\\LoaderRunner.js:230:18\n    at context.callback (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\sass-loader\\lib\\loader.js:55:13)\n    at Object.<anonymous> (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\async\\dist\\async.js:2244:31)\n    at Object.callback (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\async\\dist\\async.js:906:16)\n    at options.error (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\node-sass\\lib\\index.js:294:32)");
 
 /***/ })
 /******/ ]);

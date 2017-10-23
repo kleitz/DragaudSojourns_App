@@ -11282,7 +11282,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var checkValid = validator.isValid(this.travErr);
       this.hasSubmit = true;
       var el = '#traveler-modal' + this.id;
-      $(el).css('max-height', '-webkit-fill-available');
+      $(el).css('max-height', 'initial');
       setTimeout(function () {
         $(el).css('max-height', $(el).outerHeight());
       }, 100);
@@ -11304,7 +11304,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var checkValid = validator.isValid(this.travErr);
       this.hasSubmit = true;
       var el = '#traveler-modal' + this.id;
-      $(el).css('max-height', '-webkit-fill-available');
+      $(el).css('max-height', 'initial');
       setTimeout(function () {
         $(el).css('max-height', $(el).outerHeight());
       }, 100);
@@ -12418,7 +12418,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -12631,6 +12631,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           if (data != "") {
             bookApp.groupExists = true;
             bookApp.groupDetails = data;
+            for (var i = 0; i < bookApp.groupDetails.packages.length; i++) {
+              var str = toTitleCase(bookApp.groupDetails.packages[i].name);
+              bookApp.groupDetails.packages[i].name = str;
+            }
           } else {
             bookApp.groupExists = false;
             bookApp.groupDetails = bookApp.groupInit;
@@ -12640,7 +12644,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.detailsProceed();
     },
     detailsProceed: function detailsProceed() {
-      this.newTrip.package = $("#booking-package option:selected").text();
+      var pName = $("#booking-package option:selected").text();
+      this.newTrip.package = pName.slice(0, pName.indexOf(':'));
       this.newTrip.trav_name = $("#booking-traveler option:selected").text();
       this.tripPrecheck();
       if (this.groupExists == true && this.newTrip.group_name != "" && this.newTrip.traveler != "" && this.newTrip.package != "" && $("#release-agree").prop("checked") == true && this.spotTaken == false) {
@@ -12709,9 +12714,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       zoomOut("#new-booking-confirm");
       slideLeft("#new-booking-insurance");
     }
+    // app-wise functions
+
   },
   mounted: function mounted() {
     // do this when ready
+    console.log(toTitleCase('muffin sparks'));
     bindFormatters();
     $("#booking-success-close, #booking-success-button").attr("href", '/profile/' + authUsr.email);
     $("#release-agree").prop("checked", false);
@@ -12871,7 +12879,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       domProps: {
         "value": packages.cost
       }
-    }, [_vm._v(" " + _vm._s(packages.name) + " ")])
+    }, [_vm._v(" " + _vm._s(packages.name) + ": $" + _vm._s(packages.cost))])
   })], 2)])]), _vm._v(" "), _c('div', {
     staticClass: "new-booking-display"
   }, [(_vm.groupExists == false) ? _c('div', {
@@ -12891,7 +12899,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     }
   }, [_vm._v(_vm._s(_vm.groupDetails.number + ": " + _vm.groupDetails.destination))]), _vm._v(" "), _c('h4', {
     staticClass: "booking-filled-amount"
-  }, [_vm._v(_vm._s("$" + Math.round(_vm.newTrip.total)))])]), _vm._v(" "), _c('div', {
+  }, [_vm._v(_vm._s((_vm.newTrip.total > 0) ? "$" + Math.round(_vm.newTrip.total) : "-"))])]), _vm._v(" "), _c('div', {
     staticClass: "booking-filled-details flex-row-between row"
   }, [_c('div', {
     staticClass: "col-xs-4",
@@ -12974,7 +12982,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "rounded-title text-center"
   }, [_vm._v("Do you want traveler’s insurance?")]), _vm._v(" "), _c('h4', {
     staticClass: "rounded-subtitle text-center"
-  }, [_vm._v("We offer coverage for all custom packages. To opt in select the option below and we'll be in touch to provide a quote.\n      ")]), _vm._v(" "), _c('div', {
+  }, [_vm._v("Berkshire Hathaway travel protection is available for all custom packages. Select the option below and we'll get in touch.\n      ")]), _vm._v(" "), _c('div', {
     staticClass: "new-booking-display",
     staticStyle: {
       "margin-top": "0px"
@@ -13000,7 +13008,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "custom-control-indicator"
   }), _vm._v(" "), _c('span', {
     staticClass: "custom-control-description booking-checkbox-description"
-  }, [_vm._v("I am interested in purchasing traveling insurance through Dragaud Custom Sojourns\n              ")])])])])]), _vm._v(" "), _c('div', {
+  }, [_vm._v("I am interested in receiving information about travel insurance through Berkshire Hathaway.\n              ")])])])])]), _vm._v(" "), _c('div', {
     staticClass: "flex-row-center"
   }, [_c('a', {
     staticClass: "overlay-wide-button ds-button button-cancel",
@@ -13227,7 +13235,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -13374,7 +13382,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       paymentMethod: 'credit',
       receiptCode: '',
       paymentDetails: { amount: '0.00', cardholder: '', cardnumber: '', exp_m: '', exp_y: '', cvv2: '', method: '' },
-      paymentSave: { amount: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit' }
+      paymentSave: { amount: '0.00', fee: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit' }
     };
   },
 
@@ -13418,6 +13426,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       $("#credit-option").addClass('hidden');
       $("#paypal-option").removeClass('hidden');
       this.updatePayment();
+      this.calculateFee();
     },
     selectCredit: function selectCredit(event) {
       this.paymentMethod = 'credit';
@@ -13426,6 +13435,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       $("#credit-option").removeClass('hidden');
       $("#paypal-option").addClass('hidden');
       this.updatePayment();
+      this.calculateFee();
+    },
+    calculateFee: function calculateFee() {
+      var $amount = parseFloat(this.paymentDetails.amount);
+      if (this.paymentMethod == 'credit') {
+        this.paymentSave.fee = $amount < 100 ? formatCurrency($amount * .2) : '20.00';
+      } else {
+        this.paymentSave.fee = '0.00';
+      }
     },
     showHelper: function showHelper() {
       slideLeft("#cvv2-helper");
@@ -13501,6 +13519,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return formatCurrency(val);
     },
     formatButton: function formatButton() {
+      this.calculateFee();
       return formatCurrency(this.paymentDetails.amount).toString();
     }
   },

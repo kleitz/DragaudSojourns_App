@@ -168,7 +168,7 @@
       <h4>Welcome, <?php $fullname = explode(" ", auth()->user()->name); echo $fullname[0] ?>.</h4>
       <p>We can't wait to start traveling together! You can update your personal information & travelers,
         <a class="floating-link" href="javascript:;" @click="showBookingModal">book a new trip</a>, and
-        <a class="floating-link" href="/profile/{{ auth()->user()->email }}/payments">see your payments</a>
+        <a class="floating-link" href="/profile/{{ auth()->user()->email }}/payments/1">see your payments</a>
          all from right here.
        </p>
      </div>

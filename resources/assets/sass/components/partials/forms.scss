@@ -11,6 +11,12 @@
   color: #ca3c3c;
 }
 
+.form-bundle {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 15px;
+}
+
 .inline-hazard {
   transition: .1s;
   width: 16px;
@@ -295,4 +301,16 @@
   color: $admin-medgrey;
   bottom: 5px;
   max-width: 150px;
+}
+.material-large-err input {
+  border-color: #de8f8f !important;
+  color: #ca3c3c !important;
+}
+
+.material-large-err label {
+  color: #ca3c3c !important;
+}
+
+.material-large-err small {
+  color: #ca3c3c !important;
 }

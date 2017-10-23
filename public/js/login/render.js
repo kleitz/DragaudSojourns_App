@@ -10816,6 +10816,7 @@ var regApp = new Vue({
     deleteTraveler: function deleteTraveler(index) {
       Vue.delete(this.regtravelers, index);
       this.numTravelers--;
+      if (this.regIncomplete == true) this.testTravelers();
     },
     clearTravelers: function clearTravelers() {
       for (var i = 0; i < this.numTravelers; i++) {
@@ -10828,6 +10829,17 @@ var regApp = new Vue({
         regApp.regtravelers = [];
         regApp.regIncomplete = false;
       }, 400);
+    },
+    testTravelers: function testTravelers() {
+      this.regIncomplete = false;
+      for (var i = 0; i < this.numTravelers; i++) {
+        this.$refs.traveler[i].hasSubmit = true;
+        this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-fullname', type: 'string' });
+        this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-gender', type: 'select' });
+        this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-relate', type: 'select' });
+        this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-emerg', type: 'string' });
+        this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-ephn', type: 'phone' });
+      }
     },
     formTwo: function formTwo() {
       if (this.verifyEmail() == false) regFormTwo();
@@ -10849,15 +10861,7 @@ var regApp = new Vue({
     sendData: function sendData() {
       this.submitAttempt = true;
       if (this.regtravelers.length > 0) {
-        this.regIncomplete = false;
-        for (var i = 0; i < this.numTravelers; i++) {
-          this.$refs.traveler[i].hasSubmit = true;
-          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-fullname', type: 'string' });
-          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-gender', type: 'select' });
-          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-relate', type: 'select' });
-          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-emerg', type: 'string' });
-          this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-ephn', type: 'phone' });
-        }
+        this.testTravelers();
       }
       if (this.regIncomplete == false) {
         var _regApp = this;
@@ -11094,7 +11098,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     testError: function testError(obj) {
       var el = '#traveler-modal' + this.id;
       if ($(el).hasClass('active')) {
-        $(el).css('max-height', '-webkit-fill-available');
+        $(el).css('max-height', 'initial');
         setTimeout(function () {
           $(el).css('max-height', $(el).outerHeight());
         }, 100);
@@ -11398,7 +11402,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": 'reg-trav' + _vm.id + '-ephn-err'
     }
-  }, [_vm._v("Please enter a correct phone number")]), _vm._v(" "), (_vm.id != 0) ? _c('a', {
+  }, [_vm._v("Please enter a correct phone number")]), _vm._v(" "), _c('a', {
     staticClass: "free-link",
     attrs: {
       "href": "javascript:;",
@@ -11407,7 +11411,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.removeMe
     }
-  }, [_vm._v("Remove this traveler")]) : _vm._e()])])])
+  }, [_vm._v("Remove this traveler")])])])])
 },staticRenderFns: [function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('p', [_vm._v("Legal name as it appears"), _c('br'), _vm._v("on travelers government issued ID")])
 }]}

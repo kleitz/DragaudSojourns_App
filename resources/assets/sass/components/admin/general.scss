@@ -1,4 +1,5 @@
 .admin-content {
+  min-height: 100vh;
   position: relative;
   top: -120px;
 }
@@ -7,6 +8,8 @@
   background: white;
   border-radius: 5px;
   padding: 30px 50px 50px;
+  color: #525f64;
+  margin-bottom: 30px;
 }
 
 .admin-container {
@@ -15,4 +18,19 @@
 
 .admin-section-header {
   color: $admin-gold;
+  font-weight: 300;
+}
+
+.admin-section-subheader {
+  color: $admin-gold;
+  font-weight: 300;
+}
+
+.admin-helper {
+
+}
+
+.admin-floating-panel .page-bottom {
+  margin: 0;
+  border-color: rgba(0,0,0,0);
 }

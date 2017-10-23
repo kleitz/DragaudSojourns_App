@@ -44,7 +44,7 @@
               <label for="bookingpackage" class="material-label">Package</label>
               <select v-model="newTrip.total" @change="detailsProceed" class="custom-select form-control material-input" name="bookingpackage" id="booking-package">
                 <option selected> </option>
-                <option v-for="packages in groupDetails.packages" :value="packages.cost" > {{ packages.name }} </option>
+                <option v-for="packages in groupDetails.packages" :value="packages.cost" > {{ packages.name }}: ${{ packages.cost }}</option>
               </select>
             </div>
           </div>
@@ -56,7 +56,7 @@
             <div v-if="groupExists == true" class="new-booking-filled">
               <div class="booking-filled-header flex-row-between">
                 <h4 class="full-width dot-dot-dot" style="padding-right: 5px">{{ groupDetails.number + ": " + groupDetails.destination }}</h4>
-                <h4 class="booking-filled-amount">{{ "$" + Math.round(newTrip.total) }}</h4>
+                <h4 class="booking-filled-amount">{{ (newTrip.total > 0) ? "$" + Math.round(newTrip.total) : "-"}}</h4>
               </div>
               <div class="booking-filled-details flex-row-between row">
                 <div class="col-xs-4" style="padding-right: 0;">
@@ -108,7 +108,7 @@
       </div>
       <div class="rounded-content">
         <h3 class="rounded-title text-center">Do you want traveler’s insurance?</h3>
-        <h4 class="rounded-subtitle text-center">We offer coverage for all custom packages. To opt in select the option below and we'll be in touch to provide a quote.
+        <h4 class="rounded-subtitle text-center">Berkshire Hathaway travel protection is available for all custom packages. Select the option below and we'll get in touch.
         </h4>
         <div class="new-booking-display" style="margin-top: 0px">
           <div style="padding: 20px">
@@ -116,7 +116,7 @@
               <div class="flex-row-between">
                 <input @change="insuranceConfirm" id="insurance-agree" type="checkbox" class="custom-control-input booking-checkbox">
                 <span class="custom-control-indicator"></span>
-                <span class="custom-control-description booking-checkbox-description">I am interested in purchasing traveling insurance through Dragaud Custom Sojourns
+                <span class="custom-control-description booking-checkbox-description">I am interested in receiving information about travel insurance through Berkshire Hathaway.
                 </span>
               </div>
             </label>
@@ -195,6 +195,10 @@ import SuccessModal from './SuccessModal.vue';
               if (data != "") {
                 bookApp.groupExists = true;
                 bookApp.groupDetails = data;
+                for (let i = 0; i < bookApp.groupDetails.packages.length; i++){
+                  let str = toTitleCase(bookApp.groupDetails.packages[i].name);
+                  bookApp.groupDetails.packages[i].name = str;
+                }
               } else {
                 bookApp.groupExists = false;
                 bookApp.groupDetails = bookApp.groupInit;
@@ -204,7 +208,8 @@ import SuccessModal from './SuccessModal.vue';
         this.detailsProceed();
       },
       detailsProceed(){
-        this.newTrip.package = $("#booking-package option:selected").text();
+        let pName = $("#booking-package option:selected").text();
+        this.newTrip.package = pName.slice(0, pName.indexOf(':'));
         this.newTrip.trav_name = $("#booking-traveler option:selected").text();
         this.tripPrecheck();
         if (this.groupExists == true && this.newTrip.group_name != "" &&
@@ -274,11 +279,12 @@ import SuccessModal from './SuccessModal.vue';
       backToInsurance(){
         zoomOut("#new-booking-confirm");
         slideLeft("#new-booking-insurance");
-      },
+      }
       // app-wise functions
     },
     mounted() {
       // do this when ready
+      console.log(toTitleCase('muffin sparks'))
       bindFormatters();
       $("#booking-success-close, #booking-success-button").attr("href", '/profile/' + authUsr.email);
       $("#release-agree").prop("checked", false);

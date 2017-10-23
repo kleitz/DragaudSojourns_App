@@ -130,7 +130,7 @@ import SuccessModal from './SuccessModal.vue';
         paymentMethod: 'credit',
         receiptCode: '',
         paymentDetails: { amount: '0.00', cardholder: '', cardnumber: '', exp_m: '', exp_y: '', cvv2: '', method: '' },
-        paymentSave: { amount: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit'}
+        paymentSave: { amount: '0.00', fee: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit'}
   		}
   	},
     methods: {
@@ -183,6 +183,7 @@ import SuccessModal from './SuccessModal.vue';
         $("#credit-option").addClass('hidden');
         $("#paypal-option").removeClass('hidden');
         this.updatePayment();
+        this.calculateFee();
       },
       selectCredit(event){
         this.paymentMethod = 'credit';
@@ -191,6 +192,15 @@ import SuccessModal from './SuccessModal.vue';
         $("#credit-option").removeClass('hidden');
         $("#paypal-option").addClass('hidden');
         this.updatePayment();
+        this.calculateFee();
+      },
+      calculateFee(){
+        let $amount = parseFloat(this.paymentDetails.amount);
+        if (this.paymentMethod == 'credit') {
+          this.paymentSave.fee = ($amount < 100) ? formatCurrency($amount * .2) : '20.00';
+        } else  {
+          this.paymentSave.fee = '0.00';
+        }
       },
       showHelper(){
         slideLeft("#cvv2-helper");
@@ -266,6 +276,7 @@ import SuccessModal from './SuccessModal.vue';
         return formatCurrency(val);
       },
       formatButton(){
+        this.calculateFee();  
         return formatCurrency(this.paymentDetails.amount).toString();
       },
     },

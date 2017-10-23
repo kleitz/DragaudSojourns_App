@@ -24,7 +24,7 @@ class CreateGroupsTable extends Migration
             $table->text('icon');
             $table->text('itinerary');
             $table->text('release');
-            $table->string('message')->nullable();
+            $table->mediumText('message')->nullable();
             $table->timestamps();
         });
     }

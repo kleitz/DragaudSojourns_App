@@ -29,7 +29,7 @@
         <span :id="'reg-trav' + id + '-emerg-err'" class="text-left ds-form-errmsg">Please enter an emergency contact</span>
         <input :id="'reg-trav' + id + '-ephn'" @keyup="testError({elem: 'reg-trav' + id + '-ephn', type: 'phone'})"  v-model="traveler.ephn" class="travemerg-phone traveler-input register-input phone-format numbers-only" type="text" @click="formatPhone" name="travelercontphone" placeholder="Phone">
         <span :id="'reg-trav' + id + '-ephn-err'" class="text-left ds-form-errmsg">Please enter a correct phone number</span>
-        <a href="javascript:;" id="reg-no-travelers" class="free-link" @click="removeMe" v-if="id != 0">Remove this traveler</a>
+        <a href="javascript:;" id="reg-no-travelers" class="free-link" @click="removeMe">Remove this traveler</a>
       </div>
     </div>
   </div>
@@ -53,7 +53,7 @@ export default {
   		testError(obj) {
         let el='#traveler-modal'+ this.id;
         if ($(el).hasClass('active')) {
-          $(el).css('max-height', '-webkit-fill-available');
+          $(el).css('max-height', 'initial');
           setTimeout(function() {
             $(el).css('max-height', $(el).outerHeight());
           }, 100)

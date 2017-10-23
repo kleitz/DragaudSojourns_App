@@ -8,6 +8,7 @@ use App\Trip;
 use App\User;
 use App\Traveler;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -57,6 +58,7 @@ class PaymentsController extends Controller
             'user_id' => $request->input('payment.user_id'),
             'trip_id' => $trip,
             'amount' => $amount,
+            'fee' => $request->input('payment.fee'),
             'balance' => $request->input('payment.balance'),
             'verification' => $verification
           ]);
@@ -116,10 +118,48 @@ class PaymentsController extends Controller
      * @param  \App\Payment  $payment
      * @return \Illuminate\Http\Response
      */
-    public function show(Payment $payment)
-    {
-        //
-    }
+     public $paymentsPerPage = 20;
+     public function show($email, $page)
+     {
+       // $email =  Auth::admin()->email;
+       $email = 'jjvannatta88';
+       $search = \Request::get('search');
+       $payments = Payment::orderBy('id', 'desc')->get();
+       if ($search) {
+
+         $travelerAll = DB::table('payments')
+              ->join('trips', 'payments.trip_id', '=', 'trips.id')
+              ->join('travelers', 'trips.traveler_id', '=', 'travelers.id')
+              ->select('payments.*')
+              ->where('name', 'like', '%'.$search.'%');
+
+        $userAll = DB::table('payments')
+             ->join('trips', 'payments.trip_id', '=', 'trips.id')
+             ->join('users', 'trips.user_id', '=', 'users.id')
+             ->select('payments.*')
+             ->where('name', 'like', '%'.$search.'%');
+
+       $groupAll = DB::table('payments')
+            ->join('trips', 'payments.trip_id', '=', 'trips.id')
+            ->join('groups', 'trips.group_id', '=', 'groups.id')
+            ->select('payments.*')
+            ->where('number', 'like', '%'.$search.'%');
+
+         $payments = Payment::where('verification', 'like', '%'.$search.'%')
+             ->union($travelerAll)
+             ->union($userAll)
+             ->union($groupAll)
+             ->orderBy('id', 'desc')
+             ->get();
+       }
+       $paymentPages = ceil(count($payments) / $this->paymentsPerPage);
+
+       // $authAdmin = Auth::admin();
+       $authAdmin = 'jjvannatta88';
+       $authPayments = $payments->forPage($page, $this->paymentsPerPage)->all();
+
+       return view('admin.payments', compact('paymentPages', 'authAdmin', 'authPayments'));
+     }
 
     /**
      * Show the form for editing the specified resource.

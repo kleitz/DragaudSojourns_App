@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Group;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class GroupsController extends Controller
@@ -13,6 +15,16 @@ class GroupsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function precheck(Request $request)
+     {
+       $query = Group::where('number', '=', $request->input('number'))->first();
+       if ($query === null) {
+         return "OPEN";
+       } else {
+         return "TAKEN";
+       }
+     }
+
     public function index()
     {
         //
@@ -23,9 +35,11 @@ class GroupsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($email)
     {
-        return view('admin.creator');
+      // $email =  Auth::admin()->email;
+      $email = 'jjvannatta88';
+      return view('admin.creator');
     }
 
     /**
@@ -37,11 +51,6 @@ class GroupsController extends Controller
     public function store(Request $request)
     {
       $groupNum = $request->input('number');
-
-      $icon = $request->file('icon');
-      $iconName = pathinfo($icon->getClientOriginalName(), PATHINFO_FILENAME);
-      $iconLoc = $iconName . 'TIME' .  time() . 'EXT.' . $icon->getClientOriginalExtension();
-      $icon->storeAs('public/icons', $iconLoc);
 
       $itin = $request->file('itinerary');
       $itinLoc =  'dragaudcustomsojourns-' . $groupNum . '-itinerary.' . $itin->getClientOriginalExtension();
@@ -58,13 +67,13 @@ class GroupsController extends Controller
           'return' => $request->input('return'),
           'school' => $request->input('school'),
           'packages' => $request->input('packages'),
-          'icon' => 'storage/icons/' . $iconLoc,
+          'icon' => $request->input('icon'),
           'itinerary' => 'storage/itineraries/' . $groupNum . '/' . $itinLoc,
           'release' => 'storage/releases/' . $groupNum . '/' . $releaseLoc,
           'message' => $request->input('message')
         ]);
 
-        return view('admin.creator');
+        return redirect('/admin/jjvannatta88/groups/1');
     }
 
     public function specific(Request $request){
@@ -76,15 +85,40 @@ class GroupsController extends Controller
 
       return $group;
     }
+
+
     /**
      * Display the specified resource.
      *
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function show(Group $group)
+    public $groupsPerPage = 10;
+
+    public function show($email, $page)
     {
-        //
+      // $email =  Auth::admin()->email;
+      $email = 'jjvannatta88';
+      $search = \Request::get('search');
+      $groups = Group::orderBy('number', 'desc')->get();
+      if ($search) {
+        
+        $destination = Group::where('destination', 'like', '%'.$search.'%');
+        $school = Group::where('school', 'like', '%'.$search.'%');
+
+        $groups = Group::where('number', 'like', '%'.$search.'%')
+            ->union($destination)
+            ->union($school)
+            ->orderBy('id', 'desc')
+            ->get();
+      }
+      $groupPages = ceil(count($groups) / $this->groupsPerPage);
+
+      // $authAdmin = Auth::admin();
+      $authAdmin = 'jjvannatta88';
+      $authGroups = $groups->forPage($page, $this->groupsPerPage)->all();
+
+      return view('admin.groups', compact('groupPages', 'authAdmin', 'authGroups'));
     }
 
     /**

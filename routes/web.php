@@ -65,7 +65,7 @@ Route::get('/foodandhotels', function () {
     return view('public.foodandhotels');
 });
 
-// ROUTE ALT's
+// ROUTE POST ALT's
 Route::get('/newtraveler', function(){
   return redirect('/');
 });
@@ -93,6 +93,15 @@ Route::get('/trips/store', function(){
 Route::get('/payments/store', function(){
   return redirect('/');
 });
+Route::get('admin/group/new', function(){
+  return redirect('admin/groups/new');
+});
+Route::get('/admins/icon/store', function(){
+  return redirect('/groups/create');
+});
+Route::get('/admins/icon/destroy', function(){
+  return redirect('/groups/create');
+});
 
 
 // USER ROUTES & AUTHENTICATION
@@ -112,16 +121,25 @@ Route::group(['namespace' => 'Auth'], function() {
 // ACCOUNTS ROUTES
 Route::get('/profile/{email}', 'AccountsController@create')->name('profile.index');
 Route::get('/profile/{email}/payments/{page}', 'AccountsController@showPayments')->name('profile.payments');
-Route::get('/profile/{email}/trips/{page}', 'AccountsController@showTrips');
+Route::get('/profile/{email}/trips/{page}', 'AccountsController@showTrips')->name('profile.trips');
 Route::post('/profile/user/update', 'AccountsController@userUpdate');
 Route::post('/profile/user/confidential', 'AccountsController@confidentialUpdate');
+
+// ADMIN ROUTES
+Route::get('/admin/{email}/dashboard', 'AdminsController@create')->name('admin.dashboard');
+Route::get('/admin/{email}/groups/{page}', 'GroupsController@show')->name('admin.groups');
+Route::get('/admin/{email}/accounts/{page}', 'AccountsController@show')->name('admin.accounts');
+Route::get('/admin/{email}/payments/{page}', 'PaymentsController@show')->name('admin.payments');
+Route::get('/admin/{email}/group/new', 'GroupsController@create')->name('admin.newgroup');
+Route::post('/admin/icon/store', 'AdminsController@storeIcon');
+Route::post('/admin/icon/destroy', 'AdminsController@destroyIcon');
 
 // TRAVELERS ROUTES
 Route::post('/newtraveler', 'TravelersController@store');
 Route::post('/updatetraveler', 'TravelersController@update');
 
 // GROUPS ROUTES
-Route::get('/groups/create', 'GroupsController@create');
+Route::get('/groups/precheck', 'GroupsController@precheck');
 Route::post('/groups/store', 'GroupsController@store');
 Route::get('/groups/specific', 'GroupsController@specific');
 

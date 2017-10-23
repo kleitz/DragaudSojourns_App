@@ -82,7 +82,7 @@
         <div></div>
       </div>
     </div>
-		<a href="javascript:;" id="reg-no-travelers" class="free-link" @click="clearTravelers">Not sure yet? Click here to add travelers later</a>
+		<a href="javascript:;" id="reg-no-travelers" class="free-link" @click="clearTravelers">Not sure yet? Click here to add travelers later.</a>
 		<!-- SUBMIT -->
 		<input id="prevReg3" type="button" name="previous" class="previous action-button" value="Previous" />
 		<button id="reg-submit" type="button" name="submit" :disabled="regIncomplete" v-bind:class="{'button-locked' : regIncomplete, 'submit action-button' : true}" value="Submit" @click="sendData">

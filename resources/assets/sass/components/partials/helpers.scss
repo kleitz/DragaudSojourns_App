@@ -63,3 +63,56 @@
 .helper-err:before{
   border-bottom-color: #c62e35;
 }
+
+.admin-helper{
+  width: max-content;
+  z-index: 20;
+  position: absolute;
+  padding: 10px;
+  background: #f7f7f7;
+  border-radius: 5px;
+  margin-left: -10px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 2px 1px rgba(0,0,0,0.3);
+}
+
+.admin-helper::after, .admin-helper::before {
+  right: 100%;
+  content: "";
+  top: 15%;
+  border: solid transparent;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.admin-helper:after {
+  border-color: rgba(0,0,0,0);
+  border-right-color: #f7f7f7;
+  border-width: 10px;
+  margin-left: -5px;
+}
+
+.admin-helper:before{
+  border-color: rgba(0,0,0,0);
+  border-right-color: #ccc;
+  border-width: 12px;
+  margin-top: -2px;
+}
+
+.show-account-user a {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.show-account-user .admin-helper{
+  top: -17px;
+  left: 30px;
+}
+
+.show-account-user .admin-helperstrong {
+  position: relative;
+  left: 8px;
+  margin-right: 8px;
+}

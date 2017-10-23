@@ -43,33 +43,28 @@
       </a>
     </div>
     <div class="admin-main-panel row">
-      <div class="col-xs-12 admin-runner">
-        <div class="col-xs-2">
-          <div class="admin-username">
-            <div class="flex-row-start">
-              <div class="admin-picture-container">
-                <img src="/assets/images/icons/admin_cog.png" alt="">
-              </div>
-              <div class="flex-col-center">
-                <h5>Temp Admin</h5>
-                <p>System Administrator</p>
-              </div>
+      <div class="full-width admin-runner">
+        <div class="admin-username">
+          <div class="flex-row-start">
+            <div class="admin-picture-container">
+              <img src="/assets/images/icons/admin_cog.png" alt="">
+            </div>
+            <div class="flex-col-center">
+              <h5>Temp Admin</h5>
+              <p>System Administrator</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="col-xs-2">
+      <div class="full-width flex-row-start">
         <div class="admin-navigation">
           @include('layouts.admin.nav')
         </div>
-      </div>
-      <div class="col-xs-10">
         <div class="admin-content" id="admin-app">
           @yield('content')
         </div>
       </div>
     </div>
-    @include('layouts.admin.overlay')
 </body>
 <script>
 $.ajaxSetup({
@@ -79,5 +74,4 @@ $.ajaxSetup({
 });
 </script>
 <script src="/js/admin/app.js" type="text/javascript"></script>
-<script src="/js/admin/render.js" type="text/javascript"></script>
 </html>

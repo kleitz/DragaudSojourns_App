@@ -147,10 +147,7 @@ $(document).ready(function(){
   $('#reg-new-phone, #reg-new-home').keyup(function(){
     if (regPhoneAttempt == 1) {
       phoneCombo();
-      if (validator.isValid([{elem: 'reg-new-phone', type: 'phone'},
-                            {elem: 'reg-new-home', type: 'phone'}]) != false ) {
-        fadeOut('#new-phone-helper');
-      }
+      fadeOut('#new-phone-helper');
     }
   })
   $("#reg-new-phone").focus(function(){

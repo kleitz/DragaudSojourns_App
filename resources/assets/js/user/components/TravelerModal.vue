@@ -111,7 +111,7 @@ export default {
         let checkValid = validator.isValid(this.travErr);
         this.hasSubmit = true;
         let el='#traveler-modal'+ this.id;
-        $(el).css('max-height', '-webkit-fill-available');
+        $(el).css('max-height', 'initial');
         setTimeout(function(){
           $(el).css('max-height', $(el).outerHeight());
         }, 100);
@@ -133,7 +133,7 @@ export default {
         let checkValid = validator.isValid(this.travErr);
         this.hasSubmit = true;
         let el='#traveler-modal'+ this.id;
-        $(el).css('max-height', '-webkit-fill-available');
+        $(el).css('max-height', 'initial');
         setTimeout(function(){
           $(el).css('max-height', $(el).outerHeight());
         }, 100);

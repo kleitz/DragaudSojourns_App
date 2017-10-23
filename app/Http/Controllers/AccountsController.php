@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Auth;
 use Javascript;
+use App\User;
 use App\Group;
+use App\Traveler;
 
 class AccountsController extends Controller
 {
@@ -14,7 +17,7 @@ class AccountsController extends Controller
     public $paymentsPerPage = 10;
 
     public function __construct(){
-      $this->middleware('auth');
+      $this->middleware('auth', ['except' => 'show']);
     }
 
     public function userUpdate(Request $request) {
@@ -98,10 +101,36 @@ class AccountsController extends Controller
      * @param  \App\Traveler  $traveler
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
-    {
-        //
-    }
+     public $accountsPerPage = 15;
+     public function show($email, $page)
+     {
+       // $email =  Auth::admin()->email;
+       $email = 'jjvannatta88';
+       $search = \Request::get('search');
+       $accounts = User::orderBy('id', 'desc')->get();
+       if ($search) {
+
+         $travelerAll = DB::table('users')
+              ->join('travelers', 'users.id', '=', 'travelers.user_id')
+              ->select('users.*')
+              ->where('travelers.name', 'like', '%'.$search.'%');
+
+         $number = User::whereRaw("unix_timestamp(created_at) LIKE '%" .$search."%'");
+
+         $accounts = User::where('name', 'like', '%'.$search.'%')
+             ->union($number)
+             ->union($travelerAll)
+             ->orderBy('id', 'desc')
+             ->get();
+       }
+       $accountPages = ceil(count($accounts) / $this->accountsPerPage);
+
+       // $authAdmin = Auth::admin();
+       $authAdmin = 'jjvannatta88';
+       $authAccounts = $accounts->forPage($page, $this->accountsPerPage)->all();
+
+       return view('admin.accounts', compact('accountPages', 'authAdmin', 'authAccounts'));
+     }
 
     /**
      * Show the form for editing the specified resource.

@@ -31,6 +31,8 @@ const regApp = new Vue({
 			deleteTraveler(index){
 				Vue.delete(this.regtravelers, index);
 				this.numTravelers--;
+        if (this.regIncomplete == true)
+          this.testTravelers();
 			},
       clearTravelers(){
         for (let i = 0; i < this.numTravelers; i++){
@@ -43,6 +45,17 @@ const regApp = new Vue({
           regApp.regtravelers = [];
           regApp.regIncomplete = false
         }, 400);
+      },
+      testTravelers(){
+        this.regIncomplete = false;
+        for (let i = 0; i < this.numTravelers; i++){
+          this.$refs.traveler[i].hasSubmit = true;
+          this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-fullname', type: 'string'});
+          this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-gender', type: 'select'});
+          this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-relate', type: 'select'});
+          this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-emerg', type: 'string'});
+          this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-ephn', type: 'phone'});
+        }
       },
       formTwo() {
         if (this.verifyEmail() == false)
@@ -65,15 +78,7 @@ const regApp = new Vue({
 			sendData() {
         this.submitAttempt = true;
         if (this.regtravelers.length > 0){
-          this.regIncomplete = false;
-  				for (let i = 0; i < this.numTravelers; i++){
-  					this.$refs.traveler[i].hasSubmit = true;
-  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-fullname', type: 'string'});
-  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-gender', type: 'select'});
-  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-relate', type: 'select'});
-  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-emerg', type: 'string'});
-  					this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-ephn', type: 'phone'});
-  				}
+          this.testTravelers();
         }
         if (this.regIncomplete == false) {
           let regApp = this;

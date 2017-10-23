@@ -113,6 +113,10 @@
    stroke: $blue-med;
  }
 
+ .spinner-dark {
+   stroke: rgba(0,0,0,0.5);
+ }
+
  @-webkit-keyframes rotation
  {
    0% {

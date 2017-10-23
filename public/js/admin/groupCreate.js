@@ -10309,88 +10309,220 @@ window.Vue = __webpack_require__(6);
 
 var bus = new Vue();
 
-// Account view controller
-var accountApp = new Vue({
-  el: '#admin-app',
+// Group create app
+var groupCreateApp = new Vue({
+  el: '#group-create-app',
   data: {
+    newIcon: '',
+    deleteMode: 0,
+    iconList: iconListLoaded,
+    iconLoading: true,
+    groupExists: false,
+    groupIcon: '',
     groupDetails: false,
     groupPackages: [{ name: 'Single', cost: '' }],
+    examplePackage: '0.00',
     group: { number: '', destination: '', depart: '', return: '', school: '',
       packages: '', icon: '', itinerary: '', release: '', message: '' }
   },
   methods: {
+    groupPrecheck: function groupPrecheck() {
+      var groupApp = this;
+      $.ajax({
+        type: "GET",
+        url: '/groups/precheck',
+        data: { number: groupApp.group.number },
+        success: function success(data) {
+          if (data == 'OPEN') {
+            groupApp.groupExists = false;
+          } else if (data == 'TAKEN') {
+            groupApp.groupExists = true;
+          }
+        }
+      });
+      this.updateDates();
+    },
+    groupValid: function groupValid() {
+      if (this.group.number != '' && this.groupExists == false && this.group.destination != '' && this.group.depart != '' && this.group.return != '' && this.group.school != '' && this.checkPackages() == true && this.group.icon != '' && this.group.itinerary != '' && this.group.release != '' && this.group.message != '') {
+        this.groupDetails = true;
+      } else {
+        this.groupDetails = false;
+      }
+    },
+    formatCurrency: function formatCurrency(index, event) {
+      this.groupPackages[index].cost = parseFloat(Math.round(event.target.value * 100) / 100).toFixed(2);
+      this.groupValid();
+    },
     updateItinerary: function updateItinerary(event) {
+      this.groupValid();
       this.group.itinerary = event.target.files[0];
     },
-    updateIcon: function updateIcon(event) {
-      this.group.icon = event.target.files[0];
-    },
     updateRelease: function updateRelease(event) {
+      this.groupValid();
       this.group.release = event.target.files[0];
     },
     updateDates: function updateDates() {
       this.group.depart = $("#group-depart").val();
       this.group.return = $("#group-return").val();
       this.group.packages = JSON.stringify(this.groupPackages);
-      if (this.group.number != '' && this.group.destination != '' && this.group.depart != '' && this.group.return != '' && this.group.school != '' && this.group.packages != '' && this.group.icon != '' && this.group.itinerary != '' && this.group.release != '' && this.group.message != '') {
-        this.groupDetails = true;
-      } else {
-        this.groupDetails = false;
-      }
+      this.groupValid();
     },
     insertPackage: function insertPackage() {
+      bindFormatters();
       this.groupPackages.push({ name: '', cost: '' });
     },
     removePackage: function removePackage(index) {
       this.groupPackages.splice(index, 1);
-    }
-    // updateUserData(check){
-    //     $.ajax({
-    //         type: "POST",
-    //         url: '/profile/user/update',
-    //         data: { user : acctApp.userDetails, id : authUsr.id },
-    //         success: function(data){
-    //         }
-    //     });
-    // },
-    // showPaymentModal(){
-    //   bus.$emit("PAYMENT");
-    // }
+    },
+    checkPackages: function checkPackages() {
+      for (var i = 0; i < this.groupPackages.length; i++) {
+        if (this.groupPackages[i].name == '') return false;
+        if (this.groupPackages[i].cost <= 0 || this.groupPackages[i].cost == '') return false;
+      }
+      return true;
+    },
+    showIconSelect: function showIconSelect() {
+      var groupApp = this;
+      setTimeout(function () {
+        groupApp.iconLoading = false;
+      }, 1000);
+      slideLeft('#icon-select');
+    },
+    hideIconSelect: function hideIconSelect() {
+      this.iconLoading = true;
+      this.deleteMode = 0;
+      fadeOut('#icon-select');
+    },
+    selectIcon: function selectIcon(index, event) {
+      // DELETE ICON OPTION
+      if (this.deleteMode == 1) {
+        this.iconLoading = true;
+        var fIcon = this.iconList[index].loc.split('/');
+        fIcon = fIcon[fIcon.length - 1];
+        this.deleteIcon(fIcon, index);
+        // SELECT ICON OPTION
+      } else {
+        var icon = event.target.value;
+        var _fIcon = icon.split('/');
+        _fIcon = _fIcon[_fIcon.length - 1];
+        iExt = _fIcon.indexOf('EXT');
+        iTime = _fIcon.indexOf('TIME');
+        time = new Date(_fIcon.slice(iTime + 4, iExt) * 1000);
+        time = '-' + (time.getMonth() + 1) + '-' + time.getDate() + '-' + time.getFullYear();
 
+        _fIcon = _fIcon.slice(0, iTime) + _fIcon.slice(iExt + 3);
+
+        this.group.icon = icon;
+        this.groupIcon = _fIcon;
+        this.hideIconSelect();
+      }
+    },
+    uploadNewIcon: function uploadNewIcon(event) {
+      var groupApp = this;
+      this.iconLoading = true;
+
+      event.preventDefault();
+      var formData = new FormData();
+      formData.append('file', event.target.files[0]);
+      $.ajax({
+        type: "POST",
+        url: '/admin/icon/store',
+        processData: false,
+        contentType: false,
+        cache: false,
+        data: formData,
+        dataType: 'JSON',
+        statusCode: {
+          200: function _(response) {
+            var icon = response.responseText;
+            var fIcon = icon.split('/');
+            fIcon = fIcon[fIcon.length - 1];
+            iExt = fIcon.indexOf('EXT');
+            iTime = fIcon.indexOf('TIME');
+            fIcon = fIcon.slice(0, iTime) + fIcon.slice(iExt + 3);
+
+            groupApp.iconList.push({ loc: icon, name: fIcon });
+            setTimeout(function () {
+              groupApp.iconLoading = false;
+              groupApp.deleteMode = 0;
+            }, 1000);
+          }
+        }
+      });
+    },
+    deleteIcon: function deleteIcon(name, index) {
+      var groupApp = this;
+      $.ajax({
+        type: "POST",
+        url: '/admin/icon/destroy',
+        data: { icon: name },
+        success: function success(data) {
+          groupApp.deleteSuccess = true;
+          groupApp.iconList.splice(index, 1);
+          groupApp.group.icon = '';
+          groupApp.groupIcon = '';
+          setTimeout(function () {
+            groupApp.iconLoading = false;
+          }, 1000);
+        }
+      });
+    },
+    deleteToggle: function deleteToggle() {
+      if (this.deleteMode == 1) {
+        this.deleteMode = 0;
+      } else {
+        this.deleteMode = 1;
+      }
+    }
   },
   mounted: function mounted() {
-    // do this when ready
+    var groupApp = this;
+    $("#group-depart, #group-return").on('change keyup click', function () {
+      groupApp.updateDates();
+    });
+    for (var i = 0; i < this.iconList.length; i++) {
+      var fIcon = this.iconList[i].split('/');
+      fIcon = fIcon[fIcon.length - 1];
+      iExt = fIcon.indexOf('EXT');
+      iTime = fIcon.indexOf('TIME');
+      fIcon = fIcon.slice(0, iTime) + fIcon.slice(iExt + 3);
+
+      this.iconList[i] = { loc: this.iconList[i], name: fIcon };
+    }
   },
 
   components: {},
   computed: {
     // computed data
+    deleteMessage: function deleteMessage() {
+      if (this.deleteMode == 1) return "Cancel";
+      if (this.deleteMode == 0) return "Delete icon";
+    }
   }
 });
 
 // Change email/password view controller
 
-var overlayApp = new Vue({
-  el: '#dark-overlay',
-  data: {
-    // newConfidential: false,
-  },
-  methods: {
-    confidentialClose: function confidentialClose() {
-      // this.newConfidential = false;
-    }
-  },
-  mounted: function mounted() {
-    // bus.$on('CONFIDENTIAL', ()=> this.newConfidential = true);
-  },
-
-  components: {
-    // ConfidentialModal,
-  },
-  computed: {
-    // computed data
-  }
-});
+// const overlayApp = new Vue({
+//     el: '#dark-overlay',
+//     data: {
+//       // newConfidential: false,
+//     },
+//     methods: {
+//       confidentialClose(){
+//         // this.newConfidential = false;
+//       }
+//     },
+//     mounted() {
+//       // bus.$on('CONFIDENTIAL', ()=> this.newConfidential = true);
+//     },
+//     components: {
+//       // ConfidentialModal,
+//     },
+//     computed: {
+//       // computed data
+//     }
+// });
 
 /***/ })
 

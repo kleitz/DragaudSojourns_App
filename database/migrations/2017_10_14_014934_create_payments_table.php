@@ -21,7 +21,6 @@ class CreatePaymentsTable extends Migration
             $table->integer('trip_id');
             $table->decimal('amount', 13, 2);
             $table->decimal('balance', 13, 2);
-            $table->text('receipt');
             $table->integer('verification');
             $table->timestamps();
         });

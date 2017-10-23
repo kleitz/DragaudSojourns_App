@@ -89,9 +89,9 @@ function formatCurrency(val){
   return parseFloat(Math.round(val * 100) / 100).toFixed(2);
 }
 
-function toTitleCase(str)
+function toTitleCase(txt)
 {
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    return txt.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
 // Fill zip data
 
@@ -1282,10 +1282,7 @@ $(document).ready(function(){
   $('#reg-new-phone, #reg-new-home').keyup(function(){
     if (regPhoneAttempt == 1) {
       phoneCombo();
-      if (validator.isValid([{elem: 'reg-new-phone', type: 'phone'},
-                            {elem: 'reg-new-home', type: 'phone'}]) != false ) {
-        fadeOut('#new-phone-helper');
-      }
+      fadeOut('#new-phone-helper');
     }
   })
   $("#reg-new-phone").focus(function(){

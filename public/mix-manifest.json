@@ -3,11 +3,10 @@
     "/js/login/preload.js": "/js/login/preload.js",
     "/css/login.css": "/css/login.css",
     "/css/user.css": "/css/user.css",
-    "/css/admin.css": "/css/admin.css",
     "/js/login/render.js": "/js/login/render.js",
     "/js/user/preload.js": "/js/user/preload.js",
     "/js/admin/preload.js": "/js/admin/preload.js",
-    "/js/admin/render.js": "/js/admin/render.js",
+    "/js/admin/groupCreate.js": "/js/admin/groupCreate.js",
     "/js/login/app.js": "/js/login/app.js",
     "/js/user/app.js": "/js/user/app.js",
     "/js/admin/app.js": "/js/admin/app.js"
