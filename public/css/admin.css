@@ -15780,6 +15780,10 @@ a {
   color: #559dad;
 }
 
+.admin-nav-active {
+  color: #559dad !important;
+}
+
 .admin-content {
   min-height: 100vh;
   position: relative;
@@ -16207,5 +16211,83 @@ td {
 .admin-feature-link:hover span {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
+}
+
+.admin-section-subtext {
+  color: #979e9e;
+  font-size: 26px;
+  font-weight: 300 !important;
+}
+
+.payment-key {
+  width: 15px;
+  height: 15px;
+  position: relative;
+  top: 10px;
+  border: 2px solid #ffffff;
+  border-radius: 3px;
+  margin-right: 5px;
+}
+
+.payment-key.captured {
+  background: #73b8c4;
+}
+
+.payment-key.projected {
+  background: #aad7de;
+}
+
+.summary-key {
+  width: 12px;
+  height: 12px;
+  background: #aad7de;
+  -ms-flex-item-align: center;
+      align-self: center;
+  border-radius: 50%;
+  margin: 5px 10px 0 5px;
+}
+
+.summary-key.travelers {
+  background: #e9cfb0;
+}
+
+.summary-key.projected {
+  background: #aad7de;
+}
+
+.summary-key.captured {
+  background: #73b8c4;
+}
+
+#summary-chart-container {
+  position: relative;
+  z-index: 4;
+}
+
+.chart-scubbers {
+  position: relative;
+  z-index: 5;
+  margin: -13px 6px -19px 3px;
+}
+
+.chart-scubbers i {
+  font-size: 24px;
+  color: #c9d0d2;
+}
+
+.chart-scubbers a:hover i {
+  color: #559dad;
+}
+
+.dashboard-select select {
+  font-size: 26px;
+  padding: 0;
+  top: -3px;
+  left: 3px;
+  color: #979e9e;
+}
+
+.dashboard-select option {
+  font-weight: 100;
 }
 

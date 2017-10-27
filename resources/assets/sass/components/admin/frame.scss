@@ -101,3 +101,7 @@ a {
 .admin-navigation a:hover p {
   color: $admin-blue;
 }
+
+.admin-nav-active {
+  color: $admin-blue !important;
+}

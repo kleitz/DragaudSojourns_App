@@ -10637,7 +10637,9 @@ module.exports = {
 /* 2 */,
 /* 3 */,
 /* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */,
+/* 7 */
 /***/ (function(module, exports) {
 
 /*!
@@ -13020,8 +13022,6 @@ if (typeof jQuery === 'undefined') {
 
 
 /***/ }),
-/* 6 */,
-/* 7 */,
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13414,7 +13414,7 @@ module.exports = __webpack_require__(46);
 try {
     window.$ = window.jQuery = __webpack_require__(0);
 
-    __webpack_require__(5);
+    __webpack_require__(7);
 } catch (e) {}
 
 window.axios = __webpack_require__(24);
@@ -14499,7 +14499,7 @@ module.exports = function spread(callback) {
 /* 46 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: ModuleBuildError: Module build failed: \r\n  color: $admin-lighblue;\r\n        ^\r\n      Undefined variable: \"$admin-lighblue\".\r\n      in C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\resources\\assets\\sass\\components\\admin\\dashboard.scss (line 25, column 10)\n    at runLoaders (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\webpack\\lib\\NormalModule.js:195:19)\n    at C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\loader-runner\\lib\\LoaderRunner.js:364:11\n    at C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\loader-runner\\lib\\LoaderRunner.js:230:18\n    at context.callback (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\loader-runner\\lib\\LoaderRunner.js:111:13)\n    at Object.asyncSassJobQueue.push [as callback] (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\sass-loader\\lib\\loader.js:55:13)\n    at Object.<anonymous> (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\async\\dist\\async.js:2244:31)\n    at Object.callback (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\async\\dist\\async.js:906:16)\n    at options.error (C:\\Server\\www\\dragaudsojourns\\obs_master\\ds_app\\node_modules\\node-sass\\lib\\index.js:294:32)");
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

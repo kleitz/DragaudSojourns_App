@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Admin;
 use App\Group;
 use App\User;
+use App\Trip;
 use App\Traveler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -30,18 +32,48 @@ class AdminsController extends Controller
     public function create($email)
     {
         $email = 'jjvannatta88';
+        $trips = Trip::orderBy('id', 'desc')->get();
+        $groups = Group::orderBy('number', 'asc')->get();
+        // Groups shapshot
         $recentGroups = Group::orderBy('number', 'desc')->take(5)->get();
-        $signups = User::where('created_at', '>=', Carbon::now()->subMonth())->get();
 
+        // Accounts snapshot
+        $signups = User::where('created_at', '>=', Carbon::now()->subMonth())->get();
         $accountSnapshot = new \stdClass();
         $accountSnapshot->signups = count($signups);
         $accountSnapshot->total = count(User::all());
         $accountSnapshot->travelers = count(Traveler::all());
 
-        // $authAdmin = Auth::admin();
+        // Payments shapshot
+        $paymentSnapshot = new \stdClass();
+        $paymentSnapshot->total = 0;
+        $paymentSnapshot->paid = 0;
+        foreach ($trips as $trip){
+          $paymentSnapshot->total += $trip->total;
+          $paymentSnapshot->paid += $trip->paid;
+        }
+
+        $tripsSnapshot = array();
+        foreach ($groups as $group){
+          $groupTrips = DB::table('trips')
+               ->join('groups', 'trips.group_id', '=', 'groups.id')
+               ->select('groups.number', 'trips.total', 'trips.paid')
+               ->where('group_id', $group->id)->get();
+          $groupObj = new \stdClass();
+          $groupObj->total = 0;
+          $groupObj->paid = 0;
+          $groupObj->travelers = 0;
+          $groupObj->number = $group->number;
+          foreach ($groupTrips as $gTrip) {
+            $groupObj->total += $gTrip->total;
+            $groupObj->paid += $gTrip->paid;
+            $groupObj->travelers++;
+          }
+          $tripsSnapshot[] = $groupObj;
+        }
 
         $authAdmin = $email;
-        return view('admin.dashboard', compact('authAdmin', 'recentGroups', 'accountSnapshot'));
+        return view('admin.dashboard', compact('authAdmin', 'recentGroups', 'accountSnapshot', 'paymentSnapshot', 'tripsSnapshot'));
     }
 
     /**

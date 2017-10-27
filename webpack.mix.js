@@ -56,4 +56,5 @@ mix.scripts([
 
 mix.js('resources/assets/js/admin/preload.js', 'public/js/admin/preload.js')
    .js('resources/assets/js/admin/groupCreate.js', 'public/js/admin/groupCreate.js')
+   .js('resources/assets/js/admin/dashboard.js', 'public/js/admin/dashboard.js')
    .sass('resources/assets/sass/admin.scss', 'public/css');

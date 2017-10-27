@@ -177,7 +177,7 @@
 		</div>
 <!-- GROUP PREVIEW -->
 		<div class="col-xs-5">
-			<div class="admin-floating-panel z-depth-1 relative" style="top: 150px; padding: 35px">
+			<div class="admin-floating-panel z-depth-1 relative" style="top: 0px; padding: 35px">
 				<h4 class="admin-section-subheader" style="margin-top: 10px">Preview: </h4>
 				<div class="panel panel-secure border-panel-light">
 					<div class="panel-heading grey-panel flex-row-between">
@@ -235,7 +235,7 @@
   </div>
 	<!-- SCRIPTS -->
 	<script>
-	// PHP VARIABLES -> JAVASCRIPT 
+	// PHP VARIABLES -> JAVASCRIPT
 		var iconListLoaded = {!! json_encode($iconList) !!};
 	</script>
 	<script src="/js/admin/groupCreate.js" type="text/javascript"></script>
