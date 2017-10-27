@@ -20,6 +20,7 @@ class CreatePaymentsTable extends Migration
             $table->integer('user_id');
             $table->integer('trip_id');
             $table->decimal('amount', 13, 2);
+            $table->decimal('fee', 13, 2);
             $table->decimal('balance', 13, 2);
             $table->integer('verification');
             $table->timestamps();
