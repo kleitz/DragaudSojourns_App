@@ -93,19 +93,19 @@ Route::get('/trips/store', function(){
 Route::get('/payments/store', function(){
   return redirect('/');
 });
-Route::get('admin/group/new', function(){
-  return redirect('admin/groups/new');
-});
-Route::get('/admins/icon/store', function(){
+Route::get('/admin/icon/store', function(){
   return redirect('/groups/create');
 });
-Route::get('/admins/icon/destroy', function(){
+Route::get('/admin/icon/destroy', function(){
   return redirect('/groups/create');
+});
+Route::get('/admin', function(){
+  return redirect(route('admin.login'));
 });
 
 
 // USER ROUTES & AUTHENTICATION
-Route::get('/precheck', 'UsersController@precheck');
+Route::get('/precheck', 'UsersController@precheck')->name('precheck');
 Route::post('/register', 'UsersController@store')->name('register');
 Route::post('/login', 'UsersController@login')->name('login');
 Route::get('/logout', 'UsersController@logout')->name('logout');
@@ -118,36 +118,55 @@ Route::group(['namespace' => 'Auth'], function() {
   Route::post('/user/password/reset', 'ResetPasswordController@reset');
 });
 
-// ACCOUNTS ROUTES
-Route::get('/profile/{email}', 'AccountsController@create')->name('profile.index');
-Route::get('/profile/{email}/payments/{page}', 'AccountsController@showPayments')->name('profile.payments');
-Route::get('/profile/{email}/trips/{page}', 'AccountsController@showTrips')->name('profile.trips');
-Route::post('/profile/user/update', 'AccountsController@userUpdate');
-Route::post('/profile/user/confidential', 'AccountsController@confidentialUpdate');
+// PROFILE ROUTES
+Route::prefix('profile')->group(function(){
+  Route::get('/{email}', 'AccountsController@create')->name('profile.index');
+  Route::get('/{email}/payments/{page}', 'AccountsController@showPayments')->name('profile.payments');
+  Route::get('/{email}/trips/{page}', 'AccountsController@showTrips')->name('profile.trips');
+  Route::post('/user/update', 'AccountsController@userUpdate')->name('profile.update');
+  Route::post('/user/confidential', 'AccountsController@confidentialUpdate')->name('profile.confidential');
+});
 
 // ADMIN ROUTES
-Route::get('/admin/{email}/dashboard', 'AdminsController@create')->name('admin.dashboard');
-Route::get('/admin/{email}/groups/{page}', 'GroupsController@show')->name('admin.groups');
-Route::get('/admin/{email}/accounts/{page}', 'AccountsController@show')->name('admin.accounts');
-Route::get('/admin/{email}/payments/{page}', 'PaymentsController@show')->name('admin.payments');
-Route::get('/admin/{email}/group/new', 'GroupsController@create')->name('admin.newgroup');
-Route::post('/admin/icon/store', 'AdminsController@storeIcon');
-Route::post('/admin/icon/destroy', 'AdminsController@destroyIcon');
+Route::prefix('admin')->group(function(){
+  // - AUTHENTICATION
+  Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+  Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+  Route::get('/logout', 'AdminsController@logout')->name('admin.logout');
+  // - PAGES
+  Route::get('/{email}/dashboard', 'AdminsController@index')->name('admin.dashboard');
+  Route::get('/{email}/groups/{page}', 'AdminsController@groups')->name('admin.groups');
+  Route::get('/{email}/accounts/{page}', 'AdminsController@accounts')->name('admin.accounts');
+  Route::get('/{email}/payments/{page}', 'AdminsController@payments')->name('admin.payments');
+  // - GROUP FOCUS
+  Route::get('/{email}/group/{groupNumber}', 'AdminsController@groupOverview')->name('admin.groupoverview');
+  Route::get('/{email}/group/{groupNumber}/payments', 'AdminsController@groupPayments')->name('admin.grouppayments');
+  Route::get('/{email}/new/group', 'AdminsController@groupCreate')->name('admin.groupcreate');
+  Route::post('/icon/store', 'GroupsController@storeIcon')->name('icon.store');
+  Route::post('/icon/destroy', 'GroupsController@destroyIcon')->name('icon.destroy');
+});
 
 // TRAVELERS ROUTES
-Route::post('/newtraveler', 'TravelersController@store');
-Route::post('/updatetraveler', 'TravelersController@update');
+Route::post('/newtraveler', 'TravelersController@store')->name('travelers.store');
+Route::post('/updatetraveler', 'TravelersController@update')->name('travelers.update');
 
 // GROUPS ROUTES
-Route::get('/groups/precheck', 'GroupsController@precheck');
-Route::post('/groups/store', 'GroupsController@store');
-Route::get('/groups/specific', 'GroupsController@specific');
+Route::prefix('groups')->group(function(){
+  Route::get('/precheck', 'GroupsController@precheck')->name('groups.precheck');
+  Route::post('/store', 'GroupsController@store')->name('groups.store');
+  Route::post('/{group_id}/{email}/update', 'GroupsController@update')->name('groups.update');
+  Route::get('/specific', 'GroupsController@specific')->name('groups.specific');
+});
 
 // TRIPS ROUTES
-Route::post('/trips/store', 'TripsController@store');
-Route::get('/trips/precheck', 'TripsController@precheck');
+Route::prefix('trips')->group(function(){
+  Route::get('/precheck', 'TripsController@precheck')->name('trips.precheck');
+  Route::post('/store', 'TripsController@store')->name('trips.store');
+  Route::get('/receipts/{trip_id}', 'PaymentsController@createTripReceipt')->name('trips.receipt');
+});
 
 // PAYMENTS ROUTES
-Route::post('/payments/store', 'PaymentsController@store');
-Route::get('/payments/receipts/{verification}', 'PaymentsController@createReceipt');
-Route::get('/trips/receipts/{trip_id}', 'PaymentsController@createTripReceipt');
+Route::prefix('payments')->group(function(){
+  Route::post('/store', 'PaymentsController@store')->name('payments.store');
+  Route::get('/receipts/{verification}', 'PaymentsController@createReceipt')->name('payments.receipt');
+});

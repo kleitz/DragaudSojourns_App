@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Group;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -35,12 +36,6 @@ class GroupsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($email)
-    {
-      // $email =  Auth::admin()->email;
-      $email = 'jjvannatta88';
-      return view('admin.creator');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -73,10 +68,13 @@ class GroupsController extends Controller
           'message' => $request->input('message')
         ]);
 
-        return redirect('/admin/jjvannatta88/groups/1');
+        // $email =  Auth::admin()->email;
+        $email = 'jjvannatta88';
+        return redirect("/admin/$email/group/$groupNum");
     }
 
-    public function specific(Request $request){
+    public function specific(Request $request)
+    {
       $bookingNum = $request->input('bookingNum');
       $group = Group::where('number', $bookingNum)->first();
       if ($group) {
@@ -86,40 +84,28 @@ class GroupsController extends Controller
       return $group;
     }
 
-
     /**
      * Display the specified resource.
      *
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public $groupsPerPage = 10;
 
-    public function show($email, $page)
+    public function storeIcon(Request $request)
     {
-      // $email =  Auth::admin()->email;
-      $email = 'jjvannatta88';
-      $search = \Request::get('search');
-      $groups = Group::orderBy('number', 'desc')->get();
-      if ($search) {
-        
-        $destination = Group::where('destination', 'like', '%'.$search.'%');
-        $school = Group::where('school', 'like', '%'.$search.'%');
+      $icon = $request->file('file');
+      $iconName = pathinfo($icon->getClientOriginalName(), PATHINFO_FILENAME);
+      $iconLoc = $iconName . 'TIME' .  time() . 'EXT.' . $icon->getClientOriginalExtension();
+      $icon->storeAs('public/icons', $iconLoc);
 
-        $groups = Group::where('number', 'like', '%'.$search.'%')
-            ->union($destination)
-            ->union($school)
-            ->orderBy('id', 'desc')
-            ->get();
-      }
-      $groupPages = ceil(count($groups) / $this->groupsPerPage);
-
-      // $authAdmin = Auth::admin();
-      $authAdmin = 'jjvannatta88';
-      $authGroups = $groups->forPage($page, $this->groupsPerPage)->all();
-
-      return view('admin.groups', compact('groupPages', 'authAdmin', 'authGroups'));
+      return 'storage/icons/' . $iconLoc;
     }
+
+    public function destroyIcon(Request $request)
+    {
+      Storage::delete('public/icons/' . $request->input('icon'));
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -139,9 +125,35 @@ class GroupsController extends Controller
      * @param  \App\Group  $group
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Group $group)
+    public function update($group_id, $email, Request $request)
     {
-        //
+        $group = Group::find($group_id);
+        $number = $group->number;
+
+        $group->destination = $request->input('destination');
+        $group->depart = $request->input('depart');
+        $group->return = $request->input('return');
+        $group->school = $request->input('school');
+        $group->packages = $request->input('packages');
+        $group->message = $request->input('message');
+        $group->icon = $request->input('icon');
+        if ($request->file('itinerary') !== null) {
+          $itin = $request->file('itinerary');
+          $itinLoc =  'dragaudcustomsojourns-' . $number . '-itinerary.' . $itin->getClientOriginalExtension();
+          $itin->storeAs('public/itineraries/'. $number . '/', $itinLoc);
+
+          $group->itinerary = 'storage/itineraries/' . $number . '/' . $itinLoc;
+        }
+        if ($request->file('release') !== null) {
+          $release = $request->file('release');
+          $releaseLoc =  'dragaudcustomsojourns-terms-of-agreement.' . $release->getClientOriginalExtension();
+          $release->storeAs('public/releases/' . $number . '/', $releaseLoc);
+
+          $group->release = 'storage/releases/' . $number . '/' . $releaseLoc;
+        }
+        $group->save();
+
+        return redirect("/admin/$email/group/$number");
     }
 
     /**

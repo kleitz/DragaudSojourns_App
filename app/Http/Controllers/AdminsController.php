@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Payment;
 use App\Admin;
 use App\Group;
 use App\User;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
+use Auth;
+
 class AdminsController extends Controller
 {
     /**
@@ -19,19 +22,19 @@ class AdminsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-    }
+     public function __construct()
+     {
+       $this->middleware('auth:admin');
+     }
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($email)
+    public function index($email)
     {
-        $email = 'jjvannatta88';
+        $email =  Auth::guard('admin')->user()->email;
         $trips = Trip::orderBy('id', 'desc')->get();
         $groups = Group::orderBy('number', 'asc')->get();
         // Groups shapshot
@@ -84,22 +87,7 @@ class AdminsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
 
-    public function storeIcon(Request $request)
-    {
-      $icon = $request->file('file');
-      $iconName = pathinfo($icon->getClientOriginalName(), PATHINFO_FILENAME);
-      $iconLoc = $iconName . 'TIME' .  time() . 'EXT.' . $icon->getClientOriginalExtension();
-      $icon->storeAs('public/icons', $iconLoc);
-
-      return 'storage/icons/' . $iconLoc;
-    }
-
-    public function destroyIcon(Request $request)
-    {
-      Storage::delete('public/icons/' . $request->input('icon'));
     }
 
     /**
@@ -108,9 +96,167 @@ class AdminsController extends Controller
      * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
+
     public function show(Admin $admin)
     {
         //
+    }
+
+    /**
+      * Display and search all group information
+      * @param $email = authenticated admin
+      * @param $page = sorted information by page
+    */
+
+    public $groupsPerPage = 10;
+    public function groups($email, $page)
+    {
+      $email =  Auth::guard('admin')->user()->email;
+      $search = \Request::get('search');
+      $groups = Group::orderBy('number', 'desc')->get();
+      if ($search) {
+
+        $destination = Group::where('destination', 'like', '%'.$search.'%');
+        $school = Group::where('school', 'like', '%'.$search.'%');
+
+        $groups = Group::where('number', 'like', '%'.$search.'%')
+            ->union($destination)
+            ->union($school)
+            ->orderBy('id', 'desc')
+            ->get();
+      }
+      $groupPages = ceil(count($groups) / $this->groupsPerPage);
+
+      // $authAdmin = Auth::admin();
+      $authAdmin = $email;
+      $authGroups = $groups->forPage($page, $this->groupsPerPage)->all();
+
+      return view('admin.groups', compact('groupPages', 'authAdmin', 'authGroups'));
+    }
+
+    /**
+      * Display and search all account information
+      * @param $email = authenticated admin
+      * @param $page = sorted information by page
+    */
+
+    public $accountsPerPage = 15;
+    public function accounts($email, $page)
+    {
+      $email =  Auth::guard('admin')->user()->email;
+      $search = \Request::get('search');
+      $accounts = User::orderBy('id', 'desc')->get();
+      if ($search) {
+
+        $travelerAll = DB::table('users')
+             ->join('travelers', 'users.id', '=', 'travelers.user_id')
+             ->select('users.*')
+             ->where('travelers.name', 'like', '%'.$search.'%');
+
+        $number = User::whereRaw("unix_timestamp(created_at) LIKE '%" .$search."%'");
+
+        $accounts = User::where('name', 'like', '%'.$search.'%')
+            ->union($number)
+            ->union($travelerAll)
+            ->orderBy('id', 'desc')
+            ->get();
+      }
+      $accountPages = ceil(count($accounts) / $this->accountsPerPage);
+
+      // $authAdmin = Auth::admin();
+      $authAdmin = $email;
+      $authAccounts = $accounts->forPage($page, $this->accountsPerPage)->all();
+
+      return view('admin.accounts', compact('accountPages', 'authAdmin', 'authAccounts'));
+    }
+
+    /**
+      * Display and search all payment information
+      * @param $email = authenticated admin
+      * @param $page = sorted information by page
+    */
+
+    public $paymentsPerPage = 20;
+    public function payments($email, $page)
+    {
+      $email =  Auth::guard('admin')->user()->email;
+      $search = \Request::get('search');
+      $payments = Payment::orderBy('id', 'desc')->get();
+      if ($search) {
+
+        $travelerAll = DB::table('payments')
+             ->join('trips', 'payments.trip_id', '=', 'trips.id')
+             ->join('travelers', 'trips.traveler_id', '=', 'travelers.id')
+             ->select('payments.*')
+             ->where('name', 'like', '%'.$search.'%');
+
+       $userAll = DB::table('payments')
+            ->join('trips', 'payments.trip_id', '=', 'trips.id')
+            ->join('users', 'trips.user_id', '=', 'users.id')
+            ->select('payments.*')
+            ->where('name', 'like', '%'.$search.'%');
+
+      $groupAll = DB::table('payments')
+           ->join('trips', 'payments.trip_id', '=', 'trips.id')
+           ->join('groups', 'trips.group_id', '=', 'groups.id')
+           ->select('payments.*')
+           ->where('number', 'like', '%'.$search.'%');
+
+        $payments = Payment::where('verification', 'like', '%'.$search.'%')
+            ->union($travelerAll)
+            ->union($userAll)
+            ->union($groupAll)
+            ->orderBy('id', 'desc')
+            ->get();
+      }
+      $paymentPages = ceil(count($payments) / $this->paymentsPerPage);
+
+      $authAdmin = $email;
+      $authPayments = $payments->forPage($page, $this->paymentsPerPage)->all();
+
+      return view('admin.payments', compact('paymentPages', 'authAdmin', 'authPayments'));
+    }
+
+    /**
+      * Display all group specific information
+      * @param $email = authenticated admin
+      * @param $page = sorted information by page
+    */
+
+
+    public function groupOverview($email, $groupNumber)
+    {
+      $email =  Auth::guard('admin')->user()->email;
+      $group = Group::where('number', $groupNumber)->first();
+      $trips = $group->trips()->get();
+
+      // $authAdmin = Auth::admin();
+      $authAdmin = $email;
+      return view('admin.group.overview', compact('group', 'trips', 'authAdmin'));
+    }
+
+    public function groupPayments($email, $groupNumber)
+    {
+      $email =  Auth::guard('admin')->user()->email;
+      $group = Group::where('number', $groupNumber)->first();
+      $payments = DB::table('payments')
+           ->join('trips', 'payments.trip_id', '=', 'trips.id')
+           ->join('groups', 'trips.group_id', '=', 'groups.id')
+           ->select('payments.*', 'trips.group_id', 'trips.traveler_id', 'trips.user_id')
+           ->where('number', '=', $groupNumber)
+           ->orderBy('id', 'desc')->get();
+
+      // $authAdmin = Auth::admin();
+      $authAdmin = $email;
+      return view('admin.group.payments', compact('group', 'payments', 'authAdmin'));
+    }
+
+    public function groupCreate($email)
+    {
+      // $email =  Auth::admin()->email;
+      $email =  Auth::guard('admin')->user()->email;
+      $authAdmin = $email;
+      return view('admin.group.create', compact('authAdmin'));
     }
 
     /**
@@ -146,4 +292,10 @@ class AdminsController extends Controller
     {
         //
     }
+
+    public function logout()
+   {
+       auth('admin')->logout();
+       return redirect('/admin/login');
+   }
 }

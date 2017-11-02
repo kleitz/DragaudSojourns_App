@@ -60,12 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 89);
+/******/ 	return __webpack_require__(__webpack_require__.s = 94);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 0:
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10346,8 +10346,8 @@ function _classCallCheck(t, e) {
   }return function (e, i, n) {
     return i && t(e.prototype, i), n && t(e, n), e;
   };
-}();"undefined" == typeof jQuery && ( true ? jQuery = $ = __webpack_require__(0) : jQuery = $), function (t) {
-   true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0)], __WEBPACK_AMD_DEFINE_RESULT__ = function (e) {
+}();"undefined" == typeof jQuery && ( true ? jQuery = $ = __webpack_require__(1) : jQuery = $), function (t) {
+   true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1)], __WEBPACK_AMD_DEFINE_RESULT__ = function (e) {
     return t(e);
   }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == (typeof module === "undefined" ? "undefined" : _typeof(module)) && "object" == _typeof(module.exports) ? exports = t(require("jquery")) : t(jQuery);
@@ -11468,7 +11468,7 @@ function _classCallCheck(t, e) {
   }.call(exports, __webpack_require__, exports, module),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "undefined" != typeof module && module.exports ? module.exports = ot : t.Hammer = ot;
 }(window, document), function (t) {
-   true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(0), __webpack_require__(14)], __WEBPACK_AMD_DEFINE_FACTORY__ = (t),
+   true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(1), __webpack_require__(14)], __WEBPACK_AMD_DEFINE_FACTORY__ = (t),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__)) : "object" == (typeof exports === "undefined" ? "undefined" : _typeof(exports)) ? t(require("jquery"), require("hammerjs")) : t(jQuery, Hammer);
@@ -16032,7 +16032,7 @@ if (true) {
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports) {
 
 /*!
@@ -18416,21 +18416,21 @@ if (typeof jQuery === 'undefined') {
 
 /***/ }),
 
-/***/ 89:
+/***/ 94:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(90);
+module.exports = __webpack_require__(95);
 
 
 /***/ }),
 
-/***/ 90:
+/***/ 95:
 /***/ (function(module, exports, __webpack_require__) {
 
 try {
-    window.$ = window.jQuery = __webpack_require__(0);
+    window.$ = window.jQuery = __webpack_require__(1);
 
-    __webpack_require__(7);
+    __webpack_require__(8);
     __webpack_require__(10);
 } catch (e) {}
 

@@ -63,15 +63,15 @@
 
 .gc-delete {
   width: 120px;
-  background: rgb(241, 211, 211);
+  background: #f9f0f0;
   color: #d04242;
-  opacity: .5;
+  opacity: 1;
   border-color: #d86b6b;
 }
 
 .gc-delete:hover {
   background: white;
-  opacity: 1;
+  color: #d04242;
 }
 
 .gc-delete-active {
@@ -116,6 +116,7 @@
     display: block;
 }
 .group-icon-select {
+  transition: 0s top, left 0.2s, opacity 0.2s !important;
   top: 0;
   right: 0;
 }

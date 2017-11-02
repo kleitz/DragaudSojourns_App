@@ -34,3 +34,41 @@
   margin: 0;
   border-color: rgba(0,0,0,0);
 }
+
+.admin-split-panel {
+  background: white;
+  border-radius: 5px;
+}
+
+.split-panel-header {
+  padding: 30px 50px 0;
+  background: #fff;
+  border-radius: 5px 5px 0 0;
+}
+.split-panel-content {
+  min-height: 500px;
+  padding: 30px 50px 30px;
+  background: #f1f1f1;
+  border-top:  1px solid #ccc;
+  border-radius: 0 0 5px 5px;
+}
+
+.split-panel-link {
+  color: #828d90;
+  font-size: 20px;
+  padding: 0 15px 6px;
+  font-weight: 100;
+}
+
+.split-panel-link:hover, .split-panel-link.active {
+  color: #2ea1c5;
+}
+
+.split-nav-focus {
+  background: #2ea1c5;
+  height: 2px;
+  width: 102px;
+  transition: .2s ease;
+  left: 0;
+  position: relative;
+}

@@ -1,5 +1,20 @@
 <div class="login-container">
-  @if (Auth::check())
+  @if (Auth::guard('admin')->check())
+  <div>
+    <span id="loggedin-button" class="login-button flex-abs-center pointer" href="javascript:;">
+      <div class="login-icon">
+        <img src="/assets/images/icons/enter_arrow.png"/>
+      </div>
+      <span id="login-button-context">Admin Account</span>
+    </span>
+  </div>
+  <div id="login-dropdown" class="login-dropdown hidden">
+    <ul>
+      <li><a href="/admin/{{ auth('admin')->user()->email }}/dashboard">Dashboard</a></li>
+      <li><a href="/admin/logout">Log out</a></li>
+    </ul>
+  </div>
+  @elseif (Auth::check())
   <div>
     <span id="loggedin-button" class="login-button flex-abs-center pointer" href="javascript:;">
       <div class="login-icon">

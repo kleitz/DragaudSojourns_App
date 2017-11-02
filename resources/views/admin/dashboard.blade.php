@@ -131,9 +131,9 @@
                    <div class="group-progress flex-abs-center">
                      <div class="progress-bar">
                        <div class="progress-bar-bg"></div>
-                       <div class="progress-bar-fg {{ $tripClass }}" style="width: {{ $progress . '%' }};"></div>
+                       <div class="progress-bar-fg {{ $tripClass }}"></div>
                      </div>
-                     <p>{{ $progress . '%' }}</p>
+                     <p class="progress-bar-stat">{{ $progress . '%' }}</p>
                    </div>
                  </td>
               </tr>

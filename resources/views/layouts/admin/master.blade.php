@@ -36,6 +36,7 @@
 
 <body>
     <div class="admin-banner">
+      @include('partials.login.button')
       <div class="backgroundtop">
         <img src="{{ url('/assets/public/img/dragoo-top.png') }}"/>
       </div>
@@ -51,8 +52,8 @@
               <img src="/assets/images/icons/admin_cog.png" alt="">
             </div>
             <div class="flex-col-center">
-              <h5>Temp Admin</h5>
-              <p>System Administrator</p>
+              <h5>{{ auth('admin')->user()->name }}</h5>
+              <p>{{ auth('admin')->user()->level }}</p>
             </div>
           </div>
         </div>

@@ -3,6 +3,18 @@
 ])
 
 @section('content')
+<?php
+	$iconList = [];
+	$num = 0;
+	foreach (glob("storage/icons/*") as $icon) {
+		$iconList[$num] = $icon;
+		$num++;
+	}
+?>
+<script>
+// PHP VARIABLES -> JAVASCRIPT
+	var iconListLoaded = {!! json_encode($iconList) !!};
+</script>
     <div id="group-create-app" class="container admin-container">
 <!-- NEW GROUP FORM -->
 		<div class="col-xs-7 relative" style="z-index: 20">
@@ -113,57 +125,7 @@
 							 </div>
 						 </div>
 					</div>
-		<!-- ICON SELECT POPUP -->
-					<div id="icon-select" class="absolute group-icon-select hidden">
-						<div class="z-depth-1 panel panel-secure ">
-							<div class="panel-heading grey-panel flex-row-between">
-								<h2 class="panel-title flex-col-center">Icon Select</h2>
-								<span class="modal-ds-close pointer" @click="hideIconSelect">X</span>
-							</div>
-							<div class="panel-body">
-								<div :class="{'icon-delete-container' : deleteMode == 1, 'panel-scroll relative' : true}" style="height: 250px">
-									<div v-if="iconLoading == true" class="abs-fill flex-abs-center">
-										<svg class="spinner spinner-dark" width="60px" height="60px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-											<circle class="circle" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
-										</svg>
-									</div>
-									<?php
-										$iconList = [];
-										$num = 0;
-										foreach (glob("storage/icons/*") as $icon) {
-											$iconList[$num] = $icon;
-											$num++;
-										}
-								 ?>
-									<div v-if="iconLoading == false" class="row flex-gen">
-										<div v-for="icon, index in iconList" class='col-xs-4 flex-col'>
-											<label class='group-icon full-height flex-col-end'>
-												<div class='full-width relative'>
-													<div class='icon-overlay abs-fill'></div>
-													<img :src=" '/' + icon.loc" class='full-width'>
-												</div>
-												<div>
-													<input @click='selectIcon(index, $event)' type='radio' name='icon.jpg' :value='icon.loc'>@{{ icon.name }}
-												</div>
-											</label>
-										</div>
-									</div>
-								</div>
-						<!-- UPLOAD NEW ICON -->
-								<div style="margin-top: 20px" class="flex-row-between">
-									<div class="input-group" style="width: 120px">
-										<label class="input-group-btn">
-												<span class="btn flex-col-center gc-button" style="margin-right: 0; ">
-														Upload new&hellip; <input accept="image/*"  @change="uploadNewIcon" type="file" style="display: none;" multiple/>
-												</span>
-										</label>
-									</div>
-									<button @click="deleteToggle" type="button" :class="{'gc-delete-active' : deleteMode == 1, 'gc-button gc-delete' : true}" style="width: 120px">@{{ deleteMessage }}</button>
-								</div>
-							</div>
-						</div>
-					</div>
-
+					<icon-select ref="iconselect" @close="hideIconSelect" @location="updateIconLoc" @name="updateIconName"></icon-select>
 					</div>
           <div class="form-group">
             <label for="message">Message</label>
@@ -234,9 +196,5 @@
 		</div>
   </div>
 	<!-- SCRIPTS -->
-	<script>
-	// PHP VARIABLES -> JAVASCRIPT
-		var iconListLoaded = {!! json_encode($iconList) !!};
-	</script>
 	<script src="/js/admin/groupCreate.js" type="text/javascript"></script>
   @endsection

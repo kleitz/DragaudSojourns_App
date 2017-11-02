@@ -1,7 +1,7 @@
 <nav>
   <ul>
     <li>
-      <a href="/admin/jjvannatta88/dashboard" class="flex-row-start">
+      <a href="/admin/{{ auth('admin')->user()->email }}/dashboard" class="flex-row-start">
         <div class="admin-nav-icon">
           @include('partials.vector.dashboard')
         </div>
@@ -13,7 +13,7 @@
       </a>
     </li>
     <li>
-      <a href="/admin/jjvannatta88/groups/1" class="flex-row-start">
+      <a href="/admin/{{ auth('admin')->user()->email }}/groups/1" class="flex-row-start">
         <div class="admin-nav-icon">
           @include('partials.vector.groups')
         </div>
@@ -25,7 +25,7 @@
       </a>
     </li>
     <li>
-      <a href="/admin/jjvannatta88/accounts/1" class="flex-row-start">
+      <a href="/admin/{{ auth('admin')->user()->email }}/accounts/1" class="flex-row-start">
         <div class="admin-nav-icon">
           @include('partials.vector.accounts')
         </div>
@@ -37,7 +37,7 @@
       </a>
     </li>
     <li>
-      <a href="/admin/jjvannatta88/payments/1" class="flex-row-start">
+      <a href="/admin/{{ auth('admin')->user()->email }}/payments/1" class="flex-row-start">
         <div class="admin-nav-icon">
           @include('partials.vector.payments')
         </div>
@@ -62,4 +62,4 @@
     </li>
   </ul>
 </nav>
-<button type="button" name="button" class="ds-button button-gen" onclick="window.location='/admin/jjvannatta88/group/new'">+ Create new group</button>
+<button type="button" name="button" class="ds-button button-gen" onclick="window.location='/admin/{{ auth('admin')->user()->email }}/new/group'">+ Create new group</button>

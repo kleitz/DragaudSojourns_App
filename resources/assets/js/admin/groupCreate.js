@@ -1,15 +1,12 @@
 window.Vue = require('vue');
 
 const bus = new Vue();
+import IconSelect from './components/IconSelect.vue';
 
 // Group create app
 const groupCreateApp = new Vue({
     el: '#group-create-app',
     data: {
-      newIcon: '',
-      deleteMode: 0,
-      iconList: iconListLoaded,
-      iconLoading: true,
       groupExists: false,
       groupIcon: '',
       groupDetails: false,
@@ -41,7 +38,8 @@ const groupCreateApp = new Vue({
         if (this.group.number != '' && this.groupExists == false && this.group.destination != '' &&
             this.group.depart != '' && this.group.return != '' && this.group.school != '' &&
             this.checkPackages() == true && this.group.icon != '' && this.group.itinerary != '' &&
-            this.group.release != '' && this.group.message != '' )
+            this.group.itinerary != undefined && this.group.release != undefined && this.group.release != '' && 
+            this.group.message != '' )
           {
             this.groupDetails = true;
           } else {
@@ -85,144 +83,31 @@ const groupCreateApp = new Vue({
       showIconSelect(){
         let groupApp = this;
         setTimeout(function(){
-          groupApp.iconLoading = false;
+          groupApp.$refs.iconselect.iconLoading = false;
         },1000);
         slideLeft('#icon-select');
       },
       hideIconSelect(){
-        this.iconLoading = true;
-        this.deleteMode = 0;
+        this.$refs.iconselect.iconLoading = true;
         fadeOut('#icon-select');
       },
-      selectIcon(index, event){
-        // DELETE ICON OPTION
-        if (this.deleteMode == 1){
-          this.iconLoading = true;
-          let fIcon = this.iconList[index].loc.split('/');
-          fIcon = fIcon[fIcon.length-1];
-          this.deleteIcon(fIcon, index);
-        // SELECT ICON OPTION
-        } else {
-          let icon = event.target.value;
-          let fIcon = icon.split('/');
-          fIcon = fIcon[fIcon.length-1];
-          iExt = fIcon.indexOf('EXT');
-          iTime = fIcon.indexOf('TIME');
-          time = new Date(fIcon.slice(iTime + 4, iExt) * 1000);
-          time = '-' + (time.getMonth() + 1) + '-' + time.getDate() + '-' + time.getFullYear();
-
-          fIcon = fIcon.slice(0, iTime) + fIcon.slice(iExt+3);
-
-          this.group.icon = icon;
-          this.groupIcon = fIcon;
-          this.hideIconSelect();
-        }
+      updateIconLoc(data){
+        this.group.icon = data;
       },
-      uploadNewIcon(event){
-        let groupApp = this;
-        this.iconLoading = true;
-
-        event.preventDefault();
-        let formData = new FormData;
-        formData.append('file', event.target.files[0]);
-        $.ajax({
-              type: "POST",
-              url: '/admin/icon/store',
-              processData: false,
-              contentType: false,
-              cache: false,
-              data: formData,
-              dataType: 'JSON',
-              statusCode: {
-                200: function (response) {
-                   let icon = response.responseText;
-                   let fIcon = icon.split('/');
-                   fIcon = fIcon[fIcon.length-1];
-                   iExt = fIcon.indexOf('EXT');
-                   iTime = fIcon.indexOf('TIME');
-                   fIcon = fIcon.slice(0, iTime) + fIcon.slice(iExt+3);
-
-                   groupApp.iconList.push({loc: icon, name: fIcon});
-                   setTimeout(function(){
-                     groupApp.iconLoading = false;
-                     groupApp.deleteMode = 0;
-                   },1000);
-                },
-             },
-          });
-      },
-      deleteIcon(name, index){
-        let groupApp = this;
-        $.ajax({
-              type: "POST",
-              url: '/admin/icon/destroy',
-              data: {icon: name},
-              success: function(data){
-                groupApp.deleteSuccess = true;
-                groupApp.iconList.splice(index, 1);
-                groupApp.group.icon = '';
-                groupApp.groupIcon = '';
-                setTimeout(function(){
-                  groupApp.iconLoading = false;
-                },1000);
-              }
-          });
-      },
-      deleteToggle(){
-        if (this.deleteMode == 1) {
-          this.deleteMode = 0;
-        } else {
-          this.deleteMode = 1;
-        }
+      updateIconName(data){
+        this.groupIcon = data;
       }
     },
     mounted() {
       let groupApp = this;
       $("#group-depart, #group-return").on('change keyup click', function(){
         groupApp.updateDates();
-      })
-      for (let i = 0; i < this.iconList.length; i++){
-          let fIcon = this.iconList[i].split('/');
-          fIcon = fIcon[fIcon.length-1];
-          iExt = fIcon.indexOf('EXT');
-          iTime = fIcon.indexOf('TIME');
-          fIcon = fIcon.slice(0, iTime) + fIcon.slice(iExt+3);
-
-          this.iconList[i] = {loc: this.iconList[i], name: fIcon};
-      }
+      });
     },
 		components: {
+      IconSelect,
 		},
     computed: {
       // computed data
-      deleteMessage(){
-        if (this.deleteMode == 1)
-          return "Cancel";
-        if (this.deleteMode == 0)
-          return "Delete icon";
-      }
     }
 });
-
-// Change email/password view controller
-
-// const overlayApp = new Vue({
-//     el: '#dark-overlay',
-//     data: {
-//       // newConfidential: false,
-//     },
-//     methods: {
-//       confidentialClose(){
-//         // this.newConfidential = false;
-//       }
-//     },
-//     mounted() {
-//       // bus.$on('CONFIDENTIAL', ()=> this.newConfidential = true);
-//     },
-//     components: {
-//       // ConfidentialModal,
-//     },
-//     computed: {
-//       // computed data
-//     }
-// });

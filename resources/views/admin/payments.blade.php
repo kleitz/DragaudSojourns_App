@@ -3,7 +3,7 @@
 ])
 
 @section('content')
-<div id="acccount-show-app" class="container admin-container">
+<div id="payment-show-app" class="container admin-container">
 <!-- PAYMENTS SEARCH RESULTS -->
 <div class="col-xs-12 relative" style="z-index: 20">
   <div class="admin-floating-panel z-depth-2">
@@ -80,7 +80,7 @@
                 <a href="/payments/receipts/{{ $payment->verification }}" target="_blank">{{ $payment->verification }}</a>
               </td>
               <td class="show-account-user flex-row-start">
-                <a href="javascript:;">{{ $user->name }}</a>
+                <a href="/admin/{{$authAdmin}}/accounts/1?search={{$user->name}}" href="javascript:;">{{ $user->name }}</a>
                 <div class="relative admin-helper-modal hidden">
                   <div class="admin-helper">
                     <p>Account #: <strong>{{ $user->created_at->timestamp }}</strong> </p>

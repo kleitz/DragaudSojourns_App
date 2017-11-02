@@ -28,6 +28,9 @@
 // Admin frame
 @import './components/admin/frame.scss';
 
+// Login button
+@import "./components/login/button.scss";
+
 // Admin general
 @import './components/admin/general.scss';
 
@@ -36,6 +39,9 @@
 
 // Admin group create
 @import './components/admin/group_create.scss';
+
+// Admin group create
+@import './components/admin/group_focus.scss';
 
 // Admin group dashboard
 @import './components/admin/dashboard.scss';

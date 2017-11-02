@@ -60,12 +60,159 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 93);
+/******/ 	return __webpack_require__(__webpack_require__.s = 102);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 3:
+/***/ 102:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(103);
+
+
+/***/ }),
+
+/***/ 103:
+/***/ (function(module, exports, __webpack_require__) {
+
+window.Vue = __webpack_require__(5);
+
+var dashApp = new Vue({
+  el: '#dashboard-app',
+  data: {
+    seasons: seasonsLoaded,
+    activeSeason: seasonsLoaded[0],
+    activeDetails: { travelers: '', captured: '', projected: '' },
+    loadChartData: {
+      trips: [],
+      groups: [],
+      captured: [],
+      projected: []
+    },
+    chartScrub: 0,
+    scrubLen: 5,
+    groupLen: 0,
+    groups: groupsLoaded
+    // Stored data
+  },
+  methods: {
+    selectSeason: function selectSeason(event) {
+      this.activeSeason = parseInt($(event.target).val());
+      this.chartScrub = 0;
+      this.clearActive();
+      this.updateActive();
+    },
+    scrubRight: function scrubRight() {
+      this.chartScrub++;
+      this.clearActive();
+      this.updateActive();
+    },
+    scrubLeft: function scrubLeft() {
+      this.chartScrub--;
+      this.clearActive();
+      this.updateActive();
+    },
+    clearActive: function clearActive() {
+      this.activeDetails.travelers = 0;
+      this.activeDetails.captured = 0;
+      this.activeDetails.projected = 0;
+      this.loadChartData = {
+        trips: [],
+        groups: [],
+        captured: [],
+        projected: []
+      };
+    },
+    updateActive: function updateActive() {
+      this.groupLen = this.groups[this.activeSeason].length;
+      for (var i = 0; i < this.groups[this.activeSeason].length; i++) {
+        this.activeDetails.travelers += this.groups[this.activeSeason][i].travelers;
+        this.activeDetails.captured += this.groups[this.activeSeason][i].paid;
+        this.activeDetails.projected += this.groups[this.activeSeason][i].total;
+        if (i < this.scrubLen) {
+          this.loadChartData.trips.push(this.groups[this.activeSeason][i + this.chartScrub].travelers);
+          this.loadChartData.groups.push(this.groups[this.activeSeason][i + this.chartScrub].number);
+          this.loadChartData.captured.push(this.groups[this.activeSeason][i + this.chartScrub].paid / 1000);
+          this.loadChartData.projected.push(this.groups[this.activeSeason][i + this.chartScrub].total / 1000);
+        }
+      }
+      summaryChartData = this.loadChartData;
+      this.reloadChart();
+    },
+    reloadChart: function reloadChart() {
+      $("#summary-chart-container").html('');
+      $("#summary-chart-container").html('<canvas id="summary-chart" width="700" height="350"></canvas>');
+      var summaryCfg = {
+        labels: summaryChartData.groups,
+        datasets: [{
+          label: 'Captured',
+          backgroundColor: "#73b8c4",
+          stack: 'Stack 0',
+          data: summaryChartData.captured
+        }, {
+          label: 'Projected',
+          backgroundColor: "#aad7de",
+          stack: 'Stack 0',
+          data: summaryChartData.projected
+        }, {
+          label: 'Trips',
+          backgroundColor: "#e9cfb0",
+          stack: 'Stack 1',
+          data: summaryChartData.trips
+        }]
+
+      };
+      var summaryCtx = document.getElementById("summary-chart").getContext('2d');
+      window.myBar = new Chart(summaryCtx, {
+        type: 'bar',
+        data: summaryCfg,
+        options: {
+          title: {
+            display: false,
+            text: "Summary"
+          },
+          tooltips: {
+            mode: 'index',
+            display: false,
+            intersect: false
+          },
+          legend: {
+            display: false,
+            position: 'bottom'
+          },
+          responsive: true,
+          scales: {
+            xAxes: [{
+              stacked: true,
+              barPercentage: 0.7
+            }],
+            yAxes: [{
+              stacked: false,
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.chartScrub = 0;
+    this.clearActive();
+    this.updateActive();
+  },
+
+  components: {},
+  computed: {
+    // computed data
+  }
+});
+
+/***/ }),
+
+/***/ 5:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10262,11 +10409,11 @@ Vue$3.compile = compileToFunctions;
 
 module.exports = Vue$3;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
 
-/***/ 4:
+/***/ 6:
 /***/ (function(module, exports) {
 
 var g;
@@ -10291,153 +10438,6 @@ try {
 
 module.exports = g;
 
-
-/***/ }),
-
-/***/ 93:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(94);
-
-
-/***/ }),
-
-/***/ 94:
-/***/ (function(module, exports, __webpack_require__) {
-
-window.Vue = __webpack_require__(3);
-
-var dashApp = new Vue({
-  el: '#dashboard-app',
-  data: {
-    seasons: seasonsLoaded,
-    activeSeason: seasonsLoaded[0],
-    activeDetails: { travelers: '', captured: '', projected: '' },
-    loadChartData: {
-      trips: [],
-      groups: [],
-      captured: [],
-      projected: []
-    },
-    chartScrub: 0,
-    scrubLen: 5,
-    groupLen: 0,
-    groups: groupsLoaded
-    // Stored data
-  },
-  methods: {
-    selectSeason: function selectSeason(event) {
-      this.activeSeason = parseInt($(event.target).val());
-      this.chartScrub = 0;
-      this.clearActive();
-      this.updateActive();
-    },
-    scrubRight: function scrubRight() {
-      this.chartScrub++;
-      this.clearActive();
-      this.updateActive();
-    },
-    scrubLeft: function scrubLeft() {
-      this.chartScrub--;
-      this.clearActive();
-      this.updateActive();
-    },
-    clearActive: function clearActive() {
-      this.activeDetails.travelers = 0;
-      this.activeDetails.captured = 0;
-      this.activeDetails.projected = 0;
-      this.loadChartData = {
-        trips: [],
-        groups: [],
-        captured: [],
-        projected: []
-      };
-    },
-    updateActive: function updateActive() {
-      this.groupLen = this.groups[this.activeSeason].length;
-      for (var i = 0; i < this.groups[this.activeSeason].length; i++) {
-        this.activeDetails.travelers += this.groups[this.activeSeason][i].travelers;
-        this.activeDetails.captured += this.groups[this.activeSeason][i].paid;
-        this.activeDetails.projected += this.groups[this.activeSeason][i].total;
-        if (i < this.scrubLen) {
-          this.loadChartData.trips.push(this.groups[this.activeSeason][i + this.chartScrub].travelers);
-          this.loadChartData.groups.push(this.groups[this.activeSeason][i + this.chartScrub].number);
-          this.loadChartData.captured.push(this.groups[this.activeSeason][i + this.chartScrub].paid / 1000);
-          this.loadChartData.projected.push(this.groups[this.activeSeason][i + this.chartScrub].total / 1000);
-        }
-      }
-      summaryChartData = this.loadChartData;
-      this.reloadChart();
-    },
-    reloadChart: function reloadChart() {
-      $("#summary-chart-container").html('');
-      $("#summary-chart-container").html('<canvas id="summary-chart" width="700" height="350"></canvas>');
-      var summaryCfg = {
-        labels: summaryChartData.groups,
-        datasets: [{
-          label: 'Captured',
-          backgroundColor: "#73b8c4",
-          stack: 'Stack 0',
-          data: summaryChartData.captured
-        }, {
-          label: 'Projected',
-          backgroundColor: "#aad7de",
-          stack: 'Stack 0',
-          data: summaryChartData.projected
-        }, {
-          label: 'Trips',
-          backgroundColor: "#e9cfb0",
-          stack: 'Stack 1',
-          data: summaryChartData.trips
-        }]
-
-      };
-      var summaryCtx = document.getElementById("summary-chart").getContext('2d');
-      window.myBar = new Chart(summaryCtx, {
-        type: 'bar',
-        data: summaryCfg,
-        options: {
-          title: {
-            display: false,
-            text: "Summary"
-          },
-          tooltips: {
-            mode: 'index',
-            display: false,
-            intersect: false
-          },
-          legend: {
-            display: false,
-            position: 'bottom'
-          },
-          responsive: true,
-          scales: {
-            xAxes: [{
-              stacked: true,
-              barPercentage: 0.7
-            }],
-            yAxes: [{
-              stacked: false,
-              ticks: {
-                beginAtZero: true
-              }
-            }]
-          }
-        }
-      });
-    }
-  },
-  mounted: function mounted() {
-    this.chartScrub = 0;
-    this.clearActive();
-    this.updateActive();
-  },
-
-  components: {},
-  computed: {
-    // computed data
-  }
-});
 
 /***/ })
 

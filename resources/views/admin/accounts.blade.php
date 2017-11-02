@@ -92,6 +92,9 @@
                     @foreach($travelers as $traveler)
                     <option value="{{$traveler->name}}" > {{ $traveler->name }} </option>
                     @endforeach
+										@if (count($travelers) == 0 )
+										<option value="no-traveler" > None </option>
+										@endif
                   </select>
                 </div>
               </td>

@@ -24,7 +24,7 @@ $(document).ready(function(){
     hideLoginForm()
   })
   // Attempt to login
-  $("#login-attempt").click(function(){
+  function attemptLogin(){
     let loginEmail = $("#login-email").val();
     let loginPass = $("#login-pass").val();
 
@@ -67,7 +67,18 @@ $(document).ready(function(){
           if (checkValid[i] == 'login-pass') passAttempt = 1;
         }
       }
-  })
+  }
+
+  $("#login-attempt").click(function(){
+    attemptLogin();
+  });
+
+  $("#login-modal").keypress(function(event){
+    if ( event.which == 13 ) {
+      attemptLogin();
+    }
+  });
+
 
   // Validate user login email after failure
   $("#login-email").keyup(function(){

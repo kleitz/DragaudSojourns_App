@@ -96,43 +96,6 @@ class AccountsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Traveler  $traveler
-     * @return \Illuminate\Http\Response
-     */
-     public $accountsPerPage = 15;
-     public function show($email, $page)
-     {
-       // $email =  Auth::admin()->email;
-       $email = 'jjvannatta88';
-       $search = \Request::get('search');
-       $accounts = User::orderBy('id', 'desc')->get();
-       if ($search) {
-
-         $travelerAll = DB::table('users')
-              ->join('travelers', 'users.id', '=', 'travelers.user_id')
-              ->select('users.*')
-              ->where('travelers.name', 'like', '%'.$search.'%');
-
-         $number = User::whereRaw("unix_timestamp(created_at) LIKE '%" .$search."%'");
-
-         $accounts = User::where('name', 'like', '%'.$search.'%')
-             ->union($number)
-             ->union($travelerAll)
-             ->orderBy('id', 'desc')
-             ->get();
-       }
-       $accountPages = ceil(count($accounts) / $this->accountsPerPage);
-
-       // $authAdmin = Auth::admin();
-       $authAdmin = 'jjvannatta88';
-       $authAccounts = $accounts->forPage($page, $this->accountsPerPage)->all();
-
-       return view('admin.accounts', compact('accountPages', 'authAdmin', 'authAccounts'));
-     }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Traveler  $traveler
