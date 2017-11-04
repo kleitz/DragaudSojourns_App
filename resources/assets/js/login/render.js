@@ -15,11 +15,11 @@ const regApp = new Vue({
 			numTravelers: 1,
 			reguser: {email: "", pass: "", passconf: "", name: "",
 								cell: "", home: "", street: "", zip: ""},
-			regtravelers: [{name: "", gender: "", relate: "", emerg: "", ephn: ""}]
+			regtravelers: [{name: "", gender: "", relate: "", emerg: "", ephn: "", dob: ""}]
 		},
 		methods: {
 			insertTraveler(){
-				this.regtravelers.push({name: "", gender: "", relate: "", emerg: "", ephn: ""});
+				this.regtravelers.push({name: "", gender: "", relate: "", emerg: "", ephn: "", dob: ""});
 				$('.traveler-modal-container').addClass('active');
 				bindTravelerModal($('.traveler-modal-title'));
 				this.submitAttempt = false;
@@ -55,6 +55,7 @@ const regApp = new Vue({
           this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-relate', type: 'select'});
           this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-emerg', type: 'string'});
           this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-ephn', type: 'phone'});
+          this.$refs.traveler[i].testError({elem: 'reg-trav' + i + '-dob', type: 'date'});
         }
       },
       formTwo() {
@@ -127,7 +128,7 @@ const regApp = new Vue({
 				this.numTravelers = 1;
 				this.reguser = {email: "", pass: "", passconf: "", name: "",
 												cell: "", home: "", street: "", zip: ""};
-				this.regtravelers = [{name: "", gender: "", relate: "", emerg: "", ephn: ""}];
+				this.regtravelers = [{name: "", gender: "", relate: "", emerg: "", ephn: "", dob: ""}];
 				this.$refs.traveler[0].hasWarning = false;
 				this.$refs.traveler[0].hasSubmit = false;
 				validator.hideError(['reg-trav0-fullname', 'reg-trav0-gender', 'reg-trav0-relate',

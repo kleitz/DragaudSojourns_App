@@ -17,6 +17,10 @@
   padding: 15px;
 }
 
+.default-option {
+  color: #aaa;
+}
+
 .inline-hazard {
   transition: .1s;
   width: 16px;
@@ -313,4 +317,14 @@
 
 .material-large-err small {
   color: #ca3c3c !important;
+}
+
+.material-input optgroup {
+  font-weight: 500;
+  font-size: 18px;
+  color: #525f64;
+}
+
+.material-input option {
+  color: #525f64;
 }

@@ -8,14 +8,22 @@
 <nav aria-label="...">
   <ul class="pagination pagination-sm">
     @for ($i = 1; $i <= $tripPages; $i++)
-      @if ($i != $curPage)
-      <li class="page-item">
-        <a class="page-link" href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">{{ $i }}</a>
-      </li>
-      @else
-      <li class="page-item">
-        <a class="page-link page-active"  href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">{{ $i }}<span class="sr-only">(current)</span></a>
-      </li>
+      @if ($i == 1 || $i == $tripPages || ($i > $curPage - 3 && $i < $curPage +3) || $tripPages < 8 ||
+           ($curPage < 5 && $i < 7 && $tripPages > 7) || ($tripPages > 6 && $i > $tripPages - 6 && $curPage > $tripPages - 4)
+           )
+        @if ($i != $curPage)
+        <li class="page-item">
+          <a class="page-link" href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">{{ $i }}</a>
+        </li>
+        @else
+        <li class="page-item">
+          <a class="page-link page-active"  href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">{{ $i }}<span class="sr-only">(current)</span></a>
+        </li>
+        @endif
+      @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $tripPages - 4 && $i > $tripPages - 7) )
+        <li class="">
+          <a class="" style="border: 0px solid"  href="#">...</a>
+        </li>
       @endif
     @endfor
   </ul>
@@ -149,7 +157,7 @@
           </div>
           <div class="col-xs-12 expander-content">
             <div class="panel-body trip-modal-message ">
-              <p><strong>Note from Michael</strong></p>
+              <p><strong>Message</strong></p>
               <p>{{ $group->message }}</p>
             </div>
           </div>

@@ -21,7 +21,6 @@ $(document).ready(function(){
     for (let i = 0; i < pBars.length; i++){
       let barX = $(pStats[i]).html();
       pBars[i].style.width = barX;
-      console.log(barX);
     }
   }
 

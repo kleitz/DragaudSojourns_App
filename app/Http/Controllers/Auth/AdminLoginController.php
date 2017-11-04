@@ -10,7 +10,7 @@ class AdminLoginController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest:admin');
+        $this->middleware(['guest:admin', 'guest']);
     }
 
     public function showLoginForm()
@@ -29,7 +29,7 @@ class AdminLoginController extends Controller
         'email' => $request->email,
         'password' => $request->password
       ], $request->remember)) {
-            return redirect()->intended("/admin/" . auth('admin')->user()->email . "/dashboard");
+            return redirect("/admin/" . auth('admin')->user()->email . "/dashboard");
       }
 
       return redirect()->back()->withInput($request->only('email', 'remember'));

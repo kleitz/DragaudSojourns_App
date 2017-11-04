@@ -14409,6 +14409,10 @@ button.picker__close:focus {
   padding: 15px;
 }
 
+.default-option {
+  color: #aaa;
+}
+
 .inline-hazard {
   -webkit-transition: .1s;
   transition: .1s;
@@ -14731,6 +14735,16 @@ button.picker__close:focus {
 
 .material-large-err small {
   color: #ca3c3c !important;
+}
+
+.material-input optgroup {
+  font-weight: 500;
+  font-size: 18px;
+  color: #525f64;
+}
+
+.material-input option {
+  color: #525f64;
 }
 
 .overlay-near-shadow {
@@ -15302,11 +15316,13 @@ button.picker__close:focus {
   -webkit-appearance: none;
   -moz-appearance: none;
   border: 1px solid #ccc;
+  border-color: #ccc !important;
   border-radius: 2px;
-  background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
-  background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
-  background-size: 5px 5px, 5px 5px, 1px 1.5em;
-  background-repeat: no-repeat;
+  background-image: linear-gradient(135deg, #ccc 50%, transparent 50%), linear-gradient(45deg, transparent 50%, #ccc 50%), linear-gradient(to right, transparent, transparent) !important;
+  background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em !important;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em !important;
+  background-repeat: no-repeat !important;
+  outline: 0 !important;
 }
 
 .traveler-select option {
@@ -15319,11 +15335,11 @@ button.picker__close:focus {
 }
 
 .traveler-select:focus {
-  background-image: linear-gradient(45deg, #ccc 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #ccc 50%), linear-gradient(to right, #ccc, #ccc);
-  background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em;
-  background-size: 5px 5px, 5px 5px, 1px 1.5em;
-  background-repeat: no-repeat;
-  outline: 0;
+  background-image: linear-gradient(45deg, #999 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #999 50%), linear-gradient(to right, transparent, transparent) !important;
+  background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, calc(100% - 2.5em) 0.5em !important;
+  background-size: 5px 4px, 4px 4px, 1px 1.5em !important;
+  background-repeat: no-repeat !important;
+  outline: 0 !important;
 }
 
 .traveler-modal-details h5 {
@@ -15808,6 +15824,10 @@ th {
 .tab-active {
   border: 1px solid #ccc !important;
   border-bottom: 1px solid white !important;
+}
+
+.color-hazard {
+  color: #c13f4d !important;
 }
 
 .login-container {

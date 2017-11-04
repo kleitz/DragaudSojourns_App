@@ -153,7 +153,9 @@ class AdminsController extends Controller
              ->select('users.*')
              ->where('travelers.name', 'like', '%'.$search.'%');
 
-        $number = User::whereRaw("unix_timestamp(created_at) LIKE '%" .$search."%'");
+        $scrubSearch = str_replace("'",  "", $search);
+        $scrubSearch = str_replace('"',  "", $scrubSearch);
+        $number = User::whereRaw("unix_timestamp(created_at) LIKE '%$scrubSearch%'");
 
         $accounts = User::where('name', 'like', '%'.$search.'%')
             ->union($number)
@@ -296,6 +298,6 @@ class AdminsController extends Controller
     public function logout()
    {
        auth('admin')->logout();
-       return redirect('/admin/login');
+       return redirect('/');
    }
 }

@@ -18,6 +18,13 @@
             </div>
           </div>
           <div class="material-form-group flex-row-start">
+            <label for="travname" style="min-width: 60px">Birth Date</label>
+            <div>
+              <input :id="'traveler-modal'+ id + '-dob'" style="max-width: 108px" v-model="traveler.dob" @click="formatTrav" @keyup="testError({elem: 'traveler-modal' + id + '-dob', type: 'string'})" class="inline-material-input fulldate-format numbers-only" type="text" name="travdob"/>
+              <span :id="'traveler-modal'+ id + '-dob-err'" class="text-left ds-form-errmsg">Valid date: mm/dd/yyyy</span>
+            </div>
+          </div>
+          <div class="material-form-group flex-row-start">
             <label for="travgender">Gender</label>
             <div>
               <select :id="'traveler-modal'+ id + '-gender'" @click="testError({elem: 'traveler-modal' + id + '-gender', type: 'select'})" v-model="traveler.gender" class="inline-material-input custom-select pointer" name="travgender">
@@ -75,6 +82,7 @@ export default {
   		return {
         hasSubmit: false,
   			travErr: [{elem: 'traveler-modal' + this.id + '-name', type: 'string'},
+                  {elem: 'traveler-modal' + this.id + '-dob', type: 'date'},
                   {elem: 'traveler-modal' + this.id + '-gender', type: 'select'},
                   {elem: 'traveler-modal' + this.id + '-relate', type: 'select'},
                   {elem: 'traveler-modal' + this.id + '-emerg', type: 'string'},
@@ -140,6 +148,7 @@ export default {
         if (checkValid == true) {
           let travData = [{
             name: this.traveler.name,
+            dob: this.traveler.dob,
             emerg: this.traveler.emerg_name,
             ephn: this.traveler.emerg_phone,
             relate: this.traveler.relationship,
@@ -157,6 +166,7 @@ export default {
         }
       },
   		formatTrav() {
+        $('.fulldate-format').mask('00/00/0000');
   			$('.phone-format').mask('(000)000-0000');
   		}
   	},

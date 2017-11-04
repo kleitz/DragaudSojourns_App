@@ -168,5 +168,6 @@ Route::prefix('trips')->group(function(){
 // PAYMENTS ROUTES
 Route::prefix('payments')->group(function(){
   Route::post('/store', 'PaymentsController@store')->name('payments.store');
+  Route::post('/discount', 'PaymentsController@discount')->name('payments.discount');
   Route::get('/receipts/{verification}', 'PaymentsController@createReceipt')->name('payments.receipt');
 });

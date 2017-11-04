@@ -14,6 +14,7 @@ class TravelersController extends Controller
           $emerg = str_replace('\' ', '\'', ucwords(str_replace('\'', '\' ', strtolower($request->input("travelers.$i.emerg")))));
           Traveler::create([
             'name' => $name,
+            'dob' => $request->input("travelers.$i.dob"),
             'gender' => $request->input("travelers.$i.gender"),
             'relationship' => $request->input("travelers.$i.relate"),
             'emerg_name' => $emerg,
@@ -51,6 +52,7 @@ class TravelersController extends Controller
       $curId = $request->input('traveler.id');
       $traveler = Traveler::find($curId);
       $traveler->name = $request->input('traveler.name');
+      $traveler->dob = $request->input('traveler.dob');
       $traveler->gender = $request->input('traveler.gender');
       $traveler->relationship = $request->input('traveler.relationship');
       $traveler->emerg_name = $request->input('traveler.emerg_name');

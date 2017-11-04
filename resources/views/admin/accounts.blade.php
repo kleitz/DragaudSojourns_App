@@ -38,16 +38,24 @@
          ?>
         <nav aria-label="...">
           <ul class="pagination pagination-show">
-            @for ($i = 1; $i <= $accountPages; $i++)
-              @if ($i != $curPage)
-              <li class="page-item">
-                <a class="page-link" href="/admin/{{ $authAdmin }}/accounts/{{ $i . $search}}">{{ $i }}</a>
-              </li>
-              @else
-              <li class="page-item">
-                <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/accounts/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
-              </li>
-              @endif
+						@for ($i = 1; $i <= $accountPages; $i++)
+							@if ($i == 1 || $i == $accountPages || ($i > $curPage - 3 && $i < $curPage +3) || $accountPages < 8 ||
+									 ($curPage < 5 && $i < 7 && $accountPages > 7) || ($accountPages > 6 && $i > $accountPages - 6 && $curPage > $accountPages - 4)
+									 )
+	              @if ($i != $curPage)
+								<li class="page-item">
+	                <a class="page-link" href="/admin/{{ $authAdmin }}/accounts/{{ $i . $search}}">{{ $i }}</a>
+	              </li>
+	              @else
+								<li class="page-item">
+	                <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/accounts/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
+	              </li>
+	              @endif
+							@elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $accountPages - 4 && $i > $accountPages - 7) )
+								<li class="page-item">
+									<a class="page-link page-active"  href="#">...</a>
+								</li>
+							@endif
             @endfor
           </ul>
         </nav>
@@ -67,7 +75,7 @@
           <tbody>
             @foreach($authAccounts as $account )
             <?php
-              $travelers = \App\Traveler::where('user_id', $account->id)->get();
+              $travelers = \App\Traveler::where('user_id', $account->id)->get()->groupBy('relationship');
               $number = $account->created_at->timestamp;
              ?>
             <tr>
@@ -89,8 +97,18 @@
               <td >
                 <div class="material-input-group" style="padding: 0 50px 0 0;">
                   <select class="custom-select form-control material-input" name="traveler">
-                    @foreach($travelers as $traveler)
-                    <option value="{{$traveler->name}}" > {{ $traveler->name }} </option>
+                    @foreach($travelers as $relation)
+										<?php
+											$label = $relation[0]->relationship;
+											if ($relation[0]->relationship == 'Myself') $label = 'Account owner';
+										?>
+										<optgroup label="{{ $label }}">
+											@for ($i = 0; $i < count($relation); $i++)
+		                    <option value="{{$relation[$i]->name}}" >
+														{{ $relation[$i]->name }}
+												</option>
+											@endfor
+											</optgroup>
                     @endforeach
 										@if (count($travelers) == 0 )
 										<option value="no-traveler" > None </option>

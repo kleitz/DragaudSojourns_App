@@ -103,20 +103,22 @@ box-sizing: border-box;
 -moz-appearance: none;
 
   border: 1px solid #ccc;
+  border-color: #ccc !important;
   border-radius: 2px;
   background-image:
-    linear-gradient(45deg, transparent 50%, gray 50%),
-    linear-gradient(135deg, gray 50%, transparent 50%),
-    linear-gradient(to right, #ccc, #ccc);
-  background-position:
-    calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px),
-    calc(100% - 2.5em) 0.5em;
-  background-size:
-    5px 5px,
-    5px 5px,
-    1px 1.5em;
-  background-repeat: no-repeat;
+    linear-gradient(135deg, #ccc 50%, transparent 50%),
+    linear-gradient(45deg, transparent 50%, #ccc 50%),
+    linear-gradient(to right, transparent,  transparent) !important;
+    background-position:
+      calc(100% - 15px) 1em,
+      calc(100% - 20px) 1em,
+      calc(100% - 2.5em) 0.5em !important;
+    background-size:
+      5px 5px,
+      5px 5px,
+      1px 1.5em !important;
+    background-repeat: no-repeat !important;
+    outline: 0 !important;
 }
 
 .traveler-select option {
@@ -130,19 +132,19 @@ box-sizing: border-box;
 
 .traveler-select:focus {
   background-image:
-    linear-gradient(45deg, #ccc 50%, transparent 50%),
-    linear-gradient(135deg, transparent 50%, #ccc 50%),
-    linear-gradient(to right, #ccc, #ccc);
+    linear-gradient(45deg, #999 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%, #999 50%),
+    linear-gradient(to right, transparent,  transparent) !important;
   background-position:
     calc(100% - 15px) 1em,
     calc(100% - 20px) 1em,
-    calc(100% - 2.5em) 0.5em;
+    calc(100% - 2.5em) 0.5em !important;
   background-size:
-    5px 5px,
-    5px 5px,
-    1px 1.5em;
-  background-repeat: no-repeat;
-  outline: 0;
+    5px 4px,
+    4px 4px,
+    1px 1.5em !important;
+  background-repeat: no-repeat !important;
+  outline: 0 !important;
 }
 
 

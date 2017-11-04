@@ -36,7 +36,9 @@
 
 <body>
     <div class="admin-banner">
-      @include('partials.login.button')
+      <div class="relative" style="z-index: 10; top: -25px">
+        @include('partials.login.button')
+      </div>
       <div class="backgroundtop">
         <img src="{{ url('/assets/public/img/dragoo-top.png') }}"/>
       </div>

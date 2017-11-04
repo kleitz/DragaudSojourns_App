@@ -12,6 +12,10 @@
   margin: -2px 0 8px;
 }
 
+.gj-calendar {
+  margin-bottom: 30px !important;
+}
+
 .gfocus-message {
   overflow: hidden;
   max-height: 50px;
@@ -48,6 +52,21 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15), 0 3px 14px 0 rgba(0, 0, 0, 0.14);
 }
 
+.go-button {
+    min-width: 0px;
+    padding: 0 10px ;
+    color: #aaa;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: 0 0 0 transparent;
+    box-shadow: 0 0 0 transparent;
+}
+
+.go-button:hover {
+  color: #333;
+  border-color: #aaa;
+}
+
 .gpanel {
   position: relative;
   top: 0px;
@@ -59,7 +78,7 @@
 .gpanel-expand {
   position: relative;
   z-index: 500;
-  top: -5px;
+  top: -60px;
   width: 120%;
 }
 

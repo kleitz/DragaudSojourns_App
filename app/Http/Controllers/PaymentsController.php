@@ -48,6 +48,12 @@ class PaymentsController extends Controller
         $amount = $request->input('payment.amount');
         $verification = time();
 
+        if ($request->has('payment.created_at')) {
+          $created = $request->input('payment.created_at');
+        } else {
+          $created = date("Y-m-d H:i:s");
+        }
+
         $curTrip = Trip::find($trip);
         $curTrip->paid = $curTrip->paid + $amount;
         $curTrip->save();
@@ -60,13 +66,30 @@ class PaymentsController extends Controller
             'amount' => $amount,
             'fee' => $request->input('payment.fee'),
             'balance' => $request->input('payment.balance'),
-            'verification' => $verification
+            'verification' => $verification,
+            'created_at' => $created
           ]);
 
           $returnData = new \stdClass();
           $returnData->verification = $verification;
           $returnData->status = 'SUCCESS';
           return json_encode($returnData);
+    }
+
+    public function discount(Request $request)
+    {
+        $trip = $request->input('payment.trip_id');
+        $amount = $request->input('payment.amount');
+        $verification = time();
+
+        $curTrip = Trip::find($trip);
+        $curTrip->paid = $curTrip->paid + $amount;
+        $curTrip->save();
+
+        $returnData = new \stdClass();
+        $returnData->verification = $verification;
+        $returnData->status = 'SUCCESS';
+        return json_encode($returnData);
     }
 
     public function createReceipt($verification){

@@ -13,6 +13,10 @@ function bindFormatters(){
   })
   $('.phone-format').mask('(000)000-0000');
   $('.credit-format').mask('0000-0000-0000-0000-000');
+  $('.fulldate-format').mask('00/00/0000');
+  $('.fulldate-format').keyup(function(){
+    if ($(this).val().length > 10) return false;
+  })
   $('.date-format').bind('blur', function(){
     let num = '00000' + $(this).val().toString();
     if ($(this).val() == "" || $(this).val() < 1) num = "";
@@ -223,6 +227,9 @@ function InputValidator() {
         case "select" :
           bool = validSelect(obj[i].elem);
           break;
+        case "date" :
+          bool = validDate(obj[i].elem);
+          break;
         default:
           bool = false;
           break;
@@ -341,6 +348,21 @@ function validSelect(input) {
   let str = $("#" + input).find(":selected").hasClass('default-option');
 
   if (str) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validDate(input) {
+  let num = $('#' + input).val();
+  let str = num.split('/');
+  let now = new Date();
+  let mm = str[0];
+  let dd = str[1];
+  let yy = str[2];
+  let yyNow = now.getFullYear();
+  if (num.length < 10 || mm > 12 || dd > 31 || yy < 1900 || yy > yyNow) {
     return false;
   } else {
     return true;

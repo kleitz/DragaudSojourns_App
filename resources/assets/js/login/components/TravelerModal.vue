@@ -14,16 +14,24 @@
         <div :id="'trav-' + id + '-helper'" class="helper-modal hidden">
     			<p>Legal name as it appears<br/>on travelers government issued ID</p>
     		</div>
-        <select  :id="'reg-trav' + id + '-gender'" @click="testError({elem: 'reg-trav' + id + '-gender', type: 'select'})" v-model="traveler.gender" class="traveler-gender register-input traveler-select pointer" name="travgender">
-          <option value="" hidden class="default-option">Gender</option>
-          <option v-for="input in genderIn" :value="input" > {{ input }} </option>
-        </select>
-        <span :id="'reg-trav' + id + '-gender-err'" class="text-left ds-form-errmsg">Please select travelers gender</span>
-        <select :id="'reg-trav' + id + '-relate'" @click="testError({elem: 'reg-trav' + id + '-relate', type: 'select'})" v-model="traveler.relate" class="traveler-relation register-input traveler-select pointer" name="travrelationship">
-          <option value="" hidden class="default-option">Relationship</option>
-          <option v-for="input in relateIn" :value="input" > {{ input }} </option>
-        </select>
-        <span :id="'reg-trav' + id + '-relate-err'" class="text-left ds-form-errmsg">Please select your relationship</span>
+        <input :id="'reg-trav' + id + '-dob'" v-model="traveler.dob" @keyup="testError({elem: 'reg-trav' + id + '-dob', type: 'date'})" @click="formatDate" class="traveler-dob traveler-input register-input numbers-only fulldate-format" type="text" name="travelerdob" placeholder="Date of birth"/>
+        <span :id="'reg-trav' + id + '-dob-err'" class="text-left ds-form-errmsg">Enter a valid date: MM/DD/YYYY </span>
+        <div class="flex-row-start">
+          <div style="width: 50%; margin-right: 5px;">
+            <select  :id="'reg-trav' + id + '-gender'" @click="testError({elem: 'reg-trav' + id + '-gender', type: 'select'})" v-model="traveler.gender" class="traveler-gender register-input traveler-select pointer" name="travgender">
+              <option value="" hidden class="default-option">Gender</option>
+              <option v-for="input in genderIn" :value="input" > {{ input }} </option>
+            </select>
+            <span :id="'reg-trav' + id + '-gender-err'" class="text-left ds-form-errmsg">Please select travelers gender</span>
+          </div>
+          <div style="width: 50%; margin-left: 5px;">
+            <select :id="'reg-trav' + id + '-relate'" @click="testError({elem: 'reg-trav' + id + '-relate', type: 'select'})" v-model="traveler.relate" class="traveler-relation register-input traveler-select pointer" name="travrelationship">
+              <option value="" hidden class="default-option">Relationship</option>
+              <option v-for="input in relateIn" :value="input" > {{ input }} </option>
+            </select>
+            <span :id="'reg-trav' + id + '-relate-err'" class="text-left ds-form-errmsg">Please select your relationship</span>
+          </div>
+        </div>
         <h5>Emergency contact</h5>
         <input :id="'reg-trav' + id + '-emerg'" @keyup="testError({elem: 'reg-trav' + id + '-emerg', type: 'string'})"  v-model="traveler.emerg" class="travemerg-fullname traveler-input register-input" type="text" name="travelercont" placeholder="Full name">
         <span :id="'reg-trav' + id + '-emerg-err'" class="text-left ds-form-errmsg">Please enter an emergency contact</span>
@@ -106,6 +114,9 @@ export default {
       },
   		formatPhone() {
   			$('.phone-format').mask('(000)000-0000');
+  		},
+      formatDate() {
+  			$('.fulldate-format').mask('00/00/0000');
   		}
   	},
     mounted(){

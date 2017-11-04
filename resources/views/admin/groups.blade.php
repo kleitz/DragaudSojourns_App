@@ -38,16 +38,24 @@
          ?>
         <nav aria-label="...">
           <ul class="pagination pagination-show">
-            @for ($i = 1; $i <= $groupPages; $i++)
-              @if ($i != $curPage)
-              <li class="page-item">
-                <a class="page-link" href="/admin/{{ $authAdmin }}/groups/{{ $i . $search}}">{{ $i }}</a>
-              </li>
-              @else
-              <li class="page-item">
-                <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/groups/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
-              </li>
-              @endif
+						@for ($i = 1; $i <= $groupPages; $i++)
+							@if ($i == 1 || $i == $groupPages || ($i > $curPage - 3 && $i < $curPage +3) || $groupPages < 8 ||
+									 ($curPage < 5 && $i < 7 && $groupPages > 7) || ($groupPages > 6 && $i > $groupPages - 6 && $curPage > $groupPages - 4)
+									 )
+	              @if ($i != $curPage)
+								<li class="page-item">
+	                <a class="page-link" href="/admin/{{ $authAdmin }}/groups/{{ $i . $search}}">{{ $i }}</a>
+	              </li>
+	              @else
+								<li class="page-item">
+	                <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/groups/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
+	              </li>
+	              @endif
+							@elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $groupPages - 4 && $i > $groupPages - 7) )
+								<li class="page-item">
+									<a class="page-link page-active"  href="#">...</a>
+								</li>
+							@endif
             @endfor
           </ul>
         </nav>

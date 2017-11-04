@@ -218,7 +218,6 @@ let tripsLoaded = {!! json_encode($tripsSnapshot) !!};
 let seasonsLoaded = {!! json_encode($seasons) !!};
 let groupsLoaded = {!! json_encode($seasonGroups) !!};
 
-console.log(groupsLoaded);
 let summaryChartData = '';
 </script>
 <script src="/js/admin/dashboard.js" type="text/javascript"></script>

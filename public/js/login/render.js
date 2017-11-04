@@ -10805,11 +10805,11 @@ var regApp = new Vue({
     numTravelers: 1,
     reguser: { email: "", pass: "", passconf: "", name: "",
       cell: "", home: "", street: "", zip: "" },
-    regtravelers: [{ name: "", gender: "", relate: "", emerg: "", ephn: "" }]
+    regtravelers: [{ name: "", gender: "", relate: "", emerg: "", ephn: "", dob: "" }]
   },
   methods: {
     insertTraveler: function insertTraveler() {
-      this.regtravelers.push({ name: "", gender: "", relate: "", emerg: "", ephn: "" });
+      this.regtravelers.push({ name: "", gender: "", relate: "", emerg: "", ephn: "", dob: "" });
       $('.traveler-modal-container').addClass('active');
       bindTravelerModal($('.traveler-modal-title'));
       this.submitAttempt = false;
@@ -10844,6 +10844,7 @@ var regApp = new Vue({
         this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-relate', type: 'select' });
         this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-emerg', type: 'string' });
         this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-ephn', type: 'phone' });
+        this.$refs.traveler[i].testError({ elem: 'reg-trav' + i + '-dob', type: 'date' });
       }
     },
     formTwo: function formTwo() {
@@ -10915,7 +10916,7 @@ var regApp = new Vue({
       this.numTravelers = 1;
       this.reguser = { email: "", pass: "", passconf: "", name: "",
         cell: "", home: "", street: "", zip: "" };
-      this.regtravelers = [{ name: "", gender: "", relate: "", emerg: "", ephn: "" }];
+      this.regtravelers = [{ name: "", gender: "", relate: "", emerg: "", ephn: "", dob: "" }];
       this.$refs.traveler[0].hasWarning = false;
       this.$refs.traveler[0].hasSubmit = false;
       validator.hideError(['reg-trav0-fullname', 'reg-trav0-gender', 'reg-trav0-relate', 'reg-trav0-emerg', 'reg-trav0-ephn']);
@@ -11036,7 +11037,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11047,6 +11048,14 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -11155,6 +11164,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     formatPhone: function formatPhone() {
       $('.phone-format').mask('(000)000-0000');
+    },
+    formatDate: function formatDate() {
+      $('.fulldate-format').mask('00/00/0000');
     }
   },
   mounted: function mounted() {
@@ -11246,7 +11258,49 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": 'trav-' + _vm.id + '-helper'
     }
-  }, [_vm._m(0)]), _vm._v(" "), _c('select', {
+  }, [_vm._m(0)]), _vm._v(" "), _c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.traveler.dob),
+      expression: "traveler.dob"
+    }],
+    staticClass: "traveler-dob traveler-input register-input numbers-only fulldate-format",
+    attrs: {
+      "id": 'reg-trav' + _vm.id + '-dob',
+      "type": "text",
+      "name": "travelerdob",
+      "placeholder": "Date of birth"
+    },
+    domProps: {
+      "value": (_vm.traveler.dob)
+    },
+    on: {
+      "keyup": function($event) {
+        _vm.testError({
+          elem: 'reg-trav' + _vm.id + '-dob',
+          type: 'date'
+        })
+      },
+      "click": _vm.formatDate,
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.traveler.dob = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "text-left ds-form-errmsg",
+    attrs: {
+      "id": 'reg-trav' + _vm.id + '-dob-err'
+    }
+  }, [_vm._v("Enter a valid date: MM/DD/YYYY ")]), _vm._v(" "), _c('div', {
+    staticClass: "flex-row-start"
+  }, [_c('div', {
+    staticStyle: {
+      "width": "50%",
+      "margin-right": "5px"
+    }
+  }, [_c('select', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -11292,7 +11346,12 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": 'reg-trav' + _vm.id + '-gender-err'
     }
-  }, [_vm._v("Please select travelers gender")]), _vm._v(" "), _c('select', {
+  }, [_vm._v("Please select travelers gender")])]), _vm._v(" "), _c('div', {
+    staticStyle: {
+      "width": "50%",
+      "margin-left": "5px"
+    }
+  }, [_c('select', {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -11338,7 +11397,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": 'reg-trav' + _vm.id + '-relate-err'
     }
-  }, [_vm._v("Please select your relationship")]), _vm._v(" "), _c('h5', [_vm._v("Emergency contact")]), _vm._v(" "), _c('input', {
+  }, [_vm._v("Please select your relationship")])])]), _vm._v(" "), _c('h5', [_vm._v("Emergency contact")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",

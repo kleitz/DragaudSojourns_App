@@ -16,6 +16,7 @@ class CreateTravelersTable extends Migration
         Schema::create('travelers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('dob');
             $table->string('gender');
             $table->string('relationship');
             $table->string('emerg_name');

@@ -8,14 +8,22 @@
 <nav aria-label="...">
   <ul class="pagination pagination-sm">
     @for ($i = 1; $i <= $paymentPages; $i++)
-      @if ($i != $curPage)
-      <li class="page-item">
-        <a class="page-link" href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">{{ $i }}</a>
-      </li>
-      @else
-      <li class="page-item">
-        <a class="page-link page-active"  href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">{{ $i }}<span class="sr-only">(current)</span></a>
-      </li>
+      @if ($i == 1 || $i == $paymentPages || ($i > $curPage - 3 && $i < $curPage +3) || $paymentPages < 8 ||
+           ($curPage < 5 && $i < 7 && $paymentPages > 7) || ($paymentPages > 6 && $i > $paymentPages - 6 && $curPage > $paymentPages - 4)
+           )
+        @if ($i != $curPage)
+        <li class="page-item">
+          <a class="page-link" href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">{{ $i }}</a>
+        </li>
+        @else
+        <li class="page-item">
+          <a class="page-link page-active"  href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">{{ $i }}<span class="sr-only">(current)</span></a>
+        </li>
+        @endif
+      @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $paymentPages - 4 && $i > $paymentPages - 7) )
+      <li class="">
+        <a class="" style="border: 0px solid"  href="#">...</a>
+        </li>
       @endif
     @endfor
   </ul>

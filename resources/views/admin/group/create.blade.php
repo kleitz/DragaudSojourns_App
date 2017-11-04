@@ -187,7 +187,7 @@
 							</div>
 						</div>
 						<hr style="border-color: #ddd"/>
-						<p style="margin: 0px;line-height: 1.4;font-size: 16px;"><strong>Note from Michael</strong></p>
+						<p style="margin: 0px;line-height: 1.4;font-size: 16px;"><strong>Message</strong></p>
 						<p v-if="group.message == ''" style="margin: 0px;line-height: 1.4;font-size: 16px;color: #ccc;font-weight: 400">Lorem ipsum dolor sit amet, consectetur adipisicing elit....</p>
 						<p v-if="group.message != ''" style="margin: 0px;line-height: 1.4;font-size: 16px;font-weight: 400;">@{{group.message}}</p>
 					</div>

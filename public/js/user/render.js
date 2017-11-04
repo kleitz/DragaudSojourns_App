@@ -11167,7 +11167,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -11246,6 +11246,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -11254,7 +11261,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   data: function data() {
     return {
       hasSubmit: false,
-      travErr: [{ elem: 'traveler-modal' + this.id + '-name', type: 'string' }, { elem: 'traveler-modal' + this.id + '-gender', type: 'select' }, { elem: 'traveler-modal' + this.id + '-relate', type: 'select' }, { elem: 'traveler-modal' + this.id + '-emerg', type: 'string' }, { elem: 'traveler-modal' + this.id + '-ephn', type: 'phone' }],
+      travErr: [{ elem: 'traveler-modal' + this.id + '-name', type: 'string' }, { elem: 'traveler-modal' + this.id + '-dob', type: 'date' }, { elem: 'traveler-modal' + this.id + '-gender', type: 'select' }, { elem: 'traveler-modal' + this.id + '-relate', type: 'select' }, { elem: 'traveler-modal' + this.id + '-emerg', type: 'string' }, { elem: 'traveler-modal' + this.id + '-ephn', type: 'phone' }],
       genderIn: ['Male', 'Female', 'Other'],
       relateIn: ['Myself', 'Family', 'Spouse', 'Other']
     };
@@ -11316,6 +11323,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       if (checkValid == true) {
         var travData = [{
           name: this.traveler.name,
+          dob: this.traveler.dob,
           emerg: this.traveler.emerg_name,
           ephn: this.traveler.emerg_phone,
           relate: this.traveler.relationship,
@@ -11333,6 +11341,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     formatTrav: function formatTrav() {
+      $('.fulldate-format').mask('00/00/0000');
       $('.phone-format').mask('(000)000-0000');
     }
   },
@@ -11424,6 +11433,52 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "id": 'traveler-modal' + _vm.id + '-name-err'
     }
   }, [_vm._v("Please enter their legal name")])])]), _vm._v(" "), _c('div', {
+    staticClass: "material-form-group flex-row-start"
+  }, [_c('label', {
+    staticStyle: {
+      "min-width": "60px"
+    },
+    attrs: {
+      "for": "travname"
+    }
+  }, [_vm._v("Birth Date")]), _vm._v(" "), _c('div', [_c('input', {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: (_vm.traveler.dob),
+      expression: "traveler.dob"
+    }],
+    staticClass: "inline-material-input fulldate-format numbers-only",
+    staticStyle: {
+      "max-width": "108px"
+    },
+    attrs: {
+      "id": 'traveler-modal' + _vm.id + '-dob',
+      "type": "text",
+      "name": "travdob"
+    },
+    domProps: {
+      "value": (_vm.traveler.dob)
+    },
+    on: {
+      "click": _vm.formatTrav,
+      "keyup": function($event) {
+        _vm.testError({
+          elem: 'traveler-modal' + _vm.id + '-dob',
+          type: 'string'
+        })
+      },
+      "input": function($event) {
+        if ($event.target.composing) { return; }
+        _vm.traveler.dob = $event.target.value
+      }
+    }
+  }), _vm._v(" "), _c('span', {
+    staticClass: "text-left ds-form-errmsg",
+    attrs: {
+      "id": 'traveler-modal' + _vm.id + '-dob-err'
+    }
+  }, [_vm._v("Valid date: mm/dd/yyyy")])])]), _vm._v(" "), _c('div', {
     staticClass: "material-form-group flex-row-start"
   }, [_c('label', {
     attrs: {

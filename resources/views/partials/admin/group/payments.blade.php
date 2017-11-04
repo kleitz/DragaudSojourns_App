@@ -36,10 +36,11 @@
             <a :href="'/admin/' + admin +  '/accounts/1?search=' + payment.traveler.name" class="dot-dot-dot" style="max-width: 162px">@{{ payment.traveler.name }}</a>
             <div class="relative admin-helper-modal hidden">
               <div class="admin-helper fix-helper">
-                <small>Account</small>
-                <p>User: <strong>@{{ payment.user.name }}</strong> </p>
-                <p>Account #: <strong>@{{ payment.user.number }}</strong> </p>
-                <p>Email: <strong>@{{ payment.user.email }}</strong> </p>
+                <small>Details</small>
+                <p>Birth date: <strong>@{{ payment.traveler.dob }}</strong> </p>
+                <p>Gender: <strong>@{{ payment.traveler.gender }}</strong> </p>
+                <p v-if="payment.traveler.relationship == 'Myself'" >Account owner</p>
+                <p v-if="payment.traveler.relationship != 'Myself'">@{{ payment.traveler.relationship }}: <strong> @{{ payment.user.name }}</strong> </p>
                 <small>Emergency</small>
                 <p>Name: <strong>@{{ payment.traveler.emerg_name }}</strong> </p>
                 <p>Phone: <strong>@{{ payment.traveler.emerg_phone }}</strong> </p>
