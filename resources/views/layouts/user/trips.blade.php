@@ -45,19 +45,19 @@
       $depart = \Carbon\Carbon::create($str[2], $str[0], $str[1], 0, 0, 0);
     ?>
     <div class="row">
-      @if ($trip->total - $trip->paid == 0)
+      @if ($trip->total - $trip->paid == 0 && $trip->active == 1)
       <div class="trip-status trip-paid flex-abs-center">
         <img src="/assets/images/icons/success_check.png" class="inline-success">
         <p>Fully paid</p>
       </div>
       @endif
-      @if($month->gte($depart) == true && $trip->total - $trip->paid != 0)
+      @if($month->gte($depart) == true && $trip->total - $trip->paid != 0  && $trip->active == 1)
       <div class="trip-status trip-warn flex-abs-center">
         <div class="inline-warning"><p class="abs-center">!</p></div>
         <p>Payment due soon</p>
       </div>
       @endif
-      @if($today->gte($depart) && $trip->total - $trip->paid != 0)
+      @if($today->gte($depart) && $trip->total - $trip->paid != 0  && $trip->active == 1)
       <div class="trip-status trip-err flex-abs-center">
         <img src="/assets/images/icons/hazard_tri.png" class="inline-hazard">
         <p>Payment past due!</p>
@@ -124,7 +124,7 @@
                   @if ($trip->active == 1)
                   <span>Balance:</span> {{ '$' . number_format((float)$trip->total - $trip->paid, 2, '.', '' ) }}
                   @else
-                  Cancelled<span>&nbsp;</span> 
+                  Cancelled<span>&nbsp;</span>
                   @endif
                 </h5>
               </div>
