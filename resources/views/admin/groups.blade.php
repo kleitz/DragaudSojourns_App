@@ -3,6 +3,18 @@
 ])
 
 @section('content')
+<?php
+	$curUrl = explode("/", Request::url());
+	$curPage = $curUrl[count($curUrl) - 1];
+	$curSection = $curUrl[count($curUrl) - 2];
+	if ($curPage < 1) {
+		$curPage = 1;
+	}
+	$search = '';
+	if (isset($_GET['search'])){
+		$search = '?search=' . $_GET['search'];
+	}
+ ?>
 <div id="group-show-app" class="container admin-container">
 <!-- GROUPS SEARCH RESULTS -->
 <div class="col-xs-12 relative" style="z-index: 20">
@@ -11,54 +23,12 @@
       <div onclick="window.location='/admin/{{ $authAdmin }}/groups/1'" class="pointer">
         <h3 class="admin-section-header" >All Groups</h3>
       </div>
-    <!-- SEARCH BAR -->
-      <div class="admin-search-container flex-col-end">
-        <form class="form-inline" method="GET" action="/admin/{{ $authAdmin }}/groups/1" enctype="multipart/form-data" role="search">
-          <div class="form-group mx-sm-3">
-            <label for="search" class="sr-only">Search</label>
-            <input type="text" class="form-control" name="search" placeholder="Search...">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </div>
-          <button type="submit" class="ds-button button-gen">Search now</button>
-        </form>
-      </div>
+    	<!-- SEARCH BAR -->
+      @include('partials.admin.search')
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <?php
-          $curUrl = explode("/", Request::url());
-          $curPage = $curUrl[count($curUrl) - 1];
-          if ($curPage < 1) {
-            $curPage = 1;
-          }
-          $search = '';
-          if (isset($_GET['search'])){
-            $search = '?search=' . $_GET['search'];
-          }
-         ?>
-        <nav aria-label="...">
-          <ul class="pagination pagination-show">
-						@for ($i = 1; $i <= $groupPages; $i++)
-							@if ($i == 1 || $i == $groupPages || ($i > $curPage - 3 && $i < $curPage +3) || $groupPages < 8 ||
-									 ($curPage < 5 && $i < 7 && $groupPages > 7) || ($groupPages > 6 && $i > $groupPages - 6 && $curPage > $groupPages - 4)
-									 )
-	              @if ($i != $curPage)
-								<li class="page-item">
-	                <a class="page-link" href="/admin/{{ $authAdmin }}/groups/{{ $i . $search}}">{{ $i }}</a>
-	              </li>
-	              @else
-								<li class="page-item">
-	                <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/groups/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
-	              </li>
-	              @endif
-							@elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $groupPages - 4 && $i > $groupPages - 7) )
-								<li class="page-item">
-									<a class="page-link page-active"  href="#">...</a>
-								</li>
-							@endif
-            @endfor
-          </ul>
-        </nav>
+        @include('partials.admin.pagination')
       </div>
     </div>
     <div class="row">
@@ -134,22 +104,12 @@
             @endforeach
           </tbody>
         </table>
+				@if (count($authGroups) == 0)
+					@include('partials.admin.noresults')
+				@endif
       </div>
     </div>
-    <div class="full-width flex-row-between page-bottom">
-      @if ($groupPages > 1)
-      <div>
-        @if ($curPage > 1)
-        <a href="/admin/{{ $authAdmin }}/groups/{{ $curPage - 1 . $search}}">Previous page</a>
-        @endif
-      </div>
-      <div>
-        @if ($curPage != $groupPages)
-        <a href="/admin/{{ $authAdmin }}/groups/{{ $curPage + 1 . $search}}">Next page</a>
-        @endif
-      </div>
-      @endif
-    </div>
+    @include('partials.admin.pagebottom')
   </div>
 </div>
 <!-- END GROUPS SEARCH  -->

@@ -22,6 +22,7 @@ class CreateTripsTable extends Migration
             $table->string('package');
             $table->decimal('total', 13, 2);
             $table->decimal('paid', 13, 2);
+            $table->integer('active');
             $table->timestamps();
         });
     }

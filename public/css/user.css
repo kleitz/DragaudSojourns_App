@@ -16538,6 +16538,14 @@ body {
   margin-bottom: 5px;
 }
 
+.trip-cancelled {
+  opacity: 1;
+}
+
+.trip-cancelled.expander-open {
+  opacity: 0.5;
+}
+
 .trip-status {
   border-radius: 3px;
   padding: 0 10px 0 0;
@@ -16553,20 +16561,20 @@ body {
 }
 
 .trip-paid {
-  background: #f4fff4;
+  background: #fff;
   border-color: #25c173;
   color: #25c173;
 }
 
 .trip-err {
   border-color: #ce0004;
-  background: #fff7f7;
+  background: #fff;
   color: #ce0004;
 }
 
 .trip-warn {
   border-color: #f0ad4e;
-  background: #fff7f7;
+  background: #fff;
   color: #f0ad4e;
 }
 

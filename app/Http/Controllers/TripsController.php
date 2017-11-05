@@ -56,10 +56,20 @@ class TripsController extends Controller
           'total' => $request->input('trip.total'),
           'insurance' => $request->input('trip.insurance'),
           'package' => $request->input('trip.package'),
-          'paid' => 0.00
+          'paid' => 0.00,
+          'active' => 1
         ]);
 
         return 'SUCCESS';
+    }
+
+    public function toggleActive(Request $request)
+    {
+        $trip = Trip::find($request->input('id'));
+        $trip->active = $request->input('active');
+        $trip->save();
+
+        return $trip->active;
     }
 
     /**
@@ -68,10 +78,10 @@ class TripsController extends Controller
      * @param  \App\Trip  $trip
      * @return \Illuminate\Http\Response
      */
-    public function show(Trip $trip)
-    {
-        //
-    }
+     public function show(Trip $trip)
+     {
+         //
+     }
 
     /**
      * Show the form for editing the specified resource.

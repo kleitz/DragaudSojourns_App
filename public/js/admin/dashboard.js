@@ -173,9 +173,18 @@ var dashApp = new Vue({
             text: "Summary"
           },
           tooltips: {
+            enabled: true,
             mode: 'index',
             display: false,
-            intersect: false
+            intersect: false,
+            callbacks: {
+              label: function label(tooltipItems, data) {
+                var index = tooltipItems.datasetIndex;
+                var pS = index != 2 ? '$' : '';
+                var pK = index != 2 ? 'k' : '';
+                return data.datasets[index].label + ': ' + pS + tooltipItems.yLabel + pK;
+              }
+            }
           },
           legend: {
             display: false,

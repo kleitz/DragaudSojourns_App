@@ -72,3 +72,27 @@
   left: 0;
   position: relative;
 }
+
+.null-results-container {
+  padding: 50px 30px 50px;
+  position: relative;
+  border-top: 1px solid #cccccc;
+  top: -30px;
+}
+
+.null-results {
+  padding: 30px 50px;
+}
+
+.null-results-suggestions {
+  padding: 10px 50px;
+}
+
+.null-results-suggestions ul {
+  padding: 0 20px 20px;
+}
+
+.null-results-suggestions li {
+  font-size: 16px;
+  list-style-type: disc !important;
+}

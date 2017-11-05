@@ -125,13 +125,13 @@ class AdminsController extends Controller
             ->orderBy('id', 'desc')
             ->get();
       }
-      $groupPages = ceil(count($groups) / $this->groupsPerPage);
+      $numPages = ceil(count($groups) / $this->groupsPerPage);
 
       // $authAdmin = Auth::admin();
       $authAdmin = $email;
       $authGroups = $groups->forPage($page, $this->groupsPerPage)->all();
 
-      return view('admin.groups', compact('groupPages', 'authAdmin', 'authGroups'));
+      return view('admin.groups', compact('numPages', 'authAdmin', 'authGroups'));
     }
 
     /**
@@ -163,13 +163,13 @@ class AdminsController extends Controller
             ->orderBy('id', 'desc')
             ->get();
       }
-      $accountPages = ceil(count($accounts) / $this->accountsPerPage);
+      $numPages = ceil(count($accounts) / $this->accountsPerPage);
 
       // $authAdmin = Auth::admin();
       $authAdmin = $email;
       $authAccounts = $accounts->forPage($page, $this->accountsPerPage)->all();
 
-      return view('admin.accounts', compact('accountPages', 'authAdmin', 'authAccounts'));
+      return view('admin.accounts', compact('numPages', 'authAdmin', 'authAccounts'));
     }
 
     /**
@@ -211,12 +211,12 @@ class AdminsController extends Controller
             ->orderBy('id', 'desc')
             ->get();
       }
-      $paymentPages = ceil(count($payments) / $this->paymentsPerPage);
+      $numPages = ceil(count($payments) / $this->paymentsPerPage);
 
       $authAdmin = $email;
       $authPayments = $payments->forPage($page, $this->paymentsPerPage)->all();
 
-      return view('admin.payments', compact('paymentPages', 'authAdmin', 'authPayments'));
+      return view('admin.payments', compact('numPages', 'authAdmin', 'authPayments'));
     }
 
     /**

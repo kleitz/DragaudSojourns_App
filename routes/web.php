@@ -161,6 +161,7 @@ Route::prefix('groups')->group(function(){
 // TRIPS ROUTES
 Route::prefix('trips')->group(function(){
   Route::get('/precheck', 'TripsController@precheck')->name('trips.precheck');
+  Route::post('/toggleActive', 'TripsController@toggleActive')->name('trips.toggleActive');
   Route::post('/store', 'TripsController@store')->name('trips.store');
   Route::get('/receipts/{trip_id}', 'PaymentsController@createTripReceipt')->name('trips.receipt');
 });

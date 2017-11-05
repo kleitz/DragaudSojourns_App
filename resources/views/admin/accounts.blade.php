@@ -3,6 +3,18 @@
 ])
 
 @section('content')
+<?php
+	$curUrl = explode("/", Request::url());
+	$curPage = $curUrl[count($curUrl) - 1];
+	$curSection = $curUrl[count($curUrl) - 2];
+	if ($curPage < 1) {
+		$curPage = 1;
+	}
+	$search = '';
+	if (isset($_GET['search'])){
+		$search = '?search=' . $_GET['search'];
+	}
+ ?>
 <div id="acccount-show-app" class="container admin-container">
 <!-- ACCOUNTS SEARCH RESULTS -->
 <div class="col-xs-10 relative" style="z-index: 20">
@@ -11,54 +23,12 @@
       <div onclick="window.location='/admin/{{ $authAdmin }}/accounts/1'" class="pointer">
         <h3 class="admin-section-header" >All accounts</h3>
       </div>
-    <!-- SEARCH BAR -->
-      <div class="admin-search-container flex-col-end">
-        <form class="form-inline flex-row-start" method="GET" action="/admin/{{ $authAdmin }}/accounts/1" enctype="multipart/form-data" role="search">
-          <div class="form-account mx-sm-3">
-            <label for="search" class="sr-only">Search</label>
-            <input type="text" class="form-control" name="search" placeholder="Search...">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </div>
-          <button type="submit" class="ds-button button-gen">Search now</button>
-        </form>
-      </div>
+    	<!-- SEARCH BAR -->
+      @include('partials.admin.search')
     </div>
     <div class="row">
       <div class="col-xs-12">
-        <?php
-          $curUrl = explode("/", Request::url());
-          $curPage = $curUrl[count($curUrl) - 1];
-          if ($curPage < 1) {
-            $curPage = 1;
-          }
-          $search = '';
-          if (isset($_GET['search'])){
-            $search = '?search=' . $_GET['search'];
-          }
-         ?>
-        <nav aria-label="...">
-          <ul class="pagination pagination-show">
-						@for ($i = 1; $i <= $accountPages; $i++)
-							@if ($i == 1 || $i == $accountPages || ($i > $curPage - 3 && $i < $curPage +3) || $accountPages < 8 ||
-									 ($curPage < 5 && $i < 7 && $accountPages > 7) || ($accountPages > 6 && $i > $accountPages - 6 && $curPage > $accountPages - 4)
-									 )
-	              @if ($i != $curPage)
-								<li class="page-item">
-	                <a class="page-link" href="/admin/{{ $authAdmin }}/accounts/{{ $i . $search}}">{{ $i }}</a>
-	              </li>
-	              @else
-								<li class="page-item">
-	                <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/accounts/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
-	              </li>
-	              @endif
-							@elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $accountPages - 4 && $i > $accountPages - 7) )
-								<li class="page-item">
-									<a class="page-link page-active"  href="#">...</a>
-								</li>
-							@endif
-            @endfor
-          </ul>
-        </nav>
+				@include('partials.admin.pagination')
       </div>
     </div>
     <div class="row">
@@ -121,22 +91,12 @@
             @endforeach
           </tbody>
         </table>
+				@if (count($authAccounts) == 0)
+					@include('partials.admin.noresults')
+				@endif
       </div>
     </div>
-    <div class="full-width flex-row-between page-bottom">
-      @if ($accountPages > 1)
-      <div>
-        @if ($curPage > 1)
-        <a href="/admin/{{ $authAdmin }}/accounts/{{ $curPage - 1 . $search}}">Previous page</a>
-        @endif
-      </div>
-      <div>
-        @if ($curPage != $accountPages)
-        <a href="/admin/{{ $authAdmin }}/accounts/{{ $curPage + 1 . $search}}">Next page</a>
-        @endif
-      </div>
-      @endif
-    </div>
+  @include('partials.admin.pagebottom')
   </div>
 </div>
 <!-- END ACCOUNTS SEARCH  -->

@@ -95,9 +95,18 @@ const dashApp = new Vue({
                       text:"Summary"
                   },
                   tooltips: {
+                      enabled: true,
                       mode: 'index',
                       display: false,
                       intersect: false,
+                      callbacks: {
+                          label: function(tooltipItems, data) {
+                            let index = tooltipItems.datasetIndex;
+                            let pS = (index != 2) ? '$' : '';
+                            let pK = (index != 2) ? 'k' : '';
+                            return data.datasets[index].label + ': ' + pS + tooltipItems.yLabel + pK;
+                          }
+                      }
                   },
                   legend: {
           						display: false,
@@ -112,7 +121,7 @@ const dashApp = new Vue({
                       yAxes: [{
                           stacked: false,
                           ticks : {
-                              beginAtZero : true
+                              beginAtZero : true,
                           },
                       }]
                   }

@@ -67,6 +67,7 @@
 
 								$tripFixed->id = $trip->id;
 								$tripFixed->group_id = $trip->group_id;
+								$tripFixed->active = $trip->active;
 								$tripFixed->user = $user;
 								$tripFixed->user->number = $user->created_at->timestamp;
 								$tripFixed->traveler = $traveler;

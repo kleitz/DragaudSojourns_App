@@ -19,8 +19,8 @@ const groupTravelersApp = new Vue({
     },
     methods: {
       resetData(){
-        let tL = JSON.stringify(tripsLoaded);
-        this.trips = JSON.parse(tL);
+        // let tL = JSON.stringify(tripsLoaded);
+        // this.trips = JSON.parse(tL);
         this.payment = {
             traveler: '', user: '',
             method: '', paypal_id: '',
@@ -110,10 +110,26 @@ const groupTravelersApp = new Vue({
         let dateExp = date.split('/');
         console.log(dateExp[0]);
         this.payment.created_at = dateExp[2] + '-' + dateExp[0] + '-' + dateExp[1] + ' 00:00:00';
+      },
+      toggleActive(index){
+        let active = this.trips[index].active;
+        if (active == 0) this.trips[index].active = 1;
+        if (active == 1) this.trips[index].active = 0;
+        let trip = this.trips[index];
+        $.ajax({
+            type: "POST",
+            url: '/trips/toggleActive',
+            data: { id: trip.id, active: trip.active},
+            success: function(data){
+              trip.active = data;
+            }
+        });
       }
       // app-wise functions
     },
     mounted() {
+      let tL = JSON.stringify(tripsLoaded);
+      this.trips = JSON.parse(tL);
       this.resetData();
       $('#payment-date').datepicker({
             uiLibrary: 'bootstrap4',

@@ -121,7 +121,11 @@
               </div>
               <div class="trip-details-min">
                 <h5 style="margin-bottom: -1px;">
+                  @if ($trip->active == 1)
                   <span>Balance:</span> {{ '$' . number_format((float)$trip->total - $trip->paid, 2, '.', '' ) }}
+                  @else
+                  Cancelled<span>&nbsp;</span> 
+                  @endif
                 </h5>
               </div>
             </div>
@@ -131,9 +135,15 @@
                 <p>Travel package: <span style="font-style: italic">{{ title_case($trip->package) }}</span></p>
                 <p class="trip-modal-seperator"><strong> ${{ $trip->total }}</strong></p>
                 <p>Remaining balance:</p>
+                @if ($trip->active == 1)
                 <p class="trip-modal-seperator"><strong>
                   {{ '$' . number_format((float)$trip->total - $trip->paid, 2, '.', '' ) }}
                 </strong></p>
+                @else
+                <p class="trip-modal-seperator"><strong>
+                  Cancelled
+                </strong></p>
+                @endif
               </div>
               <!-- End expanded trip payments-->
               <?php
@@ -146,19 +156,31 @@
 
                 $tripData = json_encode($tripPayment);
                ?>
-             @if ($trip->total - $trip->paid == 0)
+             @if ($trip->total - $trip->paid == 0 && $trip->active == 1)
                <div style="padding: 8px 0">
                 <a href="/trips/receipts/{{ $trip->id }}" target="_blank">Download receipt</a>
               </div>
-              @else
+              @elseif ($trip->total - $trip->paid != 0 && $trip->active == 1)
               <button type="button" name="makepayment" class="ds-button button-gen full-width waves-effect waves-dark" @click="showPaymentModal({{$tripData}})">Make payment</button>
+              @elseif ($trip->active == 0)
+              <div style="padding: 8px 0">
+               <p>--</p>
+             </div>
               @endif
             </div>
           </div>
           <div class="col-xs-12 expander-content">
             <div class="panel-body trip-modal-message ">
               <p><strong>Message</strong></p>
+              @if ($trip->active == 1)
               <p>{{ $group->message }}</p>
+              @else
+              <p>This trip has been cancelled. If you have questions
+                call us at <a href="javascript:;">1(800) 554-7537</a>,
+                email us at <a href="javascript:;">diana.dragaudsojourns@gmail.com </a>
+                or visit our <a href="/contactus">contact page</a>.
+              </p>
+              @endif
             </div>
           </div>
         </div>
