@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Admin;
 use Auth;
 
 class AdminLoginController extends Controller
@@ -17,6 +18,17 @@ class AdminLoginController extends Controller
     {
         return view('auth.admins.login');
     }
+
+    public function precheck(Request $request)
+    {
+      $query = Admin::where('email', '=', $request->input('email'))->first();
+      if ($query === null) {
+        return "OPEN";
+      } else {
+        return "TAKEN";
+      }
+    }
+
 
     public function login(Request $request)
     {

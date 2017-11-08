@@ -62,6 +62,10 @@ class UsersController extends Controller
       }
     }
 
+    public function redirectProfile(Request $request) {
+      return redirect("/profile/" . auth()->user()->email . '/trips/1');
+    }
+
     public function show(User $user)
     {
         //
@@ -85,9 +89,10 @@ class UsersController extends Controller
         //
     }
 
-    public function logout(){
+    public function logout(Request $request){
       auth()->logout();
-
+      $request->session()->flush();
+      $request->session()->regenerate();
       return redirect()->home();
     }
 

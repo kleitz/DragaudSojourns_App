@@ -62,7 +62,47 @@
       </div>
     </div>
   @include('layouts.public.footer')
-  @include('layouts.user.overlay')
+  <!-- Overlay -->
+	<div id="dark-overlay" class="dark-overlay-gen fix-fill flex-abs-center hidden">
+		<!-- Password reset modal -->
+			<div id="overlay-admin-pwreset" class="overlay-rounded-wrapper flex-row-between overlay-near-shadow hidden">
+				<div class="overlay-content-wide overlay-pwreset" style="box-sizing: border-box; max-width: 380px; padding: 30px 50px">
+					<h3 class="overlay-wide-header">Forgot your password?</h3>
+					<p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a new one</p>
+					<div class="modal-ds-form" id="admin-pwreset-form">
+						<div class="form-group" >
+							<input id="pwreset-email" class="form-control" name="login-email" type="text" placeholder="Email" style="height: 40px"></input>
+						</div>
+            <div class="relative">
+              <span id="pwreset-email-err" class="absolute ds-form-errmsg" style="left: 0; top: -20px">Please enter a valid email</span>
+            </div>
+						<div id="pwreset-exists" class="input-add-err hidden" style="top: -6px">
+							<input class="ds-form-error ds-details-err" style="height: 40px" readonly type="text" value="We don't have this email in our records.">
+								<img src="/assets/images/icons/hazard_tri.png" class="input-hazard" style="top: -17px"/>
+							</input>
+						</div>
+						<div class="flex-row-center">
+							<a href="javascript:;" id="pwreset-confirm" class="overlay-wide-button ds-button button-gen">Reset</a>
+							<a href="javascript:;" id="pwreset-cancel" class="overlay-wide-button ds-button button-cancel">Cancel</a>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Loading password reset -->
+		@include('partials.overlay.loader', [
+		  'id' => 'pwreset-loader',
+		  'header' => 'Please wait...',
+		  'msg' => "We're resetting your password"
+		])
+		<!-- Password successfully reset -->
+		@include('partials.overlay.success', [
+		  'id' => 'pwreset-success',
+		  'header' => 'New password sent',
+		  'msg' => 'Please check your inbox for the new password',
+		  'button' => 'Continue'
+		])
+	</div>
 </body>
 <script>
 $.ajaxSetup({
@@ -72,5 +112,5 @@ $.ajaxSetup({
 });
 </script>
 <script src="/js/user/app.js" type="text/javascript"></script>
-<script src="/js/user/render.js" type="text/javascript"></script>
+<script src="/js/admin/login.js" type="text/javascript" ></script>
 </html>

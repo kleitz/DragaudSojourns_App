@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Trip;
 use Illuminate\Http\Request;
 
+use Notification;
+use App\Notifications\TravelInsuranceRequested;
+
 class TripsController extends Controller
 {
     /**
@@ -60,6 +63,10 @@ class TripsController extends Controller
           'active' => 1
         ]);
 
+        if ($trip->insurance == 'Yes') {
+          Notification::route('mail', 'diana.dragaudsojourns@gmail.com')
+          ->notify(new TravelInsuranceRequested($trip->id));
+        }
         return 'SUCCESS';
     }
 

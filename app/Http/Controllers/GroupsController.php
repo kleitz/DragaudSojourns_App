@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Group;
+use App\Admin;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+
+use Elibyy\TCPDF\Facades\TCPDF;
 
 class GroupsController extends Controller
 {
@@ -104,6 +107,25 @@ class GroupsController extends Controller
     public function destroyIcon(Request $request)
     {
       Storage::delete('public/icons/' . $request->input('icon'));
+    }
+
+    public function bookingReport($email, $group_id){
+
+      $group = Group::find($group_id);
+      $trips = $group->trips()->get();
+      $admin = Admin::where('email', $email)->first();
+
+      $view = \View::make('auth.receipts.bookingreport', compact('group', 'trips', 'admin'));
+
+      $html = $view->render();
+
+      $pdf = new TCPDF();
+
+      $pdf::SetTitle($group->number . 'Booking Report');
+      $pdf::AddPage();
+      $pdf::writeHTML($html, true, false, true, false, '');
+
+      $pdf::Output('dragaud_sojourns_receipt.pdf');
     }
 
 

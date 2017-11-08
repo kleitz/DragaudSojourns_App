@@ -25,4 +25,4 @@
 <p>@{{ groupIn.school }} </p>
 <label class="gfocus-label">Message</label>
 <p style="font-size: 16px">@{{ groupIn.message }}... </p>
-<a :href="'/' + groupIn.release" class="gfocus-link" target="_blank"><i class="material-icons">arrow_downward</i>Download booking report</a>
+<a href="/admin/{{ $authAdmin }}/report/{{ $group->id }}" target="_blank" class="gfocus-link" ><i class="material-icons">arrow_downward</i>Download booking report</a>

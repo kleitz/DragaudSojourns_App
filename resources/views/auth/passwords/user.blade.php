@@ -1,5 +1,6 @@
 @extends('layouts.user.master', [
 	'title' => 'Reset Password | Dragaud Custom Sojourns',
+	'header' => ''
 ])
 
 @section('content')

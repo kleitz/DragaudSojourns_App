@@ -15994,6 +15994,14 @@ a {
   font-weight: 300;
 }
 
+.admpage-active {
+  -webkit-box-shadow: 0 1px;
+          box-shadow: 0 1px;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin-right: 5px;
+}
+
 .admin-floating-panel .page-bottom {
   margin: 0;
   border-color: transparent;
@@ -16608,7 +16616,7 @@ td {
 
 .status-switch {
   position: relative;
-  left: 3px;
+  left: 5px;
   top: 4px;
   position: relative;
   display: inline-block;

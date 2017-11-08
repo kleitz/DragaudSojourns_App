@@ -233,13 +233,13 @@ import SuccessModal from './SuccessModal.vue';
       },
       saveNewTrip(){
         let bookApp = this;
+        zoomOut("#new-booking-confirm");
+        slideLeft("#booking-loader");
         $.ajax({
           type: "POST",
           url: '/trips/store',
           data: { trip: bookApp.newTrip},
           success: function(response){
-            zoomOut("#new-booking-confirm");
-            slideLeft("#booking-loader");
             setTimeout(function(){
               zoomOut("#booking-loader");
               slideLeft("#booking-success");

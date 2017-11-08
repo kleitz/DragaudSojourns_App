@@ -10,7 +10,8 @@
         </li>
         @else
         <li class="page-item">
-          <a class="page-link page-active"  href="/admin/{{ $authAdmin }}/{{ $curSection }}/{{ $i . $search }}">{{ $i }}<span class="sr-only">(current)</span></a>
+          <a class="page-link page-active admpage-active"  href="/admin/{{ $authAdmin }}/{{ $curSection }}/{{ $i . $search }}">
+            {{ $i }}<span class="sr-only">(current)</span></a>
         </li>
         @endif
       @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $numPages - 4 && $i > $numPages - 7) )

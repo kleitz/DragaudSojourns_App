@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CustomPasswordNotification extends Notification
+class ResetAdministratorPassword extends Notification
 {
     use Queueable;
     public $token;
@@ -44,7 +44,7 @@ class CustomPasswordNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)->view(
-        'auth.emails.password-reset', ['token' => $this->token, 'email' => $this->email]
+        'auth.emails.admin-password-reset', ['token' => $this->token, 'email' => $this->email]
         );
     }
 

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use App\Notifications\CustomPasswordNotification;
+use App\Notifications\ResetYourPassword;
 use App\Trip;
 use App\Payment;
 use App\Traveler;
@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new CustomPasswordNotification($token, $this->email));
+        $this->notify(new ResetYourPassword($token, $this->email));
     }
 }

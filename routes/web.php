@@ -93,6 +93,8 @@ Route::get('/trips/store', function(){
 Route::get('/payments/store', function(){
   return redirect('/');
 });
+Route::get('/profile/@resetpassword', 'UsersController@redirectProfile');
+
 Route::get('/admin/icon/store', function(){
   return redirect('/groups/create');
 });
@@ -100,6 +102,9 @@ Route::get('/admin/icon/destroy', function(){
   return redirect('/groups/create');
 });
 Route::get('/admin', function(){
+  return redirect(route('admin.login'));
+});
+Route::get('/admin/@resetpassword/dashboard', function(){
   return redirect(route('admin.login'));
 });
 
@@ -133,17 +138,27 @@ Route::prefix('admin')->group(function(){
   Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
   Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
   Route::get('/logout', 'AdminsController@logout')->name('admin.logout');
+  Route::get('/precheck', 'Auth\AdminLoginController@precheck')->name('admin.precheck');
+
+  //  - PASSWORD RESET
+  Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
+  Route::post('/password/email', 'Auth\AdminForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
+  Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
+  Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
+
   // - PAGES
   Route::get('/{email}/dashboard', 'AdminsController@index')->name('admin.dashboard');
   Route::get('/{email}/groups/{page}', 'AdminsController@groups')->name('admin.groups');
   Route::get('/{email}/accounts/{page}', 'AdminsController@accounts')->name('admin.accounts');
   Route::get('/{email}/payments/{page}', 'AdminsController@payments')->name('admin.payments');
+
   // - GROUP FOCUS
   Route::get('/{email}/group/{groupNumber}', 'AdminsController@groupOverview')->name('admin.groupoverview');
   Route::get('/{email}/group/{groupNumber}/payments', 'AdminsController@groupPayments')->name('admin.grouppayments');
   Route::get('/{email}/new/group', 'AdminsController@groupCreate')->name('admin.groupcreate');
   Route::post('/icon/store', 'GroupsController@storeIcon')->name('icon.store');
   Route::post('/icon/destroy', 'GroupsController@destroyIcon')->name('icon.destroy');
+  Route::get('/{email}/report/{group_id}', 'GroupsController@bookingReport')->name('booking.report');
 });
 
 // TRAVELERS ROUTES

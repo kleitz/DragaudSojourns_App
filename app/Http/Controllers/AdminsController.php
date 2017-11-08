@@ -295,9 +295,11 @@ class AdminsController extends Controller
         //
     }
 
-    public function logout()
+    public function logout(Request $request)
    {
        auth('admin')->logout();
+       $request->session()->flush();
+       $request->session()->regenerate();
        return redirect('/');
    }
 }

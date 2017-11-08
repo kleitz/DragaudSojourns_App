@@ -9,8 +9,9 @@
                             </td>
 
                             <td style="text-align:right; color: #333; font-size: 10px">
-                                Receipt: #{{ $payment->verification }}<br>
-                                Paid: {{ \Carbon\Carbon::parse($payment->created_at)->format('F d, Y') }}
+                              Dragaud Custom Sojourns<br>
+                              Austin, Texas<br>
+                               1 (800) 554 7437
                             </td>
                         </tr>
                     </table>
@@ -25,22 +26,8 @@
                     <table>
                         <tr>
                             <td style="color: #333">
-                            	<strong>To:</strong><br>
-                                {{ title_case($user->name) }}<br>
-                                {{ title_case($user->street) }}, {{ $user->zip }}<br>
-                                {{ $user->email }}<br>
-                            </td>
-                             <td style="text-align: right;color: #333">
-                            	<strong>From:</strong><br>
-                                Dragaud Custom Sojourns<br>
-                                Austin, Texas<br>
-                                 1 (800) 554 7437
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style="color: #333">
-                            	<strong>Traveler:</strong>
-                                {{ title_case($traveler->name) }}
+                            	<strong>Administrator:</strong>
+                                {{ title_case($admin->name) }}
                             </td>
                         </tr>
                     </table>
@@ -74,56 +61,63 @@
 
               <tr class="item">
                   <td style="border-bottom: 1px solid #eee;color: #333">
-                      Travel Package
+                      Travel Dates
                   </td>
 
                   <td style="text-align:right;  border-bottom: 1px solid #eee;color: #333">
-                      {{ title_case($trip->package) }}
+                      {{ $group->depart }} - {{ $group->return }}
                   </td>
               </tr>
               <tr class="item last">
                   <td style="color: #333">
-                      Package Cost
+                      School
                   </td>
 
                   <td style="text-align:right;color: #333">
-                      ${{ $trip->total }}
+                      {{ $group->school }}
                   </td>
               </tr>
               <tr class="spacer"><td></td></tr>
 
               <tr class="heading">
-                  <td style="background-color: #eee; border-bottom:1px solid #ddd;color: #333">
-                      <strong>Payment Method</strong>
+                  <td width="180"  style="background-color: #eee; border-bottom:1px solid #ddd;color: #333">
+                      <strong>Traveler</strong>
                   </td>
 
-                  <td style="background-color: #eee; border-bottom:1px solid #ddd;text-align: right;color: #333">
-                      <strong>Amount</strong>
+                  <td width="180" style="background-color: #eee; border-bottom:1px solid #ddd;color: #333">
+                      <strong>User</strong>
                   </td>
+
+                  <td width="180" style="background-color: #eee; border-bottom:1px solid #ddd;color: #333">
+                      <strong>Emergency</strong>
+                  </td>
+
               </tr>
-
+              @foreach ($trips as $trip)
+              <?php
+                $traveler = App\Traveler::where('id', $trip->traveler_id)->first();
+                $user = App\User::where('id', $trip->user_id)->first();
+               ?>
               <tr class="details">
-                  <td style="color: #333">
-                  </td>
-
-                  <td style="text-align: right; color: #333">
-                    (<span style="font-size: 10px"> Prior balance: &nbsp; &nbsp; &nbsp; &nbsp; ${{ $payment->balance + $payment->amount }} </span>)
-                  </td>
+                <td width="180" style="color: #333;border-bottom: 1px solid #ddd;">
+                  <span style="font-weight: bold; font-size: 10px">{{ $traveler->name }}</span><br/>
+                  <span style="font-size: 10px;">&nbsp; DOB: {{ $traveler->dob }}</span><br/>
+                  <span style="font-size: 10px;">&nbsp; Gender: {{ $traveler->gender }}</span><br/>
+                  <span style="font-size: 10px;">&nbsp; Package: {{ $trip->package }}</span>
+                </td>
+                <td width="180" style="color: #333;border-bottom: 1px solid #ddd;">
+                  <span style="font-weight: bold; font-size: 10px">{{ $user->name }}</span><br/>
+                  <span style="font-size: 10px;">&nbsp; Relationship: {{ $traveler->relationship }}</span><br/>
+                  <span style="font-size: 10px">&nbsp; Cell: {{ $user->cell }}</span><br/>
+                  <span style="font-size: 10px;">&nbsp; Home: {{ $user->home }}</span>
+                </td>
+                <td width="180" style="color: #333;border-bottom: 1px solid #ddd;">
+                  <span style="font-weight: bold; font-size: 10px">{{ $traveler->emerg_name }}</span><br/>
+                  <span style="font-size: 10px">&nbsp; Phone: {{ $traveler->emerg_phone }}</span>
+                </td>
+                <span style="font-size: 10px"></span>
               </tr>
-
-              <tr class="details">
-                  <td style="color: #333">
-                      {{ title_case($payment->method) }}
-                  </td>
-
-                  <td style="text-align:right; color: #333;border-bottom: 1px solid #ddd;height: 30px;">
-                      - ${{ $payment->amount }}
-                  </td>
-              </tr>
-              <tr class="total">
-              	<td></td>
-              	<td style="text-align: right; color: #333">Remaining balance: &nbsp; &nbsp; &nbsp; &nbsp; <strong>${{ $payment->balance }}</strong><br></td>
-              </tr>
+              @endforeach
             </table>
         </table>
     </div>

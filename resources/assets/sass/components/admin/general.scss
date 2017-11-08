@@ -30,6 +30,13 @@
 
 }
 
+.admpage-active {
+  box-shadow: 0 1px;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin-right: 5px
+}
+
 .admin-floating-panel .page-bottom {
   margin: 0;
   border-color: rgba(0,0,0,0);

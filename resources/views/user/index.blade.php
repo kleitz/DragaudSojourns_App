@@ -1,6 +1,7 @@
 
 @extends('layouts.user.master', [
 	'title' => auth()->user()->name . '\'s Profile | Dragaud Custom Sojourns',
+	'header' => 'My Account'
 ])
 
 @section('content')
