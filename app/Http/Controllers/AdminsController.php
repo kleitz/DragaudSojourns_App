@@ -178,7 +178,7 @@ class AdminsController extends Controller
       * @param $page = sorted information by page
     */
 
-    public $paymentsPerPage = 20;
+    public $paymentsPerPage = 1;
     public function payments($email, $page)
     {
       $email =  Auth::guard('admin')->user()->email;

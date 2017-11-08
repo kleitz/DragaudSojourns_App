@@ -121,11 +121,11 @@ class GroupsController extends Controller
 
       $pdf = new TCPDF();
 
-      $pdf::SetTitle($group->number . 'Booking Report');
+      $pdf::SetTitle($group->number . ' Booking Report');
       $pdf::AddPage();
       $pdf::writeHTML($html, true, false, true, false, '');
 
-      $pdf::Output('dragaud_sojourns_receipt.pdf');
+      $pdf::Output($group->number'_booking_report.pdf');
     }
 
 
