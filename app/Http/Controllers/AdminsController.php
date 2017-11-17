@@ -36,6 +36,7 @@ class AdminsController extends Controller
     {
         $email =  Auth::guard('admin')->user()->email;
         $trips = Trip::orderBy('id', 'desc')->get();
+        $payments = Payment::orderBy('id', 'desc')->get();
         $groups = Group::orderBy('number', 'asc')->get();
         // Groups shapshot
         $recentGroups = Group::orderBy('number', 'desc')->take(5)->get();
@@ -53,7 +54,10 @@ class AdminsController extends Controller
         $paymentSnapshot->paid = 0;
         foreach ($trips as $trip){
           $paymentSnapshot->total += $trip->total;
-          $paymentSnapshot->paid += $trip->paid;
+        }
+
+        foreach ($payments as $payment) {
+          $paymentSnapshot->paid += $payment->amount;
         }
 
         $tripsSnapshot = array();
@@ -178,45 +182,60 @@ class AdminsController extends Controller
       * @param $page = sorted information by page
     */
 
-    public $paymentsPerPage = 20;
+    public $paymentsPerPage = 15;
     public function payments($email, $page)
     {
       $email =  Auth::guard('admin')->user()->email;
       $search = \Request::get('search');
-      $payments = Payment::orderBy('id', 'desc')->get();
-      if ($search) {
+      $dateIn = \Request::get('datefrom');
+      $dateOut = \Request::get('dateto');
+      $payments = Payment::orderBy('created_at', 'desc')->get();
+      if ($search || $dateIn || $dateOut) {
+        $dateS = explode("/", htmlspecialchars_decode($dateIn));
+        $dateE = explode("/", htmlspecialchars_decode($dateOut));
+        $dateFrom = \Carbon\Carbon::createFromDate($dateS[2], $dateS[0], $dateS[1]);
+        $dateTo = \Carbon\Carbon::createFromDate($dateE[2], $dateE[0], $dateE[1]);
 
         $travelerAll = DB::table('payments')
              ->join('trips', 'payments.trip_id', '=', 'trips.id')
              ->join('travelers', 'trips.traveler_id', '=', 'travelers.id')
              ->select('payments.*')
-             ->where('name', 'like', '%'.$search.'%');
+             ->where('name', 'like', '%'.$search.'%')
+             ->whereDate('payments.created_at', '>=', $dateFrom->toDateString())
+             ->whereDate('payments.created_at', '<=', $dateTo->toDateString());
 
        $userAll = DB::table('payments')
-            ->join('trips', 'payments.trip_id', '=', 'trips.id')
-            ->join('users', 'trips.user_id', '=', 'users.id')
-            ->select('payments.*')
-            ->where('name', 'like', '%'.$search.'%');
+              ->join('trips', 'payments.trip_id', '=', 'trips.id')
+              ->join('users', 'trips.user_id', '=', 'users.id')
+              ->select('payments.*')
+              ->where('name', 'like', '%'.$search.'%')
+              ->whereDate('payments.created_at', '>=', $dateFrom->toDateString())
+              ->whereDate('payments.created_at', '<=', $dateTo->toDateString());
 
-      $groupAll = DB::table('payments')
-           ->join('trips', 'payments.trip_id', '=', 'trips.id')
-           ->join('groups', 'trips.group_id', '=', 'groups.id')
-           ->select('payments.*')
-           ->where('number', 'like', '%'.$search.'%');
+        $groupAll = DB::table('payments')
+             ->join('trips', 'payments.trip_id', '=', 'trips.id')
+             ->join('groups', 'trips.group_id', '=', 'groups.id')
+             ->select('payments.*')
+             ->where('number', 'like', '%'.$search.'%')
+             ->whereDate('payments.created_at', '>=', $dateFrom->toDateString())
+             ->whereDate('payments.created_at', '<=', $dateTo->toDateString());
 
         $payments = Payment::where('verification', 'like', '%'.$search.'%')
+            ->whereDate('created_at', '>=', $dateFrom->toDateString())
+            ->whereDate('created_at', '<=', $dateTo->toDateString())
             ->union($travelerAll)
             ->union($userAll)
             ->union($groupAll)
-            ->orderBy('id', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
       }
-      $numPages = ceil(count($payments) / $this->paymentsPerPage);
 
+      $numPages = ceil(count($payments) / $this->paymentsPerPage);
+      $allPayments = $payments->all();
       $authAdmin = $email;
       $authPayments = $payments->forPage($page, $this->paymentsPerPage)->all();
 
-      return view('admin.payments', compact('numPages', 'authAdmin', 'authPayments'));
+      return view('admin.payments', compact('numPages', 'authAdmin', 'authPayments', 'allPayments'));
     }
 
     /**

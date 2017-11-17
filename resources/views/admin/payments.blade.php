@@ -7,28 +7,82 @@
 	$curUrl = explode("/", Request::url());
 	$curPage = $curUrl[count($curUrl) - 1];
 	$curSection = $curUrl[count($curUrl) - 2];
+
 	if ($curPage < 1) {
 		$curPage = 1;
 	}
+
 	$search = '';
+	$searched = '';
+	$dateFrom = '10/01/2017';
+	$dateTo = date('m/d/Y');
+	$dateFromSearch = '';
+	$dateToSearch = '';
+
 	if (isset($_GET['search'])){
 		$search = '?search=' . $_GET['search'];
+		$dateFromSearch = '&datefrom=' . $_GET['datefrom'];
+		$dateToSearch = '&dateto=' . $_GET['dateto'];
+		$searched = htmlspecialchars_decode($_GET['search']);
+		$dateFrom = htmlspecialchars_decode($_GET['datefrom']);
+		$dateTo = htmlspecialchars_decode($_GET['dateto']);
 	}
+
+	$analytics = new \stdClass();
+	$analytics->total = 0;
+	$analytics->fees = 0;
+	$analytics->credit = 0;
+	$analytics->paypal = 0;
+	$analytics->check = 0;
+
+	$analyticsChart = new \stdClass();
+	$analyticsChart->credit = 0;
+	$analyticsChart->paypal = 0;
+	$analyticsChart->check = 0;
+
+	foreach($allPayments as $payment) {
+		$analytics->total += $payment->amount;
+		$analytics->fees += $payment->fee;
+		if (strtolower($payment->method) == 'credit') {
+			$analyticsChart->credit++;
+			$analytics->credit += $payment->amount;
+		} else if (strtolower($payment->method) == 'paypal') {
+			$analyticsChart->paypal++;
+			$analytics->paypal += $payment->amount;
+		} else {
+			$analyticsChart->check++;
+			$analytics->check += $payment->amount;
+		}
+	}
+
  ?>
+<script type="text/javascript">
+	let analyticsChart = {!! json_encode($analyticsChart) !!};
+</script>
 <div id="payment-show-app" class="container admin-container">
 <!-- PAYMENTS SEARCH RESULTS -->
 <div class="col-xs-12 relative" style="z-index: 20">
   <div class="admin-floating-panel z-depth-2">
-    <div class="flex-row-between">
+    <div class="flex-col-start">
       <div onclick="window.location='/admin/{{ $authAdmin }}/payments/1'" class="pointer">
         <h3 class="admin-section-header" >All payments</h3>
       </div>
     	<!-- SEARCH BAR -->
+			<h5 class="admin-section-subheader" style="margin-bottom: 15px">Time period</h5>
       @include('partials.admin.search')
     </div>
     <div class="row">
+			@if (count($authPayments) != 0)
+			<div class="col-xs-12">
+				<h5 class="admin-section-subheader" style="margin-top: 20px">Analytics</h5>
+					@include('partials.admin.analytics')
+			</div>
+			@endif
       <div class="col-xs-12">
+				<h5 class="admin-section-subheader" style="margin-bottom: 15px">Transactions</h5>
+				@if (count($authPayments) != 0)
 				@include('partials.admin.pagination')
+				@endif
       </div>
     </div>
     <div class="row">

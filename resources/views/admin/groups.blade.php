@@ -11,8 +11,12 @@
 		$curPage = 1;
 	}
 	$search = '';
+	$searched = '';
+	$dateFromSearch = '';
+	$dateToSearch = '';
 	if (isset($_GET['search'])){
 		$search = '?search=' . $_GET['search'];
+		$searched = $_GET['search'];
 	}
  ?>
 <div id="group-show-app" class="container admin-container">

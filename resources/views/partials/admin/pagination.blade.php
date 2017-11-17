@@ -6,11 +6,11 @@
            )
         @if ($i != $curPage)
         <li class="page-item">
-          <a class="page-link" href="/admin/{{ $authAdmin }}/{{ $curSection }}/{{ $i . $search}}">{{ $i }}</a>
+          <a class="page-link" href="/admin/{{ $authAdmin }}/{{ $curSection }}/{{ $i . $search . $dateFromSearch . $dateToSearch }}">{{ $i }}</a>
         </li>
         @else
         <li class="page-item">
-          <a class="page-link page-active admpage-active"  href="/admin/{{ $authAdmin }}/{{ $curSection }}/{{ $i . $search }}">
+          <a class="page-link page-active admpage-active"  href="/admin/{{ $authAdmin }}/{{ $curSection }}/{{ $i . $search . $dateFromSearch . $dateToSearch }}">
             {{ $i }}<span class="sr-only">(current)</span></a>
         </li>
         @endif

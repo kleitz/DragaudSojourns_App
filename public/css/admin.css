@@ -15238,6 +15238,15 @@ button.picker__close:focus {
   height: 100% !important;
 }
 
+.full-height-row {
+  display: table;
+}
+
+.full-height-col {
+  display: table-cell;
+  float: none;
+}
+
 .fix-fill {
   position: fixed;
   top: 0;
@@ -15338,6 +15347,18 @@ button.picker__close:focus {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.flex-col-around {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -ms-flex-pack: distribute;
       justify-content: space-around;
 }
@@ -15452,6 +15473,10 @@ button.picker__close:focus {
   text-align: center;
 }
 
+.text-nowrap {
+  white-space: nowrap;
+}
+
 .hidden {
   display: none;
   visibility: hidden;
@@ -15493,6 +15518,42 @@ button.picker__close:focus {
   background-color: rgba(0, 0, 0, 0.4);
   padding: 100px 0;
   background-image: url("/assets/images/textures/60-lines.png");
+}
+
+.ds-gold {
+  color: #cb9853;
+}
+
+.ds-blue {
+  color: #559dad;
+}
+
+.ds-green {
+  color: #6fc99d;
+}
+
+.ds-red {
+  color: #c43d4b;
+}
+
+.ds-trueblue {
+  color: #556fad;
+}
+
+.ds-lightblue {
+  color: #79aeb9;
+}
+
+.ds-ulightblue {
+  color: #eaeeef;
+}
+
+.ds-lightgrey {
+  color: #a9a9a9;
+}
+
+.ds-medgrey {
+  color: #515a5a;
 }
 
 .button-red {
@@ -16078,9 +16139,22 @@ a {
 
 .admin-search-container input {
   font-size: 18px;
-  width: 250px;
   height: 43px;
   padding-right: 30px;
+}
+
+.admin-search-container .search-datepicker {
+  height: 37px;
+  padding-right: 15px;
+  font-size: 15px;
+}
+
+.search-datepicker-label {
+  -ms-flex-item-align: start;
+      align-self: start;
+  font-weight: 400;
+  margin: 6px 10px 0 15px;
+  font-size: 16px;
 }
 
 .admin-search-container i {
@@ -16090,6 +16164,13 @@ a {
   margin-right: -10px;
   font-size: 17px;
   color: #ccc;
+}
+
+.admin-search-container .fa-calendar {
+  right: 0;
+  margin-right: 0;
+  font-size: 14px;
+  color: #7c8484;
 }
 
 .group-show-icon {
@@ -16174,6 +16255,77 @@ td {
   z-index: 1;
   width: 100%;
   background: #eaeeef;
+}
+
+.admin-payments-analytics {
+  height: 215px;
+  margin: 15px 0 20px;
+  padding: 30px 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.admin-panalytics-total {
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  height: 50%;
+}
+
+.admin-panalytics-table {
+  margin-bottom: 0 !important;
+  width: 80%;
+  position: absolute;
+}
+
+.admin-panalytics-table strong {
+  font-size: 16px;
+}
+
+.panalytics-node {
+  -ms-flex-item-align: center;
+      align-self: center;
+  border-radius: 2px;
+  height: 10px;
+  width: 10px;
+  margin-right: 10px;
+}
+
+.panalytics-node.blue {
+  background-color: #559dad !important;
+}
+
+.panalytics-node.green {
+  background-color: #6fc99d !important;
+}
+
+.panalytics-node.gold {
+  background-color: #cb9853 !important;
+}
+
+.admin-panalytics-table > thead > tr > th,
+.admin-panalytics-table > tbody > tr > td {
+  padding: 0 !important;
+}
+
+.admin-panalytics-total h4 {
+  margin: 0;
+  font-weight: 300;
+}
+
+.admin-panalytics-total p {
+  margin-bottom: 0;
+  margin-top: -5px;
+  font-size: 16px;
+}
+
+.admin-panalytics-total label {
+  margin-bottom: 0;
+  margin-top: -5px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .progress-bar-fg {

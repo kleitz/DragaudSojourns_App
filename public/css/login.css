@@ -376,6 +376,15 @@
   height: 100% !important;
 }
 
+.full-height-row {
+  display: table;
+}
+
+.full-height-col {
+  display: table-cell;
+  float: none;
+}
+
 .fix-fill {
   position: fixed;
   top: 0;
@@ -476,6 +485,18 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.flex-col-around {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   -ms-flex-pack: distribute;
       justify-content: space-around;
 }
@@ -590,6 +611,10 @@
   text-align: center;
 }
 
+.text-nowrap {
+  white-space: nowrap;
+}
+
 .hidden {
   display: none;
   visibility: hidden;
@@ -631,6 +656,42 @@
   background-color: rgba(0, 0, 0, 0.4);
   padding: 100px 0;
   background-image: url("/assets/images/textures/60-lines.png");
+}
+
+.ds-gold {
+  color: #cb9853;
+}
+
+.ds-blue {
+  color: #559dad;
+}
+
+.ds-green {
+  color: #6fc99d;
+}
+
+.ds-red {
+  color: #c43d4b;
+}
+
+.ds-trueblue {
+  color: #556fad;
+}
+
+.ds-lightblue {
+  color: #79aeb9;
+}
+
+.ds-ulightblue {
+  color: #eaeeef;
+}
+
+.ds-lightgrey {
+  color: #a9a9a9;
+}
+
+.ds-medgrey {
+  color: #515a5a;
 }
 
 .button-red {
