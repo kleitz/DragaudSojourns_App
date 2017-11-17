@@ -125,7 +125,7 @@ class GroupsController extends Controller
       $pdf::AddPage();
       $pdf::writeHTML($html, true, false, true, false, '');
 
-      $pdf::Output($group->number'_booking_report.pdf');
+      $pdf::Output($group->number . '-booking-report.pdf');
     }
 
 

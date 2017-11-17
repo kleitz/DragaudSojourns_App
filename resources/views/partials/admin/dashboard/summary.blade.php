@@ -19,12 +19,12 @@
       </div>
       <div class="flex-row-start" style="margin-bottom: 15px">
         <div class="summary-key projected"></div>
-        <h4 class="admin-section-subheader flex-self-centered" style="margin: 0 5px 0 0">$@{{ parseFloat(activeDetails.captured).toLocaleString('en') }}</h4>
+        <h4 class="admin-section-subheader flex-self-centered" style="margin: 0 5px 0 0">$@{{ parseFloat(activeDetails.projected).toLocaleString('en') }}</h4>
         <h4 class="admin-section-subtext flex-self-centered" style="margin: 10px 0 10px 0; font-size: 20px">in projected revenue</h4>
       </div>
       <div class="flex-row-start" style="margin-bottom: 15px">
         <div class="summary-key captured"></div>
-        <h4 class="admin-section-subheader flex-self-centered" style="margin: 0 5px 0 0">$@{{ parseFloat(activeDetails.projected).toLocaleString('en') }}</h4>
+        <h4 class="admin-section-subheader flex-self-centered" style="margin: 0 5px 0 0">$@{{ parseFloat(activeDetails.captured).toLocaleString('en') }}</h4>
         <h4 class="admin-section-subtext flex-self-centered" style="margin: 10px 0 10px 0; font-size: 20px">in captured revenue</h4>
       </div>
     </div>
