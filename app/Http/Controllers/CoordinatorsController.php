@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Password;
 use App\Coordinator;
 use App\User;
 use App\Group;
@@ -61,7 +62,7 @@ class CoordinatorsController extends Controller
 
       $group = Group::find($request->input('group_id'));
 
-      $reset_token = strtolower(str_random(64));
+      $reset_token = Hash::make(strtolower(str_random(64)));
       DB::table('password_resets')->insert([
           'email' => $request->input('user_email'),
           'token' => $reset_token,
