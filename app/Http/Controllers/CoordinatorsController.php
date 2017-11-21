@@ -10,7 +10,6 @@ use App\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use Notification;
@@ -46,11 +45,11 @@ class CoordinatorsController extends Controller
      */
     public function create(Request $request)
     {
-      $reset_token = hash_hmac('sha256', Str::random(40), env('APP_KEY'));
+      $reset_token = strtolower(str_random(64));
       DB::table('password_resets')->insert([
           'email' => $request->input('user_email'),
-          'token' => $reset_token,
-          'created_at' => new Carbon,
+          'token' => Hash::make($reset_token),
+          'created_at' => Carbon::now(),
       ]);
 
       $user = User::create([
