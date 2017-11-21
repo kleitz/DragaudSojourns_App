@@ -68,7 +68,7 @@
 			<div id="overlay-admin-pwreset" class="overlay-rounded-wrapper flex-row-between overlay-near-shadow hidden">
 				<div class="overlay-content-wide overlay-pwreset" style="box-sizing: border-box; max-width: 380px; padding: 30px 50px">
 					<h3 class="overlay-wide-header">Forgot your password?</h3>
-					<p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a new one</p>
+					<p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a reset link.</p>
 					<div class="modal-ds-form" id="admin-pwreset-form">
 						<div class="form-group" >
 							<input id="pwreset-email" class="form-control" name="login-email" type="text" placeholder="Email" style="height: 40px"></input>

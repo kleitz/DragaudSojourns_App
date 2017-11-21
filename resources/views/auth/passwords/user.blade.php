@@ -1,5 +1,12 @@
+<?php
+	$title = 'Reset Password';
+	if (isset($_GET['group'])) {
+		$title = 'Create Password';
+	}
+?>
+
 @extends('layouts.user.master', [
-	'title' => 'Reset Password | Dragaud Custom Sojourns',
+	'title' => $title .' | Dragaud Custom Sojourns',
 	'header' => ''
 ])
 
@@ -7,7 +14,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2 ">
             <div class="panel panel-default border-panel floating-div">
-                <div class="panel-heading pwreset-heading">Reset Password</div>
+                <div class="panel-heading pwreset-heading">{{ $title }}</div>
 
                 <div class="panel-body pwreset-body">
                     <form class="form-horizontal" method="POST" action="{{ route('password.request') }}">

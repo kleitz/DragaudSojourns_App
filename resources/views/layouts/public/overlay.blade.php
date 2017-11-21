@@ -9,12 +9,12 @@
   <div id="overlay-public-pwreset" class="overlay-rounded-wrapper flex-row-between overlay-near-shadow hidden">
     <div class="overlay-content-wide overlay-pwreset">
       <h3 class="overlay-wide-header">Forgot your password?</h3>
-      <p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a new one</p>
+      <p class="overlay-wide-msg">No problem. Confirm your email below and we'll send you a reset link.</p>
       <div class="modal-ds-form" id="public-pwreset-form">
         <input id="pwreset-email" class="register-input" name="login-email" type="text" placeholder="Email"></input>
         <div id="pwreset-exists" class="input-add-err hidden">
     			<input class="ds-form-error ds-details-err" readonly type="text" value="We don't have this email in our records.">
-    				<img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>
+    				<img src="/assets/images/icons/hazard_tri.png" class="input-hazard" style="margin-left: 20px; top: -11px"/>
     			</input>
     		</div>
         <span id="pwreset-email-err" class="ds-form-errmsg">Please enter a valid email</span>

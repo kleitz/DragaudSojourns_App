@@ -223,31 +223,32 @@ function InputValidator() {
   this.isValid = function(obj) {
     let v = [];
     for (let i = 0; i < obj.length; i++) {
+      let elV = $('#' + obj[i].elem).val();
       let bool = true;
       switch (obj[i].type) {
         case "email" :
-          bool = validEmail(obj[i].elem);
+          bool = validEmail(elV);
           break;
         case "pass" :
-          bool = validPass(obj[i].elem);
+          bool = validPass(elV);
           break;
         case "strongpass" :
-          bool = strongPass(obj[i].elem);
+          bool = strongPass(elV);
           break;
         case "string" :
-          bool = validString(obj[i].elem);
+          bool = validString(elV);
           break;
         case "phone" :
-          bool = validPhone(obj[i].elem);
+          bool = validPhone(elV);
           break;
         case "zip" :
-          bool = validZip(obj[i].elem);
+          bool = validZip(elV);
           break;
         case "select" :
-          bool = validSelect(obj[i].elem);
+          bool = validSelect(elV);
           break;
         case "date" :
-          bool = validDate(obj[i].elem);
+          bool = validDate(elV);
           break;
         default:
           bool = false;
@@ -287,7 +288,7 @@ function InputValidator() {
 var validator = new InputValidator;
 
 function validEmail(input){
-  userEmail = $('#' + input).val();
+  userEmail = input;
   var isEmail = 0;
   for (i = 0; i <=userEmail.length; i++){
       if (userEmail.slice(0,1) != "@"){
@@ -311,7 +312,7 @@ function validEmail(input){
 }
 
 function validPass(input) {
-  let str = $("#" + input).val();
+  let str = input;
   let spaces = false;
   for (let i = 0; i < str.length; i++) {
     if (str.slice(i, i+1) != ' ') spaces = true;
@@ -324,7 +325,7 @@ function validPass(input) {
 }
 
 function strongPass(input) {
-  let str = $("#" + input).val();
+  let str = input;
   let strong = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
   if (!strong.test(str)) {
     return false;
@@ -334,7 +335,7 @@ function strongPass(input) {
 }
 
 function validString(input, type) {
-    let str = $("#" + input).val();
+    let str = input;
 
     if (str == undefined || str == "") {
       return false;
@@ -344,7 +345,7 @@ function validString(input, type) {
 }
 
 function validZip(input) {
-  let str = $("#" + input).val();
+  let str = input;
   let regX = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
 
   if (!regX.test(str)) {
@@ -355,7 +356,7 @@ function validZip(input) {
 }
 
 function validPhone(input) {
-  let num = $("#"+ input).val();
+  let num = input;
   if(num.length < 13) {
     return false;
   } else {
@@ -364,7 +365,7 @@ function validPhone(input) {
 }
 
 function validSelect(input) {
-  let str = $("#" + input).find(":selected").hasClass('default-option');
+  let str = input;
 
   if (str) {
     return false;
@@ -374,7 +375,7 @@ function validSelect(input) {
 }
 
 function validDate(input) {
-  let num = $('#' + input).val();
+  let num = input;
   let str = num.split('/');
   let now = new Date();
   let mm = str[0];
@@ -420,18 +421,7 @@ function clone(x) {
   var prefixPattern, exactPattern, dupe;
 
   if (!x) { return null; }
-
-  // TODO: in the next major version, we should
-  // consider removing these pattern properties.
-  // They are not useful extnerally and can be
-  // confusing because the exactPattern does not
-  // always match (for instance, Maestro cards
-  // can start with 62, but the exact pattern
-  // does not include that since it would
-  // exclude UnionPay and Discover cards
-  // when it is not sure whether or not
-  // the card is a UnionPay, Discover or
-  // Maestro card).
+  
   prefixPattern = x.prefixPattern.source;
   exactPattern = x.exactPattern.source;
   dupe = JSON.parse(JSON.stringify(x));

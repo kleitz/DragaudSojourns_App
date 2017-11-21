@@ -1,7 +1,7 @@
 <div class="panel panel-secure border-panel-light" style="margin: 0; border-radius: 5px 5px 0;">
   <div class="panel-heading flex-row-between">
     <h5 style="margin: 7px 0; font-weight: 300">Payments</h5>
-    <div class="row fp-date" style="width: 70%; margin: 0">
+    <div class="row fp-date gc-date" style="width: 60%; margin: 0">
       <div class="col-xs-1" style="padding: 0">
       </div>
       <div class="form-group col-xs-5" style="padding: 0; margin: 0">
@@ -32,18 +32,20 @@
     <table>
       <tbody>
         <tr v-for="payment in paymentsOut">
-          <td class="show-account-user flex-row-start" style="width: 100%">
-            <a :href="'/admin/' + admin +  '/accounts/1?search=' + payment.traveler.name" class="dot-dot-dot" style="max-width: 162px">@{{ payment.traveler.name }}</a>
-            <div class="relative admin-helper-modal hidden">
-              <div class="admin-helper fix-helper">
-                <small>Details</small>
-                <p>Birth date: <strong>@{{ payment.traveler.dob }}</strong> </p>
-                <p>Gender: <strong>@{{ payment.traveler.gender }}</strong> </p>
-                <p v-if="payment.traveler.relationship == 'Myself'" >Account owner</p>
-                <p v-if="payment.traveler.relationship != 'Myself'">@{{ payment.traveler.relationship }}: <strong> @{{ payment.user.name }}</strong> </p>
-                <small>Emergency</small>
-                <p>Name: <strong>@{{ payment.traveler.emerg_name }}</strong> </p>
-                <p>Phone: <strong>@{{ payment.traveler.emerg_phone }}</strong> </p>
+          <td style="width: 30%">
+            <div class="show-account-user flex-row-start" >
+              <a :href="'/admin/' + admin +  '/accounts/1?search=' + payment.traveler.name" class="dot-dot-dot" style="max-width: 162px">@{{ payment.traveler.name }}</a>
+              <div class="relative admin-helper-modal hidden">
+                <div class="admin-helper fix-helper">
+                  <small>Details</small>
+                  <p>Birth date: <strong>@{{ payment.traveler.dob }}</strong> </p>
+                  <p>Gender: <strong>@{{ payment.traveler.gender }}</strong> </p>
+                  <p v-if="payment.traveler.relationship == 'Myself'" >Account owner</p>
+                  <p v-if="payment.traveler.relationship != 'Myself'">@{{ payment.traveler.relationship }}: <strong> @{{ payment.user.name }}</strong> </p>
+                  <small>Emergency</small>
+                  <p>Name: <strong>@{{ payment.traveler.emerg_name }}</strong> </p>
+                  <p>Phone: <strong>@{{ payment.traveler.emerg_phone }}</strong> </p>
+                </div>
               </div>
             </div>
           </td>

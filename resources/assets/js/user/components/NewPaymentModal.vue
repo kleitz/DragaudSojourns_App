@@ -69,7 +69,7 @@
               <div class="form-group" style="margin-bottom: 22px; width: 120px">
                 <label for="expiry">Expiry date</label>
                 <div class="flex-row-start">
-                <select @change="updatePayment" v-model="paymentDetails.exp_m" class="custom-select form-control" name="expiry" style="margin-right: 5px">
+                  <select @change="updatePayment" v-model="paymentDetails.exp_m" class="custom-select form-control" name="expiry" style="margin-right: 5px">
                     <option selected class="select-default">MM</option>
                     <option v-for="month in selectMonth" :value="month" > {{ month }} </option>
                   </select>
@@ -276,7 +276,7 @@ import SuccessModal from './SuccessModal.vue';
         return formatCurrency(val);
       },
       formatButton(){
-        this.calculateFee();  
+        this.calculateFee();
         return formatCurrency(this.paymentDetails.amount).toString();
       },
     },

@@ -24,6 +24,11 @@
 .full-width {
   width: 100% !important;
 }
+.auto-width {
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: auto !important;
+}
 .full-height {
   height: 100% !important;
 }
@@ -59,6 +64,14 @@
 
 .clear-img {
   transform: translateZ(0px);
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.no-padding {
+  padding: 0;
 }
 
 .flex-gen {
@@ -215,31 +228,31 @@
 }
 
 .ds-gold {
-  color: $admin-gold;
+  color: $admin-gold !important;
 }
 .ds-blue {
-  color: $admin-blue;
+  color: $admin-blue !important;
 }
 .ds-green {
-  color: $admin-green;
+  color: $admin-green !important;
 }
 .ds-red {
-  color: $admin-red;
+  color: $admin-red !important;
 }
 .ds-trueblue {
-  color: $admin-trueblue;
+  color: $admin-trueblue !important;
 }
 .ds-lightblue {
-  color: $admin-lightblue;
+  color: $admin-lightblue !important;
 }
 .ds-ulightblue {
-  color: $admin-ulightblue;
+  color: $admin-ulightblue !important;
 }
 .ds-lightgrey {
-  color: $admin-lightgrey;
+  color: $admin-lightgrey !important;
 }
 .ds-medgrey {
-  color: $admin-medgrey;
+  color: $admin-medgrey !important;
 }
 
 .button-red {

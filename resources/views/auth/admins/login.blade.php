@@ -4,10 +4,30 @@
 ])
 
 @section('content')
-  <div class="row">
-      <div class="col-xs-8 col-xs-offset-2 ">
-          <div class="panel panel-default border-panel floating-div">
-              <div class="panel-heading pwreset-heading">Administrator Login</div>
+<div style="padding: 0 15px">
+<div class="floating-div border-panel panel-default">
+  <div class="panel-heading pwreset-heading">Administrator Login</div>
+  <div class="row panel-body" style="padding: 50px 80px 30px">
+			<div class="col-xs-4">
+				<div class="flex-col-start">
+					@if (count($errors) > 0)
+					<div class="alert alert-danger" style="border-color:#c98484; margin-bottom: 15px">
+							<ul>
+									@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+									@endforeach
+							</ul>
+					</div>
+					@endif
+					<div class="panel-default border-panel panel">
+						<div class="panel-body">
+								<p style="margin:0">Use a valid username and password to access the administrator back-end.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+      <div class="col-xs-8">
+          <div class="panel panel-default border-panel">
 
               <div class="panel-body pwreset-body">
                   <form class="form-horizontal" method="POST" action="{{ route('admin.login.submit') }}">
@@ -70,6 +90,8 @@
           </div>
       </div>
   </div>
-	
+</div>
+
+</div>
 	<script>$(".login-container").hide()</script>
 @endsection

@@ -56,8 +56,10 @@
               $paid = 0;
               if ($len > 0) {
                 for ($i = 0; $i < $len; $i++ ) {
-                  $total += $trips[$i]->total;
-                  $paid += $trips[$i]->paid;
+									if ($trips[$i]->active == 1){
+	                  $total += $trips[$i]->total;
+	                  $paid += $trips[$i]->paid;
+									}
                 }
               } else {
                 $total = 1;

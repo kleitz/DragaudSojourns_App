@@ -19,7 +19,7 @@
     <table>
       <tbody>
         <tr v-for="trip, index in trips">
-          <td class="show-account-user flex-row-start" style="width: 100%">
+          <td class="show-account-user flex-row-start" style="width: 101%">
             <a class="dot-dot-dot" :href="'/admin/' + admin + '/accounts/1?search=' + trip.traveler.name" style="max-width: 165px">@{{ trip.traveler.name }}</a>
             <div class="relative admin-helper-modal hidden">
               <div class="admin-helper fix-helper">

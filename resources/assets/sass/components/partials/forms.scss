@@ -11,6 +11,12 @@
   color: #ca3c3c;
 }
 
+.ds-errmsg-gen {
+  font-size: 14px;
+  font-family: Alegreya Sans;
+  color: #ca3c3c;
+}
+
 .form-bundle {
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -327,4 +333,68 @@
 
 .material-input option {
   color: #525f64;
+}
+
+.payment-input label {
+  font-size: 16px;
+  font-weight: 400;
+}
+.payment-input .input-group-addon {
+  font-size: 22px;
+}
+.payment-input input {
+  font-size: 22px;
+  font-weight: 400;
+  padding: 22px 10px;
+}
+.payment-input select {
+  font-size: 18px;
+  font-weight: 400;
+  height: 46px;
+  width: 62px;
+  padding: 0 5px;
+}
+.payment-input h5 {
+  margin: 0px 0 0;
+  font-weight: 100;
+  font-size: 30px;
+}
+.payment-type {
+  margin-bottom: 22px;
+}
+.payment-type input {
+  position: relative;
+  top: 3px;
+  margin: 4px 2px 0 0;
+}
+.credit-input {
+    font-size: 20px;
+    font-weight: 400;
+    padding: 20px 10px;
+}
+
+.modal-popup-form label {
+  font-size: 16px;
+  font-weight: 400;
+}
+.modal-popup-form .input-group-addon {
+  font-size: 22px;
+}
+.modal-popup-form input {
+  font-size: 18px;
+  font-weight: 400;
+  padding: 22px 10px;
+}
+.modal-popup-form select {
+  font-size: 16px;
+  padding: 5px;
+}
+.modal-popup-form option {
+  padding: 5px;
+  border-radius: 3px;
+}
+.modal-popup-form h5 {
+  margin: 0px 0 0;
+  font-weight: 100;
+  font-size: 30px;
 }

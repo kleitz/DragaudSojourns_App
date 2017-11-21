@@ -32,8 +32,9 @@
 
 .admin-search-container .fa-calendar {
   right: 0;
+  top: 0;
   margin-right: 0;
-  font-size: 14px;
+  font-size: 16px;
   color: #7c8484;
 }
 
@@ -119,11 +120,28 @@ vertical-align: middle !important;
 }
 
 .admin-payments-analytics {
-  height: 215px;
+  transition: .3s ease;
+  overflow: hidden;
+  height: 0;
   margin: 15px 0 20px;
-  padding: 30px 0;
+  padding: 0;
   border-top: 1px solid #ccc;
+  border-bottom: 0px solid #ccc;
+}
+#analytics-controller{
+  font-family: Georgia;
+  margin: 20px 8px 10px;
+  padding: 0px 7px;
+  min-width: 26px;
+}
+
+.admin-payments-analytics.expanded {
+  height: 215px;
+  padding: 30px 0;
   border-bottom: 1px solid #ccc;
+}
+.admin-payments-analytics.static {
+  transition: 0s !important;
 }
 
 .admin-panalytics-total {
@@ -135,7 +153,7 @@ vertical-align: middle !important;
 
 .admin-panalytics-table {
   margin-bottom: 0 !important;
-  width: 80%;
+  width: 70%;
   position: absolute;
 }
 

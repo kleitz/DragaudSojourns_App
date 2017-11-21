@@ -114,6 +114,7 @@ Route::get('/precheck', 'UsersController@precheck')->name('precheck');
 Route::post('/register', 'UsersController@store')->name('register');
 Route::post('/login', 'UsersController@login')->name('login');
 Route::get('/logout', 'UsersController@logout')->name('logout');
+Route::get('/user/search/criteria-name', 'UsersController@searchByName')->name('user.search.byname');
 
 // PASSWORD RESET ROUTES
 Route::group(['namespace' => 'Auth'], function() {
@@ -146,15 +147,16 @@ Route::prefix('admin')->group(function(){
   Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
   Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
 
-  // - PAGES
+  // - SECTIONS
   Route::get('/{email}/dashboard', 'AdminsController@index')->name('admin.dashboard');
   Route::get('/{email}/groups/{page}', 'AdminsController@groups')->name('admin.groups');
   Route::get('/{email}/accounts/{page}', 'AdminsController@accounts')->name('admin.accounts');
   Route::get('/{email}/payments/{page}', 'AdminsController@payments')->name('admin.payments');
 
-  // - GROUP FOCUS
+  // - GROUP CRUD FUNCTIONS
   Route::get('/{email}/group/{groupNumber}', 'AdminsController@groupOverview')->name('admin.groupoverview');
   Route::get('/{email}/group/{groupNumber}/payments', 'AdminsController@groupPayments')->name('admin.grouppayments');
+  Route::get('/{email}/group/{groupNumber}/coordinators', 'AdminsController@groupCoordinators')->name('admin.groupcoordinators');
   Route::get('/{email}/new/group', 'AdminsController@groupCreate')->name('admin.groupcreate');
   Route::post('/icon/store', 'GroupsController@storeIcon')->name('icon.store');
   Route::post('/icon/destroy', 'GroupsController@destroyIcon')->name('icon.destroy');
@@ -186,4 +188,12 @@ Route::prefix('payments')->group(function(){
   Route::post('/store', 'PaymentsController@store')->name('payments.store');
   Route::post('/discount', 'PaymentsController@discount')->name('payments.discount');
   Route::get('/receipts/{verification}', 'PaymentsController@createReceipt')->name('payments.receipt');
+});
+
+
+Route::prefix('coordinators')->group(function(){
+  Route::get('/precheck', 'CoordinatorsController@precheck')->name('coordinators.precheck');
+  Route::post('/destroy', 'CoordinatorsController@destroy')->name('coordinators.destroy');
+  Route::get('/store', 'CoordinatorsController@store')->name('coordinators.store');
+  Route::get('/create', 'CoordinatorsController@create')->name('coordinators.create');
 });

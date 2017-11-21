@@ -46,14 +46,14 @@ class AccountsController extends Controller
     {
       $email =  Auth::user()->email;
       $trips = Auth::user()->trips()->orderBy('id', 'desc')->get();
-      $tripPages = ceil(count($trips) / $this->tripsPerPage);
+      $numPages = ceil(count($trips) / $this->tripsPerPage);
 
       $authUsr = Auth::user();
       $authTrips = $trips->forPage(1, $this->tripsPerPage)->all();
       $authTravs = Auth::user()->travelers()->get();
 
       if (Auth::user()){
-        return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'tripPages'));
+        return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'numPages'));
       } else {
         return redirect('/');
       }
@@ -63,25 +63,25 @@ class AccountsController extends Controller
     {
         $email =  Auth::user()->email;
         $payments = Auth::user()->payments()->orderBy('id', 'desc')->get();
-        $paymentPages = ceil(count($payments) / $this->paymentsPerPage);
+        $numPages = ceil(count($payments) / $this->paymentsPerPage);
 
         $authUsr = Auth::user();
         $authTravs = Auth::user()->travelers()->get();
         $authPayments = $payments->forPage($page, $this->paymentsPerPage)->all();
 
-        return view('user.payments', compact('authUsr', 'authTravs', 'authPayments', 'paymentPages'));
+        return view('user.payments', compact('authUsr', 'authTravs', 'authPayments', 'numPages'));
     }
 
     public function showTrips($email, $page) {
       $email =  Auth::user()->email;
       $trips = Auth::user()->trips()->orderBy('id', 'desc')->get();
-      $tripPages = ceil(count($trips) / $this->tripsPerPage);
+      $numPages = ceil(count($trips) / $this->tripsPerPage);
 
       $authUsr = Auth::user();
       $authTrips = $trips->forPage($page, $this->tripsPerPage)->all();
       $authTravs = Auth::user()->travelers()->get();
 
-      return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'tripPages'));
+      return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'numPages'));
     }
 
         /**

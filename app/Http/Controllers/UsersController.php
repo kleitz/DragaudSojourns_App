@@ -66,6 +66,12 @@ class UsersController extends Controller
       return redirect("/profile/" . auth()->user()->email . '/trips/1');
     }
 
+    // Search for all users by name
+    public function searchByName(Request $request) {
+      $users = User::where('name', 'LIKE', '%'. $request->input('name') .'%')->get()->all();
+      return $users;
+    }
+
     public function show(User $user)
     {
         //

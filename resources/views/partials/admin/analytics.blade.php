@@ -1,13 +1,23 @@
-<div class="row admin-payments-analytics full-width">
+<div id="admin-payment-analytics" class="row admin-payments-analytics full-width static">
   <div class="col-xs-3 full-height">
-    <div class="row">
+    <div class="row full-height">
       <div class="col-xs-1"> </div>
-      <div class="col-xs-9">
-        <canvas id="panalytics-chart" width="400" height="400"></canvas>
+      <div class="col-xs-9 relative full-height">
+        <div class="abs-fill">
+          <div class="abs-center flex-col-start">
+            <h4 class="text-center admin-section-subheader no-margin">{{
+                number_format($analyticsChart->credit + $analyticsChart->paypal + $analyticsChart->check)
+             }}</h4>
+             <h5 class="text-center admin-section-subtext subtext-close no-margin">payments</h5>
+          </div>
+        </div>
+        <div class="full-height flex-abs-center">
+          <canvas id="panalytics-chart" width="400" height="400"></canvas>
+        </div>
       </div>
     </div>
   </div>
-  <div class="col-xs-4 relative">
+  <div class="col-xs-4 relative full-height flex-col-center">
     <table class="table admin-panalytics-table">
       <thead style="border-bottom: 10px solid white;">
         <tr>
@@ -45,19 +55,20 @@
     </table>
   </div>
   <div class="col-xs-5 full-height">
-    <div class="flex-col-around full-height" style="padding-right: 50px">
+    <div class="col-xs-1"></div>
+    <div class="flex-col-around full-height col-xs-11" style="padding-right: 50px">
       <div class="admin-panalytics-total flex-row-start">
         <div class="col-xs-6">
-          <h4 class="ds-blue">${{ number_format($analytics->total) }}</h4>
+          <h4 class="ds-blue text-right">${{ number_format($analytics->total) }}</h4>
         </div>
         <div class="col-xs-6">
-          <label>Payments</label>
+          <label>Total income</label>
           <p>Over period</p>
         </div>
       </div>
       <div class="admin-panalytics-total" style='border-bottom: 0'>
         <div class="col-xs-6">
-          <h4 class="ds-trueblue">${{ number_format($analytics->fees) }}</h4>
+          <h4 class="ds-trueblue text-right">${{ number_format($analytics->fees) }}</h4>
         </div>
         <div class="col-xs-6">
           <label>Processing fees</label>
@@ -67,55 +78,3 @@
     </div>
   </div>
 </div>
-<script type="text/javascript">
-let summaryChartData = '';
-let paymentCfg = {
-    type: 'doughnut',
-    data: {
-        datasets: [{
-            data: [
-							analyticsChart.credit,
-							analyticsChart.paypal,
-              analyticsChart.check
-            ],
-            backgroundColor: [
-							"#559dad",
-              "#6fc99d",
-              "#cb9853",
-            ],
-            label: 'Total revenue',
-						pointHoverBackgroundColor: "#73b8c4",
-        }],
-        labels: [
-				  "Credit",
-          "Paypal",
-          "Check"
-        ]
-    },
-    options: {
-			tooltips: {
-						 enabled: true,
-						 mode: 'single',
-				 },
-				cutoutPercentage: 60,
-        responsive: true,
-        legend: {
-						display: false,
-            position: 'bottom',
-        },
-        title: {
-            display: false,
-            text: 'Total revenue'
-        },
-        animation: {
-            animateScale: false,
-            animateRotate: true
-        }
-    }
-};
-
-$(document).ready(function(){
-	var paymentCtx = document.getElementById("panalytics-chart").getContext('2d');
-	window.paymentSnapshot = new Chart(paymentCtx, paymentCfg);
-});
-</script>

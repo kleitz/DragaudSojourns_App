@@ -12,6 +12,7 @@
     "/js/admin/dashboard.js": "/js/admin/dashboard.js",
     "/js/admin/groupPayments.js": "/js/admin/groupPayments.js",
     "/js/admin/groupOverview.js": "/js/admin/groupOverview.js",
+    "/js/admin/groupCoordinators.js": "/js/admin/groupCoordinators.js",
     "/js/login/app.js": "/js/login/app.js",
     "/js/user/app.js": "/js/user/app.js",
     "/js/admin/app.js": "/js/admin/app.js"

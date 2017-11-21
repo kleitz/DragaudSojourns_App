@@ -59,5 +59,6 @@ mix.js('resources/assets/js/admin/preload.js', 'public/js/admin/preload.js')
    .js('resources/assets/js/admin/groupFocus.js', 'public/js/admin/groupFocus.js')
    .js('resources/assets/js/admin/groupOverview.js', 'public/js/admin/groupOverview.js')
    .js('resources/assets/js/admin/groupPayments.js', 'public/js/admin/groupPayments.js')
+   .js('resources/assets/js/admin/groupCoordinators.js', 'public/js/admin/groupCoordinators.js')
    .js('resources/assets/js/admin/dashboard.js', 'public/js/admin/dashboard.js')
    .sass('resources/assets/sass/admin.scss', 'public/css');

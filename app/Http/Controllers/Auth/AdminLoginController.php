@@ -44,6 +44,7 @@ class AdminLoginController extends Controller
             return redirect("/admin/" . auth('admin')->user()->email . "/dashboard");
       }
 
-      return redirect()->back()->withInput($request->only('email', 'remember'));
+      return redirect()->back()->withInput($request->only('email', 'remember'))
+          ->withErrors(["Your email or password are incorrect. Please try again with different credentials"]);
     }
 }

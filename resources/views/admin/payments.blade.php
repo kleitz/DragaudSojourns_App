@@ -58,6 +58,7 @@
  ?>
 <script type="text/javascript">
 	let analyticsChart = {!! json_encode($analyticsChart) !!};
+	let authAdmin = {!! json_encode($authAdmin) !!};
 </script>
 <div id="payment-show-app" class="container admin-container">
 <!-- PAYMENTS SEARCH RESULTS -->
@@ -74,7 +75,10 @@
     <div class="row">
 			@if (count($authPayments) != 0)
 			<div class="col-xs-12">
-				<h5 class="admin-section-subheader" style="margin-top: 20px">Analytics</h5>
+				<div class="flex-row-start">
+					<h5 class="admin-section-subheader" style="margin-top: 20px">Analytics</h5>
+					<button type="button" id="analytics-controller" class="relative button-cancel gc-button go-button">-</button>
+				</div>
 					@include('partials.admin.analytics')
 			</div>
 			@endif
@@ -90,7 +94,7 @@
         <table class="table">
           <thead style="border-bottom: 10px solid white;">
             <tr>
-              <th scope="col">Payment Id</th>
+              <th scope="col">Receipt #</th>
               <th scope="col">User Name</th>
               <th scope="col">Traveler</th>
               <th scope="col">Group #</th>

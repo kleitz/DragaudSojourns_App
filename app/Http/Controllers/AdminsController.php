@@ -272,6 +272,17 @@ class AdminsController extends Controller
       return view('admin.group.payments', compact('group', 'payments', 'authAdmin'));
     }
 
+    public function groupCoordinators($email, $groupNumber)
+    {
+      $email =  Auth::guard('admin')->user()->email;
+      $group = Group::where('number', $groupNumber)->first();
+      $coordinators = $group->coordinators()->get();
+
+      // $authAdmin = Auth::admin();
+      $authAdmin = $email;
+      return view('admin.group.coordinators', compact('group', 'coordinators', 'authAdmin'));
+    }
+
     public function groupCreate($email)
     {
       // $email =  Auth::admin()->email;

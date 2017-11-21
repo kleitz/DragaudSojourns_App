@@ -7,20 +7,18 @@
  ?>
 <nav aria-label="...">
   <ul class="pagination pagination-sm">
-    @for ($i = 1; $i <= $tripPages; $i++)
-      @if ($i == 1 || $i == $tripPages || ($i > $curPage - 3 && $i < $curPage +3) || $tripPages < 8 ||
-           ($curPage < 5 && $i < 7 && $tripPages > 7) || ($tripPages > 6 && $i > $tripPages - 6 && $curPage > $tripPages - 4)
-           )
-        @if ($i != $curPage)
-        <li class="page-item">
-          <a class="page-link" href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">{{ $i }}</a>
-        </li>
-        @else
-        <li class="page-item">
-          <a class="page-link page-active"  href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">{{ $i }}<span class="sr-only">(current)</span></a>
-        </li>
-        @endif
-      @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $tripPages - 4 && $i > $tripPages - 7) )
+    @for ($i = 1; $i <= $numPages; $i++)
+      @if ($i == 1 || $i == $numPages || ($i > $curPage - 3 && $i < $curPage +3) || $numPages < 8 ||
+           ($curPage < 5 && $i < 7 && $numPages > 7) || ($numPages > 6 && $i > $numPages - 6 && $curPage > $numPages - 4))
+       <li class="page-item">
+         <a class="page-link @if($i == $curPage) page-active @endif" href="/profile/{{ auth()->user()->email }}/trips/{{ $i }}">
+           {{ $i }}
+           @if ($i == $curPage)
+           <span class="sr-only">(current)</span>
+           @endif
+         </a>
+       </li>
+      @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $numPages - 4 && $i > $numPages - 7) )
         <li class="">
           <a class="" style="border: 0px solid"  href="#">...</a>
         </li>
@@ -206,14 +204,14 @@
   @endif
 </div>
 <div class="full-width flex-row-between page-bottom">
-  @if ($tripPages > 1)
+  @if ($numPages > 1)
   <div>
     @if ($curPage > 1)
     <a href="/profile/{{ auth()->user()->email }}/trips/{{ $curPage - 1 }}">Previous page</a>
     @endif
   </div>
   <div>
-    @if ($curPage != $tripPages)
+    @if ($curPage != $numPages)
     <a href="/profile/{{ auth()->user()->email }}/trips/{{ $curPage + 1 }}">Next page</a>
     @endif
   </div>

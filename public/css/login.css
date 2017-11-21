@@ -372,6 +372,12 @@
   width: 100% !important;
 }
 
+.auto-width {
+  width: auto !important;
+  max-width: 100% !important;
+  min-width: auto !important;
+}
+
 .full-height {
   height: 100% !important;
 }
@@ -410,6 +416,14 @@
 .clear-img {
   -webkit-transform: translateZ(0px);
           transform: translateZ(0px);
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.no-padding {
+  padding: 0;
 }
 
 .flex-gen {
@@ -659,39 +673,39 @@
 }
 
 .ds-gold {
-  color: #cb9853;
+  color: #cb9853 !important;
 }
 
 .ds-blue {
-  color: #559dad;
+  color: #559dad !important;
 }
 
 .ds-green {
-  color: #6fc99d;
+  color: #6fc99d !important;
 }
 
 .ds-red {
-  color: #c43d4b;
+  color: #c43d4b !important;
 }
 
 .ds-trueblue {
-  color: #556fad;
+  color: #527cbd !important;
 }
 
 .ds-lightblue {
-  color: #79aeb9;
+  color: #79aeb9 !important;
 }
 
 .ds-ulightblue {
-  color: #eaeeef;
+  color: #eaeeef !important;
 }
 
 .ds-lightgrey {
-  color: #a9a9a9;
+  color: #a9a9a9 !important;
 }
 
 .ds-medgrey {
-  color: #515a5a;
+  color: #515a5a !important;
 }
 
 .button-red {
@@ -1074,51 +1088,6 @@ th {
           box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.payment-input label {
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.payment-input .input-group-addon {
-  font-size: 22px;
-}
-
-.payment-input input {
-  font-size: 22px;
-  font-weight: 400;
-  padding: 22px 10px;
-}
-
-.payment-input select {
-  font-size: 18px;
-  font-weight: 400;
-  height: 46px;
-  width: 62px;
-  padding: 0 5px;
-}
-
-.payment-input h5 {
-  margin: 0px 0 0;
-  font-weight: 100;
-  font-size: 30px;
-}
-
-.payment-type {
-  margin-bottom: 22px;
-}
-
-.payment-type input {
-  position: relative;
-  top: 3px;
-  margin: 4px 2px 0 0;
-}
-
-.credit-input {
-  font-size: 20px;
-  font-weight: 400;
-  padding: 20px 10px;
-}
-
 .pass-reveal img {
   width: 16px;
   -webkit-transform: translateZ(0px);
@@ -1139,6 +1108,12 @@ th {
   width: 100%;
   display: none;
   top: -8px;
+  font-size: 14px;
+  font-family: Alegreya Sans;
+  color: #ca3c3c;
+}
+
+.ds-errmsg-gen {
   font-size: 14px;
   font-family: Alegreya Sans;
   color: #ca3c3c;
@@ -1486,6 +1461,82 @@ th {
 
 .material-input option {
   color: #525f64;
+}
+
+.payment-input label {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.payment-input .input-group-addon {
+  font-size: 22px;
+}
+
+.payment-input input {
+  font-size: 22px;
+  font-weight: 400;
+  padding: 22px 10px;
+}
+
+.payment-input select {
+  font-size: 18px;
+  font-weight: 400;
+  height: 46px;
+  width: 62px;
+  padding: 0 5px;
+}
+
+.payment-input h5 {
+  margin: 0px 0 0;
+  font-weight: 100;
+  font-size: 30px;
+}
+
+.payment-type {
+  margin-bottom: 22px;
+}
+
+.payment-type input {
+  position: relative;
+  top: 3px;
+  margin: 4px 2px 0 0;
+}
+
+.credit-input {
+  font-size: 20px;
+  font-weight: 400;
+  padding: 20px 10px;
+}
+
+.modal-popup-form label {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.modal-popup-form .input-group-addon {
+  font-size: 22px;
+}
+
+.modal-popup-form input {
+  font-size: 18px;
+  font-weight: 400;
+  padding: 22px 10px;
+}
+
+.modal-popup-form select {
+  font-size: 16px;
+  padding: 5px;
+}
+
+.modal-popup-form option {
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.modal-popup-form h5 {
+  margin: 0px 0 0;
+  font-weight: 100;
+  font-size: 30px;
 }
 
 .overlay-near-shadow {

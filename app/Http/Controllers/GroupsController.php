@@ -71,8 +71,7 @@ class GroupsController extends Controller
           'message' => $request->input('message')
         ]);
 
-        // $email =  Auth::admin()->email;
-        $email = 'jjvannatta88';
+        $email = Auth::admin()->email;
         return redirect("/admin/$email/group/$groupNum");
     }
 

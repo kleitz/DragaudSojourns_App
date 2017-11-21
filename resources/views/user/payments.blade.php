@@ -4,7 +4,7 @@
 ])
 
 @section('content')
-	@include('layouts.user.details')
+	@include('partials.user.details')
 	<div class="col-xs-9">
 		<div class="row">
 			<div class="col-xs-12">
@@ -23,7 +23,7 @@
 				</ul>
 			</div>
 			<div class="col-xs-12">
-				@include('layouts.user.payments')
+				@include('partials.user.payments')
 			</div>
 		</div>
 	</div>

@@ -25,7 +25,7 @@
 				<nav class="split-panel-nav">
 					<a class="split-panel-link" href="/admin/{{ $authAdmin }}/group/{{ $group->number }}">Overview</a>
 					<a class="split-panel-link active" href="/admin/{{ $authAdmin }}/group/{{ $group->number }}/payments">Payments</a>
-					<a class="split-panel-link" href="/admin/{{ $authAdmin }}/group/{{ $group->number }}/liasons">Coordinators</a>
+					<a class="split-panel-link" href="/admin/{{ $authAdmin }}/group/{{ $group->number }}/coordinators">Coordinators</a>
 					<div id="group-nav-focus" class="split-nav-focus"></div>
 				</nav>
 			</div>

@@ -7,20 +7,18 @@
  ?>
 <nav aria-label="...">
   <ul class="pagination pagination-sm">
-    @for ($i = 1; $i <= $paymentPages; $i++)
-      @if ($i == 1 || $i == $paymentPages || ($i > $curPage - 3 && $i < $curPage +3) || $paymentPages < 8 ||
-           ($curPage < 5 && $i < 7 && $paymentPages > 7) || ($paymentPages > 6 && $i > $paymentPages - 6 && $curPage > $paymentPages - 4)
-           )
-        @if ($i != $curPage)
-        <li class="page-item">
-          <a class="page-link" href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">{{ $i }}</a>
-        </li>
-        @else
-        <li class="page-item">
-          <a class="page-link page-active"  href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">{{ $i }}<span class="sr-only">(current)</span></a>
-        </li>
-        @endif
-      @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $paymentPages - 4 && $i > $paymentPages - 7) )
+    @for ($i = 1; $i <= $numPages; $i++)
+      @if ($i == 1 || $i == $numPages || ($i > $curPage - 3 && $i < $curPage +3) || $numPages < 8 ||
+           ($curPage < 5 && $i < 7 && $numPages > 7) || ($numPages > 6 && $i > $numPages - 6 && $curPage > $numPages - 4))
+      <li class="page-item">
+        <a class="page-link @if($i == $curPage) page-active @endif" href="/profile/{{ auth()->user()->email }}/payments/{{ $i }}">
+          {{ $i }}
+          @if ($i == $curPage)
+          <span class="sr-only">(current)</span>
+          @endif
+        </a>
+      </li>
+      @elseif ($i === $curPage - 3 || $i === $curPage + 3 || ($curPage < 4 && $i < 8) ||  ($curPage > $numPages - 4 && $i > $numPages - 7) )
       <li class="">
         <a class="" style="border: 0px solid"  href="#">...</a>
         </li>
@@ -74,14 +72,14 @@
   @endif
 </div>
 <div class="full-width flex-row-between page-bottom">
-  @if ($paymentPages > 1)
+  @if ($numPages > 1)
   <div>
     @if ($curPage > 1)
     <a href="/profile/{{ auth()->user()->email }}/payments/{{ $curPage - 1 }}">Previous page</a>
     @endif
   </div>
   <div>
-    @if ($curPage != $paymentPages)
+    @if ($curPage != $numPages)
     <a href="/profile/{{ auth()->user()->email }}/payments/{{ $curPage + 1 }}">Next page</a>
     @endif
   </div>

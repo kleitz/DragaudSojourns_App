@@ -37,7 +37,7 @@
         </label>
       </div>
       <!-- PAYPAL CONTINUE -->
-      <div class="panel panel-secure-inner border-panel-light payment-input">
+      <div class="panel panel-secure-inner border-panel-light modal-popup-form">
         <div class="form-group">
           <label for="method">Method</label>
           <input v-model="payment.method" type="text" class="form-control" name="method" @keyup="checkPayment">
