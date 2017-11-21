@@ -10,6 +10,7 @@ use App\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 use Notification;
@@ -45,6 +46,13 @@ class CoordinatorsController extends Controller
      */
     public function create(Request $request)
     {
+      $reset_token = hash_hmac('sha256', Str::random(40), env('APP_KEY'));
+      DB::table('password_resets')->insert([
+          'email' => $request->input('user_email'),
+          'token' => $reset_token,
+          'created_at' => new Carbon,
+      ]);
+
       $user = User::create([
         'name' => $request->input('user_name'),
         'email' => $request->input('user_email'),
@@ -62,19 +70,11 @@ class CoordinatorsController extends Controller
 
       $group = Group::find($request->input('group_id'));
 
-      $reset_token = Hash::make(strtolower(str_random(64)));
-      DB::table('password_resets')->insert([
-          'email' => $request->input('user_email'),
-          'token' => $reset_token,
-          'created_at' => Carbon::now(),
-      ]);
-
       Notification::route('mail', $request->input('user_email'))
       ->notify(new NewGroupCoordinator($reset_token, $request->input('user_email'), $user, $group));
 
-      $groupNum = $request->input('group_number');
-      $email = Auth::guard('admin')->user()->email;
-      return redirect("/admin/$email/group/$groupNum/coordinators");
+
+      return redirect()->back();
     }
 
     /**
