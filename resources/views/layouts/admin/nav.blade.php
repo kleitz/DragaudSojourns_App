@@ -49,14 +49,14 @@
       </a>
     </li>
     <li>
-      <a href="#" class="flex-row-start">
+      <a href="/admin/{{ auth('admin')->user()->email }}/settings/" class="flex-row-start">
         <div class="admin-nav-icon">
           @include('partials.vector.system')
         </div>
-        @if (Request::is('*/system/*'))
-        <p class="flex-col-center admin-nav-active">System</p>
+        @if (Request::is('*/settings/*'))
+        <p class="flex-col-center admin-nav-active">Settings</p>
         @else
-        <p class="flex-col-center">System</p>
+        <p class="flex-col-center">Settings</p>
         @endif
       </a>
     </li>

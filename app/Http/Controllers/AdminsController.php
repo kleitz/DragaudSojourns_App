@@ -9,6 +9,7 @@ use App\User;
 use App\Trip;
 use App\Traveler;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -291,15 +292,10 @@ class AdminsController extends Controller
       return view('admin.group.create', compact('authAdmin'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
+    public function settings($email)
     {
-        //
+      $authAdmin = Auth::guard('admin')->user();
+      return view('admin.settings', compact('authAdmin'));
     }
 
     /**
@@ -309,10 +305,34 @@ class AdminsController extends Controller
      * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
+    public function update(Request $request)
     {
-        //
+        $authAdmin = Auth::guard('admin')->user();
+
+        $authAdmin->name = $request->input('name');
+        $authAdmin->email = $request->input('email');
+        return view('admin.settings', compact('authAdmin'));
     }
+
+    public function edit(Request $request)
+    {
+        $authAdmin = Auth::guard('admin')->user();
+        $currPass = $request->input('current-pass');
+        $newPass = $request->input('new-pass');
+        $checkPass = $request->input('confirm-pass');
+        if (Hash::check($currPass, $authAdmin->password))
+        {
+          if ($newPass === $checkPass) {
+            $authAdmin->password = Hash::make($newPass);
+            return view('admin.settings', compact('authAdmin'));
+          }
+          return view('admin.settings', compact('authAdmin'))
+              ->withErrors(["Unable to update password: The passwords do not match."]);
+        }
+        return view('admin.settings', compact('authAdmin'))
+            ->withErrors(["Unable to update password: Current password is invalid"]);
+    }
+
 
     /**
      * Remove the specified resource from storage.

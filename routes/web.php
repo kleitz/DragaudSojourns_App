@@ -161,6 +161,11 @@ Route::prefix('admin')->group(function(){
   Route::post('/icon/store', 'GroupsController@storeIcon')->name('icon.store');
   Route::post('/icon/destroy', 'GroupsController@destroyIcon')->name('icon.destroy');
   Route::get('/{email}/report/{group_id}', 'GroupsController@bookingReport')->name('booking.report');
+
+  // - SETTINGS
+  Route::get('/{email}/settings/', 'AdminsController@settings')->name('admin.settings');
+  Route::post('/profile/update', 'AdminsController@update')->name('admin.update');
+  Route::post('/auth/edit', 'AdminsController@edit')->name('admin.edit');
 });
 
 // TRAVELERS ROUTES

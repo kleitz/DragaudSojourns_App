@@ -1,5 +1,5 @@
 @extends('layouts.admin.master', [
-	'title' => 'Group ' . $group->number . ' | Dragaud Custom Sojourns',
+	'title' => 'Coordinators: Group ' . $group->number . ' | Dragaud Custom Sojourns',
 ])
 
 @section('content')
