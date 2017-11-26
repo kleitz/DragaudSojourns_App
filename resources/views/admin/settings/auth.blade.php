@@ -84,7 +84,7 @@
 	<div class="admin-floating-panel z-depth-1 relative" style="top: 0px; padding: 35px">
 		<h4 class="admin-section-subheader" style="margin-top: 10px">System control </h4>
 		<div class="form-group form-inline inline-material-large flex-row-start" style="margin-bottom: 15px !important">
-			<label for="number">Accounts</label>
+			<label for="number">Administrator accounts</label>
 		</div>
 		<div class="row linear-expander expanded full-width static" style="padding: 0; border-color: transparent">
 			@foreach ($adminAccounts as $admin)
@@ -120,7 +120,7 @@
 			<div class="row linear-expander full-width static">
 
 				<div id="admin-settings-newlabel" class="form-group form-inline inline-material-large flex-row-start hidden" style="margin-bottom: 15px !important">
-					<label for="number">Create new</label>
+					<label for="number">Create new admin</label>
 				</div>
 
 				<div class="form-group">
