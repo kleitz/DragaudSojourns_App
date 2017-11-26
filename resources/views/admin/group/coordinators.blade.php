@@ -10,6 +10,10 @@
 		$iconList[$num] = $icon;
 		$num++;
 	}
+
+	$systemLevel = true;
+	if (\Auth::guard('admin')->user()->level != 'System Administrator')
+		$systemLevel = false;
 ?>
 <script>
 // PHP VARIABLES -> JAVASCRIPT
@@ -32,32 +36,14 @@
 			<div class="split-panel-content">
 				<div class="row">
 					<div class="col-xs-4" id="group-focus-app">
-						<div id="goverlay" class="dark-overlay-gen fix-fill hidden" style="overflow-y: hidden">
-							<!-- include icon picker -->
-							<icon-select ref="iconselect" @close="hideIconSelect" @location="updateIconLoc" @name="updateIconName"></icon-select>
-						</div>
-						<div :class="{'gpanel-expand z-depth-2' : groupEdit == true, 'panel panel-secure border-panel-light gpanel' : true}">
-							<div class="panel-heading">
-								<div class="flex-row-between">
-									<h5 style="margin: 7px 0; font-weight: 300">Group @{{ groupIn.number }}</h5>
-									<a href="javascript:;" class="gfocus-button ds-button button-cancel" v-if="groupEdit == false" @click="emitEdit">Edit</a>
-									<a href="javascript:;" class="gfocus-button ds-button gc-delete" v-if="groupEdit == true" @click="cancelEdit">Cancel</a>
-								</div>
-							</div>
-							<div class="panel-body gfocus-body">
-								<div v-if="groupEdit == false">
-									@include('partials.admin.group.before')
-								</div>
-								<div v-if="groupEdit == true">
-									@include('partials.admin.group.after')
-								</div>
-							</div>
-						</div>
+						@include('partials.admin.group.focus')
 					</div>
 					<div class="col-xs-8" id="group-coordinators-app">
+					  @if ($systemLevel)
 						<div id="coverlay" class="dark-overlay-gen fix-fill hidden">
 						</div>
 						@include('partials.admin.group.coordinatorMod')
+						@endif
 						<?php
 							$coordinatorsLoaded = array();
 							foreach ($coordinators as $coordinator) {

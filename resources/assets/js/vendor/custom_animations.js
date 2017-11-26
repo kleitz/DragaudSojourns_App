@@ -161,3 +161,10 @@ $(document).ready(function(){
   });
 
 });
+
+// Linear expander
+
+$(".linear-expander-controller").click(function(){
+  $(".linear-expander").removeClass('static');
+  $(".linear-expander").toggleClass('expanded');
+})

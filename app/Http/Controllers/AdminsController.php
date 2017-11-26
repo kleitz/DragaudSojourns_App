@@ -18,21 +18,16 @@ use Auth;
 
 class AdminsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
      public function __construct()
      {
        $this->middleware('auth:admin');
      }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+     * Load admin dashboard
+   */
+
     public function index($email)
     {
         $email =  Auth::guard('admin')->user()->email;
@@ -83,35 +78,6 @@ class AdminsController extends Controller
         $authAdmin = $email;
         return view('admin.dashboard', compact('authAdmin', 'recentGroups', 'accountSnapshot', 'paymentSnapshot', 'tripsSnapshot'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-
-    public function show(Admin $admin)
-    {
-        //
-    }
-
-    /**
-      * Display and search all group information
-      * @param $email = authenticated admin
-      * @param $page = sorted information by page
-    */
 
     public $groupsPerPage = 10;
     public function groups($email, $page)
@@ -170,7 +136,6 @@ class AdminsController extends Controller
       }
       $numPages = ceil(count($accounts) / $this->accountsPerPage);
 
-      // $authAdmin = Auth::admin();
       $authAdmin = $email;
       $authAccounts = $accounts->forPage($page, $this->accountsPerPage)->all();
 
@@ -252,7 +217,6 @@ class AdminsController extends Controller
       $group = Group::where('number', $groupNumber)->first();
       $trips = $group->trips()->get();
 
-      // $authAdmin = Auth::admin();
       $authAdmin = $email;
       return view('admin.group.overview', compact('group', 'trips', 'authAdmin'));
     }
@@ -268,10 +232,15 @@ class AdminsController extends Controller
            ->where('number', '=', $groupNumber)
            ->orderBy('id', 'desc')->get();
 
-      // $authAdmin = Auth::admin();
       $authAdmin = $email;
       return view('admin.group.payments', compact('group', 'payments', 'authAdmin'));
     }
+
+    /**
+      * Display all group coordinator information
+      * @param $email = authenticated admin
+      * @param $page = sorted information by page
+    */
 
     public function groupCoordinators($email, $groupNumber)
     {
@@ -279,70 +248,172 @@ class AdminsController extends Controller
       $group = Group::where('number', $groupNumber)->first();
       $coordinators = $group->coordinators()->get();
 
-      // $authAdmin = Auth::admin();
       $authAdmin = $email;
       return view('admin.group.coordinators', compact('group', 'coordinators', 'authAdmin'));
     }
 
+    /**
+      * Display group creation page
+      * @param $email = authenticated admin
+    */
+
     public function groupCreate($email)
     {
-      // $email =  Auth::admin()->email;
-      $email =  Auth::guard('admin')->user()->email;
+      $email = Auth::guard('admin')->user()->email;
+      $level = Auth::guard('admin')->user()->level;
+      if ($level != 'System Administrator')
+        return redirect("/admin/$email/dashboard");
+
       $authAdmin = $email;
       return view('admin.group.create', compact('authAdmin'));
     }
 
+    /**
+      * Display admin settings
+      * @param $email = authenticated admin
+    */
+
     public function settings($email)
     {
       $authAdmin = Auth::guard('admin')->user();
-      return view('admin.settings', compact('authAdmin'));
+      return view('admin.settings.auth', compact('authAdmin'));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
+      * Update admin profile details
+    */
+
     public function update(Request $request)
     {
         $authAdmin = Auth::guard('admin')->user();
+        $redirUrl = "/admin/$authAdmin->email/settings/";
+        if ($request->has('admin_id')) {
+          $authAdmin = Admin::find($request->input('admin_id'));
+          $redirUrl = "/admin/$authAdmin->email/system/update/$authAdmin->id";
+        }
+        if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+          return redirect($redirUrl)
+              ->withErrors(["<strong>Error!</strong> Could not update account. Email address must follow 'example@mail.com'"]);
+        }
+
+        if (strlen($request->input('name')) < 1) {
+          return redirect($redirUrl)
+              ->withErrors(["<strong>Error!</strong> Could not update account. User name is required"]);
+        }
 
         $authAdmin->name = $request->input('name');
-        $authAdmin->email = $request->input('email');
-        return view('admin.settings', compact('authAdmin'));
+        if ($request->input('email') != $authAdmin->email)
+          $authAdmin->email = $request->input('email');
+        $authAdmin->level = $request->input('level');
+        $authAdmin->save();
+        return redirect($redirUrl)->with('message', 'Profile has been updated');
     }
+
+    /**
+      * Update admin password details
+    */
 
     public function edit(Request $request)
     {
         $authAdmin = Auth::guard('admin')->user();
+        $redirUrl = "/admin/$authAdmin->email/settings/";
+        $altPass = false;
+        $throughPass = '';
         $currPass = $request->input('current-pass');
         $newPass = $request->input('new-pass');
         $checkPass = $request->input('confirm-pass');
-        if (Hash::check($currPass, $authAdmin->password))
+
+        if ($request->has('admin_id')) {
+          $altPass = true;
+          $checkPass = $request->input('new-pass');
+          $authAdmin = Admin::find($request->input('admin_id'));
+          $throughPass = $request->input('new-pass');
+          $redirUrl = "/admin/$authAdmin->email/system/update/$authAdmin->id";
+        }
+
+        if (Hash::check($currPass, $authAdmin->password) || $altPass == true)
         {
           if ($newPass === $checkPass) {
+            $uppercase = preg_match('@[A-Z]@', $newPass);
+            $lowercase = preg_match('@[a-z]@', $newPass);
+            $number    = preg_match('@[0-9]@', $newPass);
+
+            if(!$uppercase || !$lowercase || !$number || strlen($newPass) < 8) {
+              return redirect($redirUrl)
+                  ->withErrors(["<strong>Error!</strong> Password must have at least 8 characters, include an uppercase letter, lowercase letter, and one number."]);
+            }
             $authAdmin->password = Hash::make($newPass);
-            return view('admin.settings', compact('authAdmin'));
+            $authAdmin->save();
+            return redirect($redirUrl)->with('message', 'Password has been changed')->with('throughPass', $throughPass);
           }
-          return view('admin.settings', compact('authAdmin'))
-              ->withErrors(["Unable to update password: The passwords do not match."]);
+          return redirect($redirUrl)
+              ->withErrors(["<strong>Error!</strong> Could not update Password. The passwords do not match."]);
         }
-        return view('admin.settings', compact('authAdmin'))
-            ->withErrors(["Unable to update password: Current password is invalid"]);
+        return redirect($redirUrl)
+            ->withErrors(["<strong>Error!</strong> Could not update Password. The current password entered is incorrect"]);
     }
 
+    /**
+      * Admin create new admin
+    */
+
+    public function store(Request $request)
+    {
+      $authAdmin = Auth::guard('admin')->user();
+      $tempPass = $request->input('password');
+      $uppercase = preg_match('@[A-Z]@', $tempPass);
+      $lowercase = preg_match('@[a-z]@', $tempPass);
+      $number    = preg_match('@[0-9]@', $tempPass);
+      if (strlen($request->input('name')) < 1 || strlen($request->input('email')) < 1 || strlen($request->input('password')) < 1) {
+        return redirect("/admin/$authAdmin->email/settings/")
+            ->withErrors(["<strong>Error: Could not create new admin. </strong><br/> All fields in 'Create new' are required to create a new administrator"]);
+      }
+
+      if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL)) {
+        return redirect("/admin/$authAdmin->email/settings/")
+            ->withErrors(["<strong>Error: Could not create new admin. </strong><br/>Email address must follow 'example@mail.com'"]);
+      }
+
+      if(!$uppercase || !$lowercase || !$number || strlen($tempPass) < 8) {
+        return redirect("/admin/$authAdmin->email/settings/")
+            ->withErrors(["<strong>Error: Could not create new admin. </strong><br/>Temporary password must have at least 8 characters, include an uppercase letter, lowercase letter, and one number."]);
+      }
+
+      $admin = Admin::create([
+        'name' => $request->input('name'),
+        'password' => Hash::make($tempPass),
+        'email' => $request->input('email'),
+        'level' => $request->input('level')
+      ]);
+
+      return redirect("/admin/$authAdmin->email/settings/")->with('message', 'New administrator has been created');
+
+    }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Admin $admin)
+      * System admin view specific admin
+    */
+
+    public function specific($email, $admin_id)
     {
-        //
+      $authAdmin = Auth::guard('admin')->user();
+        $specAdmin = Admin::find($admin_id);
+      if ($authAdmin->level != 'System Administrator' || $authAdmin->id == $specAdmin->id)
+        return redirect("/admin/$authAdmin->email/settings/");
+
+      return view('admin.settings.specific', compact('authAdmin', 'specAdmin'));
+    }
+
+    /**
+      * Admin delete admin account
+    */
+
+    public function destroy($admin_id)
+    {
+      $admin = Admin::find($admin_id);
+      $authAdmin = Auth::guard('admin')->user();
+      $admin->delete();
+      return redirect("/admin/$authAdmin->email/settings/");
     }
 
     public function logout(Request $request)

@@ -14,6 +14,34 @@
   margin: -1px auto -1px;
 }
 
+.linear-expander {
+
+}
+
+.linear-expander {
+  transition: .3s ease;
+  overflow: hidden;
+  height: 0;
+  margin: 15px 0 20px;
+  padding: 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 0px solid #ccc;
+}
+
+.linear-expander-controller{
+}
+
+.linear-expander.expanded {
+  overflow: visible;
+  height: auto;
+  padding: 30px 0;
+  border-bottom: 1px solid #ccc;
+}
+.linear-expander.static {
+  transition: 0s !important;
+}
+
+
 // ANIMATED ARROWS
 
 .flex-arrow {

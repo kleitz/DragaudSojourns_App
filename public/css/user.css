@@ -15207,6 +15207,29 @@ button.picker__close:focus {
   margin: -1px auto -1px;
 }
 
+.linear-expander {
+  -webkit-transition: .3s ease;
+  transition: .3s ease;
+  overflow: hidden;
+  height: 0;
+  margin: 15px 0 20px;
+  padding: 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 0px solid #ccc;
+}
+
+.linear-expander.expanded {
+  overflow: visible;
+  height: auto;
+  padding: 30px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.linear-expander.static {
+  -webkit-transition: 0s !important;
+  transition: 0s !important;
+}
+
 .flex-arrow {
   width: 16px;
   position: relative;
@@ -15794,6 +15817,10 @@ button.picker__close:focus {
 
 .ds-button:focus:hover {
   color: #333;
+}
+
+.ds-button-slim {
+  padding: 3px 10px;
 }
 
 .container {

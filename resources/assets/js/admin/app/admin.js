@@ -18,6 +18,16 @@ $(document).ready(function(){
         iconsLibrary: 'fontawesome'
     });
 
+  $('#admin-settings-newbutton').click(function(){
+      $('#admin-settings-newbutton').addClass('hidden');
+      $('#admin-settings-newlabel').removeClass('hidden');
+  });
+
+  $('#admin-settings-newcancel').click(function(){
+      $('#admin-settings-newlabel').addClass('hidden');
+      $('#admin-settings-newbutton').removeClass('hidden');
+  });
+
   // Initiate groups progress bars
   if ($(".progress-bar-fg").length) {
     let pBars = document.getElementsByClassName('progress-bar-fg');
@@ -141,6 +151,8 @@ if ($("#payment-show-app").length){
         $("#gfocus-icon-show").addClass('hidden');
       })
   }
+
+  $('.generate-pass-output').val(generatePass(6));
 });
 
 // File upload behavior
@@ -245,3 +257,19 @@ function initAnalyiticsChart(){
   window.paymentSnapshot = new Chart(paymentCtx, paymentCfg);
   $("#panalytics-chart").addClass('absolute');
 }
+
+function generatePass(num) {
+  let today = new Date();
+  let text = "Dragaud." + today.getFullYear() + '.';
+  let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (let i = 0; i < num; i++){
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+
+  return text;
+}
+
+$('.generate-pass-controller').click(function(){
+  $('.generate-pass-output').val(generatePass(6));
+})

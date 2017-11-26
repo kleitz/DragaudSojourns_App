@@ -49,19 +49,28 @@
                   </div>
                 </div>
               </div>
+              @if ($systemLevel)
               <button type="button" name="newtrip" class="button-cancel gc-button go-button" @click="adminPayment(index)">+</button>
+              @endif
             </div>
           </td>
           <td class="" width="100px">
             <del class="del-content"v-if="trip.active == 0">@{{ trip.insurance }}</del>
             <div v-if="trip.active == 1">@{{ trip.insurance }}</div>
           </td>
+          @if ($systemLevel)
           <td width="68px" style="padding: 0 5px">
             <label class="status-switch">
               <input type="checkbox" :checked="trip.active == 1" @click="toggleActive(index)">
               <span class="status-slider status-round"></span>
             </label>
           </td>
+          @else
+          <td width="68px">
+            <div v-if="trip.active == 1">Yes</div>
+            <div v-if="trip.active == 0">No</div>
+          </td>
+          @endif
         </tr>
         @if (count($trips) < 9)
           @for ($i = 0; $i < 9 - count($trips) ; $i++)

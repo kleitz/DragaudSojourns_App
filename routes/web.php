@@ -165,7 +165,10 @@ Route::prefix('admin')->group(function(){
   // - SETTINGS
   Route::get('/{email}/settings/', 'AdminsController@settings')->name('admin.settings');
   Route::post('/profile/update', 'AdminsController@update')->name('admin.update');
+  Route::post('/system/store', 'AdminsController@store')->name('admin.store');
+  Route::get('/system/destroy/{admin_id}', 'AdminsController@destroy')->name('admin.destroy');
   Route::post('/auth/edit', 'AdminsController@edit')->name('admin.edit');
+  Route::get('/{email}/system/update/{admin_id}', 'AdminsController@specific')->name('admin.specific');
 });
 
 // TRAVELERS ROUTES

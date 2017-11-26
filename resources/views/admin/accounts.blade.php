@@ -42,7 +42,7 @@
             <tr>
               <th scope="col">Account #</th>
               <th scope="col">Full Name</th>
-              <th scope="col">Travelers</th>
+              <th scope="col" style="min-width: 200px">Travelers</th>
               <th scope="col">Created</th>
             </tr>
           </thead>

@@ -40,9 +40,14 @@
             @{{ coordinator.created }}
           </td>
           <td width="20%" class="">
+      			@if ($systemLevel)
             <a href="javascript:;" class="gfocus-button ds-button button-cancel auto-width" @click="removeCoordinator(index)">Remove</a>
+            @else
+            --
+            @endif
           </td>
         </tr>
+    		@if ($systemLevel)
         <tr>
           <td width="30%">--</td>
           <td width="30%">--</td>
@@ -51,6 +56,7 @@
             <a href="javascript:;" class="gfocus-button ds-button button-cancel auto-width" style="padding: 5px 12px" @click="newCoordinator">Add new</a>
           </td>
         </tr>
+        @endif
         @if (count($coordinators) < 8)
           @for ($i = 0; $i < 8 - count($coordinators) ; $i++)
           <tr>
