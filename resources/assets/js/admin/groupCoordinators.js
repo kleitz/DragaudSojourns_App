@@ -17,6 +17,12 @@ const groupCoordinatorsApp = new Vue({
       selectUser: '',
     },
     methods: {
+      preventEnter(event){
+        if (event.keyCode === 13 || event.which === 13) {
+          event.preventDefault();
+          return false;
+        }
+      },
       newCoordinator(){
         fadeIn('#coverlay');
         fadeIn('#new-coordinator-modal');
@@ -124,7 +130,7 @@ const groupCoordinatorsApp = new Vue({
               (newUser.home.length > 12 && newUser.cell == '') ||
               (newUser.home == '' && newUser.cell.length > 12) ||
               (newUser.home.length > 12 && newUser.cell.length > 12)
-            ) 
+            )
             && newUser.street != '' && newUser.zip.length > 4)
         {
           this.coordinator.valid = true;

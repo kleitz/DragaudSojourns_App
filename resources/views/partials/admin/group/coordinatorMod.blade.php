@@ -24,7 +24,7 @@
 
         <!-- ADD NEW -->
         <div v-if="coordinator.new.active == 1" class="panel panel-secure-inner border-panel-light modal-popup-form">
-          <form action="/coordinators/create" method="GET" enctype="multipart/form-data">
+          <form action="/coordinators/create" method="GET" enctype="multipart/form-data" @keyup="preventEnter" @keypress="preventEnter">
             <!-- New user name -->
             <div class="form-group">
               <label for="newuser-name">Full name</label>
@@ -80,7 +80,7 @@
             </div>
           </div>
           <!-- Results of seach -->
-          <form action="/coordinators/store" method="GET" enctype="multipart/form-data">
+          <form action="/coordinators/store" method="GET" enctype="multipart/form-data" @keyup="preventEnter" @keypress="preventEnter">
             <div class="form-group">
               <label for="selectuser">Select user</label>
               <select @change="updateSelected" v-model="coordinator.existing.selected" class="custom-select form-control" name="selectuser" size="4">

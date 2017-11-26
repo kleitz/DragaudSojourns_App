@@ -95,6 +95,12 @@ var groupCoordinatorsApp = new Vue({
     selectUser: ''
   },
   methods: {
+    preventEnter: function preventEnter(event) {
+      if (event.keyCode === 13 || event.which === 13) {
+        event.preventDefault();
+        return false;
+      }
+    },
     newCoordinator: function newCoordinator() {
       fadeIn('#coverlay');
       fadeIn('#new-coordinator-modal');
