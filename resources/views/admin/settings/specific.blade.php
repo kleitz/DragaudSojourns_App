@@ -83,7 +83,7 @@
 
 			<input type="hidden" name="admin_id" value="{{ $specAdmin->id }}">
 
-      <button type="submit" name="button" class="ds-button button-gen ds-button-slim" style="margin-top: 15px">Change password</button>
+      <button type="submit" name="button" class="ds-button button-gen ds-button-slim">Change password</button>
     </form>
   </div>
 </div>
