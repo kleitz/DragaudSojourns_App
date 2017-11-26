@@ -23,7 +23,7 @@
 				 <strong>Success!</strong> {{ session()->get('message') }}
 		</div>
 		@endif
-    <form method="POST" action="/admin/profile/update" enctype="multipart/form-data" style="margin-bottom: 50px">
+    <form class="admin-short-form"  method="POST" action="/admin/profile/update" enctype="multipart/form-data" style="margin-bottom: 50px">
       {{ csrf_field() }}
 
       <div class="form-group form-inline inline-material-large flex-row-start" style="margin-bottom: 15px !important">
@@ -48,7 +48,7 @@
       <button type="submit" name="button" class="ds-button button-gen ds-button-slim" style="margin-top: 15px;">Update profile</button>
     </form>
 
-    <form method="POST" action="/admin/auth/edit" enctype="multipart/form-data">
+    <form class="admin-short-form"  method="POST" action="/admin/auth/edit" enctype="multipart/form-data">
       {{ csrf_field() }}
 
       <div class="form-group form-inline inline-material-large flex-row-start" style="margin-bottom: 15px !important">
@@ -112,7 +112,7 @@
 			</div>
 			@endforeach
 		</div>
-		<form method="POST" action="/admin/system/store" enctype="multipart/form-data" style="margin-bottom: 50px">
+		<form class="admin-short-form"  method="POST" action="/admin/system/store" enctype="multipart/form-data" style="margin-bottom: 50px">
       {{ csrf_field() }}
 
 			<button id="admin-settings-newbutton" type="button" name="button" class="ds-button button-gen linear-expander-controller ds-button-slim generate-pass-controller" style="margin-bottom: 15px;">+ Create new admin</button>

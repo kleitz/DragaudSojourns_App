@@ -28,7 +28,7 @@
     </div>
 		@endif
 
-    <form method="POST" action="/admin/profile/update" enctype="multipart/form-data" style="margin-bottom: 50px">
+    <form method="POST" action="/admin/profile/update" enctype="multipart/form-data" class="admin-short-form">
       {{ csrf_field() }}
 
       <div class="form-group form-inline inline-material-large flex-row-start" style="margin-bottom: 15px !important">
@@ -65,11 +65,11 @@
 
 			<div class="flex-row-start" style="margin-top: 15px;">
 	      <button type="submit" name="button" class="ds-button button-gen ds-button-slim" style="margin-right: 15px">Update account</button>
-				<a href="/admin/system/destroy/{{ $specAdmin->id }}" name="button" class="gfocus-button ds-button gc-delete auto-width">Delete account</a>
+				<a href="/admin/system/destroy/{{ $specAdmin->id }}" name="button" class="gfocus-button ds-button gc-delete auto-width ds-button-slim">Delete account</a>
 			</div>
     </form>
 
-    <form method="POST" action="/admin/auth/edit" enctype="multipart/form-data">
+    <form method="POST" action="/admin/auth/edit" enctype="multipart/form-data" class="admin-short-form">
       {{ csrf_field() }}
 
       <div class="form-group form-inline inline-material-large flex-row-start" style="margin-bottom: 15px !important">
@@ -83,7 +83,7 @@
 
 			<input type="hidden" name="admin_id" value="{{ $specAdmin->id }}">
 
-      <button type="submit" name="button" class="ds-button button-gen ds-button-slim">Change password</button>
+      <button type="submit" name="button" class="ds-button button-gen ds-button-slim" style="margin-top: 15px">Change password</button>
     </form>
   </div>
 </div>
