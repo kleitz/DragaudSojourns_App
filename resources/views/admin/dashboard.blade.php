@@ -63,11 +63,11 @@ let paymentCfg = {
 							paymentLoaded.total - paymentLoaded.paid,
             ],
             backgroundColor: [
-							"#73b8c4",
-              "#aad7de",
+							"#7db4ce",
+              "#aed2e2",
             ],
             label: 'Total revenue',
-						pointHoverBackgroundColor: "#73b8c4",
+						pointHoverBackgroundColor: "#7db4ce",
         }],
         labels: [
 				  "Captured",

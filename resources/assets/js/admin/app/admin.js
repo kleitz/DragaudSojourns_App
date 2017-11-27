@@ -18,6 +18,7 @@ $(document).ready(function(){
         iconsLibrary: 'fontawesome'
     });
 
+  // Settings / Create new admin
   $('#admin-settings-newbutton').click(function(){
       $('#admin-settings-newbutton').addClass('hidden');
       $('#admin-settings-newlabel').removeClass('hidden');
@@ -26,6 +27,17 @@ $(document).ready(function(){
   $('#admin-settings-newcancel').click(function(){
       $('#admin-settings-newlabel').addClass('hidden');
       $('#admin-settings-newbutton').removeClass('hidden');
+  });
+
+  // Settings / remove admin
+  $('#remove-admin-begin').click(function(){
+      fadeIn('#settings-overlay');
+      fadeIn('#remove-admin-modal');
+  });
+
+  $('#remove-admin-cancel').click(function(){
+      fadeOut('#settings-overlay');
+      fadeOut('#remove-admin-modal');
   });
 
   // Initiate groups progress bars
@@ -182,32 +194,6 @@ function bindUploads(){
 
 };
 
-// Create, read, erase cookies
-function createCookie(name,value,days) {
-    let expires = "";
-    if (days) {
-        let date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
-}
-
-function readCookie(name) {
-    let nameEQ = name + "=";
-    let ca = document.cookie.split(';');
-    for(let i=0;i < ca.length;i++) {
-        let c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    }
-    return null;
-}
-
-function eraseCookie(name) {
-    createCookie(name,"",-1);
-}
-
 function initAnalyiticsChart(){
   let paymentCfg = {
       type: 'doughnut',
@@ -219,7 +205,7 @@ function initAnalyiticsChart(){
                 analyticsChart.check
               ],
               backgroundColor: [
-  							"#559dad",
+  							"#4b95b7",
                 "#6fc99d",
                 "#cb9853",
               ],

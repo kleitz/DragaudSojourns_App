@@ -3,6 +3,12 @@
 	'header' => 'My Account'
 ])
 
+<?php
+	$authCoords = App\Coordinator::where('user_id', '=', auth()->user()->id)->get();
+	if (count($authCoords) > 0)
+	$firstGroup = App\Group::where('id', '=', $authCoords->first()->group_id)->first()->number;
+?>
+
 @section('content')
 	@include('partials.user.details')
 	<div class="col-xs-9">
@@ -17,6 +23,11 @@
 					<li class="nav-item">
 					 <a class="nav-link" href="/profile/{{ auth()->user()->email }}">My Trips</a>
 				 </li>
+				 @if (count($authCoords) > 0)
+				 <li class="nav-item">
+					 <a class="nav-link" href="/profile/{{ auth()->user()->email }}/groups/{{ $firstGroup }}">My Groups</a>
+				 </li>
+				 @endif
 				 <li class="nav-item">
 					 <a class="nav-link tab-active" href="/profile/{{ auth()->user()->email }}/payments/1">My Payments</a>
 				 </li>

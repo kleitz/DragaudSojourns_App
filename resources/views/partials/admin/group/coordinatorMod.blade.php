@@ -83,7 +83,7 @@
           <form action="/coordinators/store" method="GET" enctype="multipart/form-data" @keyup="preventEnter" @keypress="preventEnter">
             <div class="form-group">
               <label for="selectuser">Select user</label>
-              <select @change="updateSelected" v-model="coordinator.existing.selected" class="custom-select form-control" name="selectuser" size="4">
+              <select @change="updateSelected" v-model="coordinator.existing.selected" class="custom-select form-control" name="selectuser" size="5">
                 <option v-if="selectUser.length == 0 && coordinator.existing.searched == false" value="null" style="color: #aaa" disabled>Search results will appear here</option>
                 <option v-if="selectUser.length == 0 && coordinator.existing.searched == true" value="null" style="color: #aaa" disabled>Your search returned 0 users</option>
                 <option v-for="user, index in selectUser" :value="index" > @{{ user.name }} (@{{ user.email }})</option>

@@ -5,10 +5,10 @@
 ])
 
 <?php
-	$authCoords = App\Coordinator::where('user_id', '=', auth()->user()->id)->get();
-	if (count($authCoords) > 0)
-	$firstGroup = App\Group::where('id', '=', $authCoords->first()->group_id)->first()->number;
-?>
+	$curUrl = explode("/", Request::url());
+	$curPage = $curUrl[count($curUrl) - 1];
+	$curGroup = App\Group::where('number', '=', $curPage)->first();
+ ?>
 
 @section('content')
 	@include('partials.user.details')
@@ -22,27 +22,32 @@
 			<div class="col-xs-12">
 				<ul class="nav nav-tabs ds-tabs">
 				  <li class="nav-item">
-				    <a class="nav-link tab-active" href="/profile/{{ auth()->user()->email }}">My Trips</a>
+				    <a class="nav-link" href="/profile/{{ auth()->user()->email }}">My Trips</a>
 				  </li>
-					@if (count($authCoords) > 0)
 					<li class="nav-item">
-				    <a class="nav-link" href="/profile/{{ auth()->user()->email }}/groups/{{ $firstGroup }}">My Groups</a>
+				    <a class="nav-link tab-active" href="/profile/{{ auth()->user()->email }}/groups/{{ $authGroups[0]->number }}">My Groups</a>
 				  </li>
-					@endif
 				  <li class="nav-item">
 				    <a class="nav-link" href="/profile/{{ auth()->user()->email }}/payments/1">My Payments</a>
 				  </li>
 				</ul>
 			</div>
 			<div class="col-xs-12">
-				@include('partials.user.trips')
+				 <!-- Group carousel -->
+				  <div class="relative full-width">
+				    @include('partials.user.groups.carousel')
+				  </div>
+				  <!-- Group description -->
+				  <div class="relative full-width">
+				    @include('partials.user.groups.description')
+				  </div>
 			</div>
 		</div>
 	</div>
 @endsection
 <script>
 let authUsr = {!! json_encode($authUsr->toArray()) !!};
+let authGroups = {!! json_encode($authGroups) !!};
+let authCoords = {!! json_encode($authCoords) !!};
 let authTravs = {!! json_encode($authTravs) !!};
-let authTrips = {!! json_encode($authTrips) !!};
-let tripPayment = '';
 </script>

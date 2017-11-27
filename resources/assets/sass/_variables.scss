@@ -39,9 +39,11 @@ $panel-default-heading-bg: #fff;
 
 // App Colors
 $gold-med: #cb9853;
-$blue-med: #559dad;
-$red-med: #da3232;
+$gold-pale: #f3b868;
+$blue-med: #4b95b7;
+$red-med: #d63142;
 $red-pale: #ca5e5e;
+$red-light: #d63142;
 
 // Greys
 $grey-paleblue: #e4e7e8;
@@ -49,11 +51,11 @@ $off-white: #f4f4f4;
 
 // Admin color's
 $admin-gold: #cb9853;
-$admin-blue: #559dad;
+$admin-blue: $blue-med;
 $admin-trueblue: #527cbd;
 $admin-green: #6fc99d;
-$admin-red: #c43d4b;
-$admin-lightblue: #79aeb9;
-$admin-ulightblue: #eaeeef;
+$admin-red: #d63142;
+$admin-lightblue: #7db4ce;
+$admin-ulightblue: #aed2e2;
 $admin-lightgrey: #a9a9a9;
-$admin-medgrey: #515a5a;
+$admin-medgrey: #52585a;

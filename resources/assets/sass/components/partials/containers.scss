@@ -74,6 +74,7 @@
 }
 
 .modal-ds-link {
+  font-weight: 400;
   font-family: Alegreya Sans;
     font-size: 13px;
     color: $blue-med;
@@ -168,4 +169,134 @@
 }
 .pass-reveal:hover {
   background-color: #f4f4f4;
+}
+
+// Cards
+
+.full-card {
+  width: 100%;
+  font-size: 16px;
+  padding: 15px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+}
+
+.hz-card {
+  display: inline-block;
+  min-width: 200px;
+  border-bottom: 0px solid;
+  padding: 10px;
+  color: #636b6f;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+  margin: 0 10px 10px 0;
+  transition: .2s ease;
+}
+
+.hz-card.card-active {
+  border-bottom: 3px solid $admin-blue;
+  padding-bottom: 8px;
+}
+
+.hz-card:hover {
+  box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px #ccc;
+}
+
+.card-label {
+  font-weight: 600;
+  color: #636363;
+  font-size: 14px;
+  margin-bottom: -5px;
+}
+
+.card-content {
+  font-size: 16px;
+}
+
+.card-custom.message-contain {
+  border-left: 1px solid #e2e2e2;
+  padding-right: 0;
+}
+
+.card-custom.custom-message {
+  font-size: 14px;
+  height: 75px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.card-custom.custom-message::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 !important;
+  box-shadow: inset 0 0 !important;
+	background-color: #fff;
+}
+
+.card-custom.custom-message::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+.card-custom.custom-message::-webkit-scrollbar-thumb
+{
+  border-radius: 5px;
+  background-color: #cdcfd2;
+}
+
+// Card carousel
+.card-carousel {
+  z-index: 2;
+  width: 110%;
+  padding: 5px 5px;
+  overflow: hidden;
+  margin-top: 15px;
+  position: relative;
+  left: -5px;
+}
+
+.carousel-controls {
+  width: 104%;
+  position: absolute;
+  padding: 8px 0;
+  top: 0;
+  left: -2%;
+}
+
+.carousel-shield {
+  height: 80px;
+  top: -10px;
+  z-index: 1;
+  width: 70px;
+  position: absolute;
+}
+
+.carousel-button, .carousel-button button {
+  outline: none !important;
+}
+
+.carousel-shield.left {
+  background: linear-gradient(to right, #fff, 80%, rgba(0,0,0,0));
+}
+
+.carousel-shield.right {
+  background: linear-gradient(to left, #fff, 80%, rgba(0,0,0,0));
+}
+
+.carousel-controls button {
+  opacity: .9;
+  border: 1px solid #ccc;
+}
+
+.carousel-controls button i {
+  color: #808285;
+}
+
+.carousel-controls button:hover {
+  opacity: 1;
+}
+
+.card-carousel-reel {
+  left: 0;
+  white-space: nowrap;
+  position: relative;
+  transition: .3s ease;
 }

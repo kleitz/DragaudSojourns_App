@@ -69,12 +69,12 @@ const dashApp = new Vue({
                     labels: summaryChartData.groups,
                     datasets: [{
                         label: 'Captured',
-                        backgroundColor: "#73b8c4",
+                        backgroundColor: "#7db4ce",
                         stack: 'Stack 0',
                         data: summaryChartData.captured,
                     }, {
                         label: 'Projected',
-                        backgroundColor: "#aad7de",
+                        backgroundColor: "#aed2e2",
                         stack: 'Stack 0',
                         data: summaryChartData.projected,
                     }, {

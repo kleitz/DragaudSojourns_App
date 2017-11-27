@@ -348,7 +348,7 @@ function validPhone(input) {
 function validSelect(input) {
   let str = input;
 
-  if (str) {
+  if (!str) {
     return false;
   } else {
     return true;
@@ -402,7 +402,7 @@ function clone(x) {
   var prefixPattern, exactPattern, dupe;
 
   if (!x) { return null; }
-  
+
   prefixPattern = x.prefixPattern.source;
   exactPattern = x.exactPattern.source;
   dupe = JSON.parse(JSON.stringify(x));

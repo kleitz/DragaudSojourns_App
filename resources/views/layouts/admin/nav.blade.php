@@ -62,6 +62,6 @@
     </li>
   </ul>
 </nav>
-@if (\Auth::guard('admin')->user()->level == 'System Administrator')
-<button type="button" name="button" class="ds-button button-gen" onclick="window.location='/admin/{{ auth('admin')->user()->email }}/new/group'">+ Create new group</button>
+@if ( auth('admin')->user()->level == 'System Administrator')
+<button type="button" name="button" class="ds-button button-gen " onclick="window.location='/admin/{{ auth('admin')->user()->email }}/new/group'">+ Create new group</button>
 @endif

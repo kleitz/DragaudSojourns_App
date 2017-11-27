@@ -10,6 +10,7 @@ use Javascript;
 use App\User;
 use App\Group;
 use App\Traveler;
+use App\Coordinator;
 
 class AccountsController extends Controller
 {
@@ -82,6 +83,19 @@ class AccountsController extends Controller
       $authTravs = Auth::user()->travelers()->get();
 
       return view('user.index', compact('authUsr', 'authTravs', 'authTrips' , 'numPages'));
+    }
+
+    public function showGroups($email, $group) {
+      $email = Auth::user()->email;
+      $authCoords = Coordinator::where('user_id', '=', auth()->user()->id)->get();
+      $authGroups = array();
+      foreach ($authCoords as $coord) {
+        $authGroups[] = Group::find($coord->group_id);
+      }
+      $authUsr = Auth::user();
+      $authTravs = Auth::user()->travelers()->get();
+
+      return view('user.groups', compact('authUsr', 'authTravs', 'authCoords', 'authGroups'));
     }
 
         /**

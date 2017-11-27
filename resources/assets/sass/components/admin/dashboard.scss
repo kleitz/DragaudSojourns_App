@@ -42,17 +42,17 @@
 }
 
 .payment-key.captured {
-  background: #73b8c4;
+  background: #7db4ce;
 }
 
 .payment-key.projected {
-  background: #aad7de;
+  background: #aed2e2;
 }
 
 .summary-key {
   width: 12px;
   height: 12px;
-  background: #aad7de;
+  background: #aed2e2;
   align-self: center;
   border-radius: 50%;
   margin: 5px 10px 0 5px;
@@ -63,11 +63,11 @@
 }
 
 .summary-key.projected {
-  background: #aad7de;
+  background: #aed2e2;
 }
 
 .summary-key.captured {
-  background: #73b8c4
+  background: #7db4ce;
 }
 
 #summary-chart-container{
@@ -87,7 +87,7 @@
 }
 
 .chart-scubbers a:hover i {
-  color: #559dad;
+  color: $blue-med;
 }
 
 .dashboard-select select {

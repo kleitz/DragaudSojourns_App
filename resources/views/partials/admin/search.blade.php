@@ -1,7 +1,7 @@
 <div class="admin-search-container flex-col-end">
   <form class="flex-row-between" method="GET" action="/admin/{{ $authAdmin }}/{{ $curSection }}/1" enctype="multipart/form-data" role="search">
       @if ($curSection == 'payments')
-      <div class="flex-row-between gc-date" style="width: 450px; align-items: center">
+      <div class="flex-row-between gc-date" style="width: 510px; align-items: center">
         <label class="text-center text-nowrap search-datepicker-label" style="margin-left: 5px;">Start date</label>
         <div class="form-group" style="padding: 0;">
           <input type="text" name="datefrom" class="form-control search-datepicker" id="date-begin" value="{{ $dateFrom }}">
@@ -9,6 +9,9 @@
         <label class="text-center text-nowrap search-datepicker-label">End date</label>
         <div class="form-group" style="padding: 0;">
           <input type="text" name="dateto" class="form-control search-datepicker" id="date-end" value="{{ $dateTo }}">
+        </div>
+        <div class="relative" style="top: -7px; margin-left: 5px">
+          <button type="submit" class="gfocus-button ds-button button-cancel" style="min-width: 80px;padding: 2px ">Refine</button>
         </div>
       </div>
       <div style='margin-top: -103px'>

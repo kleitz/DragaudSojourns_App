@@ -9,7 +9,9 @@ body {
 }
 
 a {
+  color: $blue-med;
   text-decoration: none !important;
+  font-size: 20px;
 }
 
 .admin-banner {
@@ -99,6 +101,7 @@ a {
 }
 
 .admin-navigation a {
+  font-weight: 400;
   text-decoration: none !important;
 }
 

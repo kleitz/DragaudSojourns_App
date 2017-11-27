@@ -166,7 +166,7 @@
 
 .free-link {
   font-family: Alegreya Sans;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .text-left {
@@ -214,7 +214,7 @@
 }
 
 .page-bottom a {
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .dark-overlay-gen {
@@ -304,13 +304,23 @@
   padding: 3px 10px
 }
 
+.button-transparent {
+  background: transparent !important;
+  color: $blue-med !important;
+  font-size: 17px;
+  font-weight: 400;
+  padding: 9px 15px;
+  border-radius: 7px;
+  font-family: inherit;
+}
+
 .container {
   width: 1170px !important;
 }
 
 .button-gen {
-  background-color: #559dad;
-  border-color: #559dad;
+  background-color: $blue-med;
+  border-color: $blue-med;
   color: white;
 }
 .button-cancel {
@@ -339,8 +349,8 @@
 }
 
 .ds-button-large {
-  background: #559dad;
-  border-color: #559dad;
+  background: $blue-med;
+  border-color: $blue-med;
   color: white;
   padding: 5px;
   width: 100%;
@@ -389,6 +399,14 @@ input:-webkit-autofill {
               0px 2px 1px rgba(0,0,0,0.3);;
 }
 
+.z-depth-custom {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+}
+
+.z-depth-custom:hover {
+  box-shadow: 0 3px 8px 0 rgba(0,0,0,0.2), 0 0 0 1px #ccc;
+}
+
 .font-light {
   font-weight: 100;
 }
@@ -403,8 +421,14 @@ input:-webkit-autofill {
 }
 
 a {
-    color: #2ea1c5;
+    font-size: 18px;
+    font-weight: 300;
+    color: $blue-med;
     text-decoration: none;
+}
+
+.cls-1 {
+    fill: $blue-med !important;
 }
 
 td, th {
@@ -425,7 +449,7 @@ td, th {
 
 
 .ds-tabs > li > a {
-  font-size: 18px;
+  font-size: 19px;
   padding: 10px 20px;
 }
 
@@ -435,5 +459,5 @@ td, th {
 }
 
 .color-hazard {
-  color: #c13f4d !important;
+  color: $red-med !important;
 }

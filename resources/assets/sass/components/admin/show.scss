@@ -133,7 +133,7 @@ vertical-align: middle !important;
   border-radius: 5px;
   z-index: 1;
   width: 100%;
-  background: $admin-ulightblue;
+  background: #eef0f1;
 }
 
 .admin-payments-analytics {
@@ -228,7 +228,7 @@ vertical-align: middle !important;
 }
 
 .progress-safe {
-  background: $admin-blue;
+  background: $admin-lightblue;
 }
 
 .progress-good {
@@ -236,12 +236,12 @@ vertical-align: middle !important;
 }
 
 .progress-warning {
-  background: $admin-gold;
+  background: $gold-pale;
 }
 
 .progress-hazard {
-  background: $admin-red;
-  color: $admin-red;
+  background: $red-light;
+  color: $red-light;
 }
 
 .group-hazard {

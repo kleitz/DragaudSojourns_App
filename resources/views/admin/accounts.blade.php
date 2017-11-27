@@ -21,7 +21,7 @@
  ?>
 <div id="acccount-show-app" class="container admin-container">
 <!-- ACCOUNTS SEARCH RESULTS -->
-<div class="col-xs-10 relative" style="z-index: 20">
+<div class="col-xs-12 relative" style="z-index: 20">
   <div class="admin-floating-panel z-depth-2">
     <div class="flex-row-between">
       <div onclick="window.location='/admin/{{ $authAdmin }}/accounts/1'" class="pointer">
@@ -40,10 +40,10 @@
         <table class="table">
           <thead style="border-bottom: 10px solid white;">
             <tr>
-              <th scope="col">Account #</th>
-              <th scope="col">Full Name</th>
-              <th scope="col" style="min-width: 200px">Travelers</th>
-              <th scope="col">Created</th>
+              <th scope="col" width="20%">Account #</th>
+              <th scope="col" width="25%">Full Name</th>
+              <th scope="col" width="35%">Travelers</th>
+              <th scope="col" width="15%">Created</th>
             </tr>
           </thead>
           <tbody>

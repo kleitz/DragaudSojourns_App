@@ -14216,7 +14216,7 @@ button.picker__close:focus {
   font-size: 20px;
   padding: 5px;
   color: white;
-  background-color: #559dad;
+  background-color: #4b95b7;
 }
 
 .modal-ds-button:hover {
@@ -14235,9 +14235,10 @@ button.picker__close:focus {
 }
 
 .modal-ds-link {
+  font-weight: 400;
   font-family: Alegreya Sans;
   font-size: 13px;
-  color: #559dad;
+  color: #4b95b7;
 }
 
 .empty-default {
@@ -14346,6 +14347,138 @@ button.picker__close:focus {
 
 .pass-reveal:hover {
   background-color: #f4f4f4;
+}
+
+.full-card {
+  width: 100%;
+  font-size: 16px;
+  padding: 15px;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+}
+
+.hz-card {
+  display: inline-block;
+  min-width: 200px;
+  border-bottom: 0px solid;
+  padding: 10px;
+  color: #636b6f;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+  margin: 0 10px 10px 0;
+  -webkit-transition: .2s ease;
+  transition: .2s ease;
+}
+
+.hz-card.card-active {
+  border-bottom: 3px solid #4b95b7;
+  padding-bottom: 8px;
+}
+
+.hz-card:hover {
+  -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ccc;
+          box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ccc;
+}
+
+.card-label {
+  font-weight: 600;
+  color: #636363;
+  font-size: 14px;
+  margin-bottom: -5px;
+}
+
+.card-content {
+  font-size: 16px;
+}
+
+.card-custom.message-contain {
+  border-left: 1px solid #e2e2e2;
+  padding-right: 0;
+}
+
+.card-custom.custom-message {
+  font-size: 14px;
+  height: 75px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.card-custom.custom-message::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 !important;
+  box-shadow: inset 0 0 !important;
+  background-color: #fff;
+}
+
+.card-custom.custom-message::-webkit-scrollbar {
+  width: 6px;
+  background-color: #F5F5F5;
+}
+
+.card-custom.custom-message::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #cdcfd2;
+}
+
+.card-carousel {
+  z-index: 2;
+  width: 110%;
+  padding: 5px 5px;
+  overflow: hidden;
+  margin-top: 15px;
+  position: relative;
+  left: -5px;
+}
+
+.carousel-controls {
+  width: 104%;
+  position: absolute;
+  padding: 8px 0;
+  top: 0;
+  left: -2%;
+}
+
+.carousel-shield {
+  height: 80px;
+  top: -10px;
+  z-index: 1;
+  width: 70px;
+  position: absolute;
+}
+
+.carousel-button,
+.carousel-button button {
+  outline: none !important;
+}
+
+.carousel-shield.left {
+  background: -webkit-gradient(linear, left top, right top, from(#fff), color-stop(80%), to(transparent));
+  background: linear-gradient(to right, #fff, 80%, transparent);
+}
+
+.carousel-shield.right {
+  background: -webkit-gradient(linear, right top, left top, from(#fff), color-stop(80%), to(transparent));
+  background: linear-gradient(to left, #fff, 80%, transparent);
+}
+
+.carousel-controls button {
+  opacity: .9;
+  border: 1px solid #ccc;
+}
+
+.carousel-controls button i {
+  color: #808285;
+}
+
+.carousel-controls button:hover {
+  opacity: 1;
+}
+
+.card-carousel-reel {
+  left: 0;
+  white-space: nowrap;
+  position: relative;
+  -webkit-transition: .3s ease;
+  transition: .3s ease;
 }
 
 .ds-form-errmsg {
@@ -14680,7 +14813,7 @@ button.picker__close:focus {
 .inline-material-large input {
   position: relative;
   font-size: 32px;
-  color: #515a5a;
+  color: #52585a;
   bottom: 5px;
   max-width: 150px;
 }
@@ -14893,7 +15026,7 @@ button.picker__close:focus {
 .spinner {
   -webkit-animation: rotation 1.4s linear infinite;
   animation: rotation 1.4s linear infinite;
-  stroke: #559dad;
+  stroke: #4b95b7;
 }
 
 .spinner-dark {
@@ -14991,7 +15124,7 @@ button.picker__close:focus {
   height: 100px;
   width: 100px;
   border-radius: 50%;
-  background: #559dad;
+  background: #4b95b7;
 }
 
 .success-button {
@@ -15532,7 +15665,7 @@ button.picker__close:focus {
 
 .free-link {
   font-family: Alegreya Sans;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .text-left {
@@ -15581,7 +15714,7 @@ button.picker__close:focus {
 }
 
 .page-bottom a {
-  font-size: 18px;
+  font-size: 19px;
 }
 
 .dark-overlay-gen {
@@ -15599,7 +15732,7 @@ button.picker__close:focus {
 }
 
 .ds-blue {
-  color: #559dad !important;
+  color: #4b95b7 !important;
 }
 
 .ds-green {
@@ -15607,7 +15740,7 @@ button.picker__close:focus {
 }
 
 .ds-red {
-  color: #c43d4b !important;
+  color: #d63142 !important;
 }
 
 .ds-trueblue {
@@ -15615,11 +15748,11 @@ button.picker__close:focus {
 }
 
 .ds-lightblue {
-  color: #79aeb9 !important;
+  color: #7db4ce !important;
 }
 
 .ds-ulightblue {
-  color: #eaeeef !important;
+  color: #aed2e2 !important;
 }
 
 .ds-lightgrey {
@@ -15627,17 +15760,17 @@ button.picker__close:focus {
 }
 
 .ds-medgrey {
-  color: #515a5a !important;
+  color: #52585a !important;
 }
 
 .button-red {
-  background-color: #da3232 !important;
-  border: 2px solid #da3232 !important;
+  background-color: #d63142 !important;
+  border: 2px solid #d63142 !important;
 }
 
 .button-red:hover {
   background: white !important;
-  border: 2px solid #da3232 !important;
+  border: 2px solid #d63142 !important;
 }
 
 .ds-button {
@@ -15684,13 +15817,23 @@ button.picker__close:focus {
   padding: 3px 10px;
 }
 
+.button-transparent {
+  background: transparent !important;
+  color: #4b95b7 !important;
+  font-size: 17px;
+  font-weight: 400;
+  padding: 9px 15px;
+  border-radius: 7px;
+  font-family: inherit;
+}
+
 .container {
   width: 1170px !important;
 }
 
 .button-gen {
-  background-color: #559dad;
-  border-color: #559dad;
+  background-color: #4b95b7;
+  border-color: #4b95b7;
   color: white;
 }
 
@@ -15723,8 +15866,8 @@ button.picker__close:focus {
 }
 
 .ds-button-large {
-  background: #559dad;
-  border-color: #559dad;
+  background: #4b95b7;
+  border-color: #4b95b7;
   color: white;
   padding: 5px;
   width: 100%;
@@ -15777,6 +15920,16 @@ input:-webkit-autofill {
           box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2), 0px 2px 1px rgba(0, 0, 0, 0.3);
 }
 
+.z-depth-custom {
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px #ccc;
+}
+
+.z-depth-custom:hover {
+  -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ccc;
+          box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2), 0 0 0 1px #ccc;
+}
+
 .font-light {
   font-weight: 100;
 }
@@ -15794,8 +15947,14 @@ input:-webkit-autofill {
 }
 
 a {
-  color: #2ea1c5;
+  font-size: 18px;
+  font-weight: 300;
+  color: #4b95b7;
   text-decoration: none;
+}
+
+.cls-1 {
+  fill: #4b95b7 !important;
 }
 
 td,
@@ -15817,7 +15976,7 @@ th {
 }
 
 .ds-tabs > li > a {
-  font-size: 18px;
+  font-size: 19px;
   padding: 10px 20px;
 }
 
@@ -15827,7 +15986,7 @@ th {
 }
 
 .color-hazard {
-  color: #c13f4d !important;
+  color: #d63142 !important;
 }
 
 body {
@@ -15836,11 +15995,13 @@ body {
   font-size: 14px;
   background-attachment: fixed;
   overflow-x: hidden;
-  color: #515a5a;
+  color: #52585a;
 }
 
 a {
+  color: #4b95b7;
   text-decoration: none !important;
+  font-size: 20px;
 }
 
 .admin-banner {
@@ -15934,15 +16095,16 @@ a {
 }
 
 .admin-navigation a {
+  font-weight: 400;
   text-decoration: none !important;
 }
 
 .admin-navigation a:hover p {
-  color: #559dad;
+  color: #4b95b7;
 }
 
 .admin-nav-active {
-  color: #559dad !important;
+  color: #4b95b7 !important;
 }
 
 .login-container {
@@ -15965,7 +16127,7 @@ a {
 }
 
 .login-button-active .login-icon {
-  background: #559dad !important;
+  background: #4b95b7 !important;
   opacity: 1 !important;
 }
 
@@ -16068,13 +16230,14 @@ a {
 .login-dropdown a {
   padding: 5px 20px;
   display: block;
+  font-weight: 400;
   color: #555;
   font-size: 16px;
   font-family: Alegreya Sans;
 }
 
 .login-dropdown a:hover {
-  background: #559dad;
+  background: #4b95b7;
   color: white;
   text-decoration: none;
 }
@@ -16160,7 +16323,7 @@ a {
 .split-panel-content {
   min-height: 500px;
   padding: 30px 50px 30px;
-  background: #f1f1f1;
+  background: #f7f7f7;
   border-top: 1px solid #ccc;
   border-radius: 0 0 5px 5px;
 }
@@ -16350,7 +16513,7 @@ td {
   border-radius: 5px;
   z-index: 1;
   width: 100%;
-  background: #eaeeef;
+  background: #eef0f1;
 }
 
 .admin-payments-analytics {
@@ -16411,7 +16574,7 @@ td {
 }
 
 .panalytics-node.blue {
-  background-color: #559dad !important;
+  background-color: #4b95b7 !important;
 }
 
 .panalytics-node.green {
@@ -16458,7 +16621,7 @@ td {
 }
 
 .progress-safe {
-  background: #559dad;
+  background: #7db4ce;
 }
 
 .progress-good {
@@ -16466,20 +16629,20 @@ td {
 }
 
 .progress-warning {
-  background: #cb9853;
+  background: #f3b868;
 }
 
 .progress-hazard {
-  background: #c43d4b;
-  color: #c43d4b;
+  background: #d63142;
+  color: #d63142;
 }
 
 .group-hazard {
-  color: #c43d4b;
+  color: #d63142;
 }
 
 .group-hazard-icon {
-  background: #c43d4b;
+  background: #d63142;
   border-radius: 50%;
   height: 20px;
   width: 20px;
@@ -16958,7 +17121,7 @@ input:checked + .status-slider:before {
 }
 
 .admin-feature-link {
-  color: #559dad;
+  color: #4b95b7;
   font-weight: 300;
   font-size: 24px;
   position: relative;
@@ -17005,17 +17168,17 @@ input:checked + .status-slider:before {
 }
 
 .payment-key.captured {
-  background: #73b8c4;
+  background: #7db4ce;
 }
 
 .payment-key.projected {
-  background: #aad7de;
+  background: #aed2e2;
 }
 
 .summary-key {
   width: 12px;
   height: 12px;
-  background: #aad7de;
+  background: #aed2e2;
   -ms-flex-item-align: center;
       align-self: center;
   border-radius: 50%;
@@ -17027,11 +17190,11 @@ input:checked + .status-slider:before {
 }
 
 .summary-key.projected {
-  background: #aad7de;
+  background: #aed2e2;
 }
 
 .summary-key.captured {
-  background: #73b8c4;
+  background: #7db4ce;
 }
 
 #summary-chart-container {
@@ -17051,7 +17214,7 @@ input:checked + .status-slider:before {
 }
 
 .chart-scubbers a:hover i {
-  color: #559dad;
+  color: #4b95b7;
 }
 
 .dashboard-select select {

@@ -129,6 +129,7 @@ Route::prefix('profile')->group(function(){
   Route::get('/{email}', 'AccountsController@create')->name('profile.index');
   Route::get('/{email}/payments/{page}', 'AccountsController@showPayments')->name('profile.payments');
   Route::get('/{email}/trips/{page}', 'AccountsController@showTrips')->name('profile.trips');
+  Route::get('/{email}/groups/{page}', 'AccountsController@showGroups')->name('profile.groups');
   Route::post('/user/update', 'AccountsController@userUpdate')->name('profile.update');
   Route::post('/user/confidential', 'AccountsController@confidentialUpdate')->name('profile.confidential');
 });

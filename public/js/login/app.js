@@ -367,7 +367,7 @@ function validPhone(input) {
 function validSelect(input) {
   let str = input;
 
-  if (str) {
+  if (!str) {
     return false;
   } else {
     return true;
@@ -421,7 +421,7 @@ function clone(x) {
   var prefixPattern, exactPattern, dupe;
 
   if (!x) { return null; }
-  
+
   prefixPattern = x.prefixPattern.source;
   exactPattern = x.exactPattern.source;
   dupe = JSON.parse(JSON.stringify(x));
@@ -779,6 +779,83 @@ $(".linear-expander-controller").click(function(){
   $(".linear-expander").removeClass('static');
   $(".linear-expander").toggleClass('expanded');
 })
+
+// Card carousel
+$(document).ready(function(){
+
+  let cC_Lb = $(".carousel-button.left");
+  let cC_Rb = $(".carousel-button.right");
+  let cC = $(".card-carousel");
+  let cC_Cards = document.getElementsByClassName('hz-card');
+  let cC_Reel = $(".card-carousel-reel");
+
+
+  if (cC_Reel.outerWidth() > cC.parent().outerWidth()){
+    cC_Rb.removeClass('hidden');
+  };
+
+  let cC_Scrub = 0;
+  let cC_Left = 0;
+  let cC_Pad = 50;
+
+  function cardReelL(){
+    cC_Pad = 50;
+    cC_Left -= $(cC_Cards[cC_Scrub]).outerWidth() + 10;
+    cC_Scrub++;
+    cC_Lb.removeClass('hidden');
+    if (cC_Scrub > cC_Cards.length - 4) cC_Rb.addClass('hidden');
+    cC_Reel.css('left', cC_Left + cC_Pad);
+  }
+
+  function cardReelR(){
+    cC_Left += $(cC_Cards[cC_Scrub]).outerWidth() + 10;
+    cC_Scrub--;
+    cC_Rb.removeClass('hidden');
+    if (cC_Scrub == 0) {
+      cC_Pad = 0;
+      cC_Lb.addClass('hidden');
+    }
+    cC_Reel.css('left', cC_Left + cC_Pad);
+  }
+
+  for (let i = 0; i < cC_Cards.length; i++){
+    if (i > 2) {
+      cardReelL()
+    }
+    if ($(cC_Cards[i]).hasClass('card-active')){
+        break;
+    }
+  }
+
+  cC_Rb.click(function(){ cardReelL() });
+  cC_Lb.click(function(){ cardReelR() });
+});
+
+// Create, read, erase cookies
+function createCookie(name,value,days) {
+    let expires = "";
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function readCookie(name) {
+    let nameEQ = name + "=";
+    let ca = document.cookie.split(';');
+    for(let i=0;i < ca.length;i++) {
+        let c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function eraseCookie(name) {
+    createCookie(name,"",-1);
+}
 
 function getZipData(zip, elem){
   var lat;
