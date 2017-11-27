@@ -179,7 +179,7 @@ $(document).ready(function(){
   let cC_Reel = $(".card-carousel-reel");
 
 
-  if (cC_Reel.outerWidth() > cC.parent().outerWidth()){
+  if (cC_Cards.length >= 3){
     cC_Rb.removeClass('hidden');
   };
 
