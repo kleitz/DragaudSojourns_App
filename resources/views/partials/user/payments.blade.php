@@ -26,7 +26,7 @@
     @endfor
   </ul>
 </nav>
-<div class="col-xs-12 trips-wrapper">
+<div class="col-xs-12 trips-wrapper user-main-content">
   @if (count($authPayments) > 0)
   <div class="trips-container">
     <table class="table">

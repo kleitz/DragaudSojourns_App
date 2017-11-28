@@ -128,3 +128,41 @@
   height: 16px !important;
   margin: 0 10px 0 0;
 }
+
+.coordinator-trips-table td{
+  border-top: 0px !important;
+}
+
+.coordinator-trips-table .row-odd{
+  background: #f3f3f3;
+}
+
+.coordinator-trips-container {
+  border: 1px solid #ccc;
+  left: -1px;
+  overflow: scroll;
+  overflow-x: hidden;
+  max-height: 300px;
+}
+
+.coordinator-trips-expanded {
+  padding: 0 !important;
+  border-top: 0 !important;
+}
+
+.coordinator-trips-expanded p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.coordinator-trips-expanded .expander-content {
+  background-color: #fcfcfc;
+  margin: 0;
+  border-bottom: 1px solid #ddd;
+  box-shadow: inset 0px 4px 2px -2px rgba(0,0,0,0.2);
+}
+
+.coordinator-trips-expanded .expander-controller {
+  right: 30px;
+  top: -33px;
+}

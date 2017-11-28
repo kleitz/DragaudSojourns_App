@@ -87,7 +87,7 @@ class AccountsController extends Controller
 
     public function showGroups($email, $group) {
       $email = Auth::user()->email;
-      $authCoords = Coordinator::where('user_id', '=', auth()->user()->id)->get();
+      $authCoords = Coordinator::where('user_id', '=', auth()->user()->id)->get()->sortBy('group_id');
       $authGroups = array();
       foreach ($authCoords as $coord) {
         $authGroups[] = Group::find($coord->group_id);

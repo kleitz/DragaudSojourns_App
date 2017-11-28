@@ -16,6 +16,23 @@ $(document).ready(function(){
   $('.slick-arrow').addClass('slider-button btn-floating btn-large waves-effect waves-light grey darken-1');
   $('.slick-prev').html('<i class="material-icons">chevron_left</i>');
   $('.slick-next').html('<i class="material-icons">chevron_right</i>');
+
+  if ($('.trip-controller').length) {
+    tripModalExpand($('.trip-controller').first());
+  }
+  if ($('.coordinator-trips-table').length) {
+    $(".expander-controller").click(function(){
+      if ($(this).html() == 'Show details') {
+        $(".expander-controller").html('Show details');
+        $(this).html('Hide details');
+        openExpander($('.coordinator-expander'));
+        expanderController(($(this).parent()));
+      } else {
+        $(this).html('Show details');
+        openExpander($(this));
+      }
+    });
+  }
 });
 
 function tripModalExpand(el){
@@ -27,7 +44,7 @@ function tripModalExpand(el){
     $('.trip-details-full').addClass('hidden');
     openExpander($('.trip-expander'));
     $('.trip-controller').html('Show details');
-    
+
     $(el).html('Hide details');
     max.removeClass('hidden');
     min.addClass('hidden');

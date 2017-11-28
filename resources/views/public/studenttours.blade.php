@@ -26,7 +26,7 @@
      <p>Travel is a mind-expanding experience that changes us for the  better and nothing offers more value to students thirsty for knowledge.   It is an education in and of itself, an opportunity for students to  connect with varying cultures and peoples, a perfect medium for a better  understanding of the world and our place in it.  The opportunity to  work with teachers and students has proven to be one of the most  satisfying aspects of my business and I hope you will choose to join us  in this exploration of all the world has to offer.</p>
 
      <p>
-     We currently offer Student Tours to <a href="{{ url('/newyork') }}"><h2>New York</h2></a>,<a href="{{ url('/london') }}"><h2> London</h2></a>, and <a href="{{ url('/greece') }}"><h2>Greece</h2></a>
+     We currently offer Student Tours to <a href="{{ url('/newyork') }}"><h2 style="font-size: 18px">New York</h2></a>,<a href="{{ url('/london') }}"><h2 style="font-size: 18px"> London</h2></a>, and <a href="{{ url('/greece') }}"><h2 style="font-size: 18px">Greece</h2></a>
     as well as general interest student tours to New York, Washington D.C.,  Boston, most European countries, Australia, and New Zealand.
     </div>
 

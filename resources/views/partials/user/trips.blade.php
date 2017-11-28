@@ -26,7 +26,7 @@
     @endfor
   </ul>
 </nav>
-<div class="col-xs-12 trips-wrapper">
+<div class="col-xs-12 trips-wrapper user-main-content">
   @if ($authTrips)
   <div class="trips-container">
 

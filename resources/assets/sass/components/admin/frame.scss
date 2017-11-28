@@ -8,11 +8,17 @@ body {
   color: $admin-medgrey;
 }
 
-a {
-  color: $blue-med;
-  text-decoration: none !important;
-  font-size: 20px;
+td, th {
+  font-size: 16px;
 }
+
+a {
+    font-size: 18px;
+    font-weight: 300;
+    color: $blue-med;
+    text-decoration: none;
+}
+
 
 .admin-banner {
   background-image: url("/assets/public/img/burlap-transparent.jpg");

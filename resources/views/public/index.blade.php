@@ -100,7 +100,7 @@
 		    A Message From Michael Dragoo
 		  </a>
 		   <a href="{{ url('/messagefrommichael') }}" >
-				   <h2 id="boxtitle">
+				   <h2 id="boxtitle" style="font-size: 22px">
 				 A Message From Michael
 				 </h2>
 			  </a>
@@ -122,7 +122,7 @@
 		    A Message From Michael Dragoo
 		  </a>
 		     <a href="{{ url('/commitmenttoexcellence') }}">
-		     	<h2 id="boxtitle">
+		     	<h2 id="boxtitle" style="font-size: 21px">
 				  Commitment to Excellence
 				  </h2>
 			  </a>

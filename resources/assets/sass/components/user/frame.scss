@@ -7,6 +7,22 @@ body {
   background-attachment: fixed;
   overflow-x: hidden;
 }
+
+td, th {
+  font-size: 16px;
+}
+
+a {
+    font-size: 18px;
+    font-weight: 300;
+    color: $blue-med;
+    text-decoration: none;
+}
+
+.user-main-content {
+  min-height: 500px !important;
+}
+
 .backgroundtop {
     top: 0px;
     height: auto;

@@ -4,7 +4,7 @@
 ])
 
 <?php
-	$authCoords = App\Coordinator::where('user_id', '=', auth()->user()->id)->get();
+	$authCoords = App\Coordinator::where('user_id', '=', auth()->user()->id)->get()->sortBy('group_id');
 	if (count($authCoords) > 0)
 	$firstGroup = App\Group::where('id', '=', $authCoords->first()->group_id)->first()->number;
 ?>
@@ -23,14 +23,14 @@
 					<li class="nav-item">
 					 <a class="nav-link" href="/profile/{{ auth()->user()->email }}">My Trips</a>
 				 </li>
-				 @if (count($authCoords) > 0)
-				 <li class="nav-item">
-					 <a class="nav-link" href="/profile/{{ auth()->user()->email }}/groups/{{ $firstGroup }}">My Groups</a>
-				 </li>
-				 @endif
 				 <li class="nav-item">
 					 <a class="nav-link tab-active" href="/profile/{{ auth()->user()->email }}/payments/1">My Payments</a>
 				 </li>
+				 @if (count($authCoords) > 0)
+				<li class="nav-item">
+					<a class="nav-link" href="/profile/{{ auth()->user()->email }}/groups/{{ $firstGroup }}">My Groups</a>
+				</li>
+				@endif
 				</ul>
 			</div>
 			<div class="col-xs-12">

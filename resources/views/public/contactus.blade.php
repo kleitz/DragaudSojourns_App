@@ -57,13 +57,13 @@
       </div>
       <div class="phonenumber">
          <a href="mailto:	michael@dragaudsojourns.com">
-         <h2>
+         <h2 style="font-size: 20px">
       Michael@dragaudsojourns.com
          </h2>
          </a>
          Call us at
             <a href="tel:1 (800) 554-7537">
-            <h2>1 (800) 554-7537</h2>
+            <h2 style="font-size: 20px">1 (800) 554-7537</h2>
          </a>
       </div>
 

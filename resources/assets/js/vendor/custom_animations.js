@@ -170,54 +170,59 @@ $(".linear-expander-controller").click(function(){
 })
 
 // Card carousel
-$(document).ready(function(){
+function cardCarousel(){
+  // Define elements
+  let Lbutton = $(".carousel-button.left");
+  let Rbutton = $(".carousel-button.right");
+  let Cards = $('.hz-card');
+  let Reel = $(".card-carousel-reel");
+  // Initialize variables
+  let Scrub = 0;
+  let Left = 0;
+  let Pad = 50;
+  let Width = $(".card-carousel").parent().outerWidth() / ($(Cards[Scrub]).outerWidth() + 10);
+  Width = Math.floor(Width);
 
-  let cC_Lb = $(".carousel-button.left");
-  let cC_Rb = $(".carousel-button.right");
-  let cC = $(".card-carousel");
-  let cC_Cards = document.getElementsByClassName('hz-card');
-  let cC_Reel = $(".card-carousel-reel");
+  // Push carousel left or right depending on function state
+  function cardReel(x){
+    // Increase carousel position & current card
+    Left += ($(Cards[Scrub]).outerWidth() + 10) * x;
+    Scrub -= x;
+    // Determine buttons and padding state
+    if (Scrub == 0) {
+      Pad = 0;
+      Lbutton.addClass('hidden');
+    } else {
+      Pad = 50;
+      Lbutton.removeClass('hidden')
+      if (Scrub > Cards.length - Width - 1)
+        Rbutton.addClass('hidden');
+    }
+    if (x > 0) Rbutton.removeClass('hidden');
+    // Move carousel by position
+    Reel.css('left', Left + Pad);
+  }
 
-
-  if (cC_Cards.length >= 3){
-    cC_Rb.removeClass('hidden');
+  // Initialize starting position
+  if (Cards.length >= Width + 1){
+    Rbutton.removeClass('hidden');
   };
 
-  let cC_Scrub = 0;
-  let cC_Left = 0;
-  let cC_Pad = 50;
-
-  function cardReelL(){
-    cC_Pad = 50;
-    cC_Left -= $(cC_Cards[cC_Scrub]).outerWidth() + 10;
-    cC_Scrub++;
-    cC_Lb.removeClass('hidden');
-    if (cC_Scrub > cC_Cards.length - 4) cC_Rb.addClass('hidden');
-    cC_Reel.css('left', cC_Left + cC_Pad);
-  }
-
-  function cardReelR(){
-    cC_Left += $(cC_Cards[cC_Scrub]).outerWidth() + 10;
-    cC_Scrub--;
-    cC_Rb.removeClass('hidden');
-    if (cC_Scrub == 0) {
-      cC_Pad = 0;
-      cC_Lb.addClass('hidden');
+  for (let i = 0; i < Cards.length; i++){
+    if (i > Width - 1) {
+      cardReel(-1);
     }
-    cC_Reel.css('left', cC_Left + cC_Pad);
-  }
-
-  for (let i = 0; i < cC_Cards.length; i++){
-    if (i > 2) {
-      cardReelL()
-    }
-    if ($(cC_Cards[i]).hasClass('card-active')){
+    if ($(Cards[i]).hasClass('card-active')){
         break;
     }
   }
 
-  cC_Rb.click(function(){ cardReelL() });
-  cC_Lb.click(function(){ cardReelR() });
+  Rbutton.click(function(){ cardReel(-1) });
+  Lbutton.click(function(){ cardReel(1) });
+}
+
+$(document).ready(function(){
+  cardCarousel();
 });
 
 // Create, read, erase cookies

@@ -655,10 +655,12 @@ h2 {
 	border-top-color: #000;
 }
 .footer2 ul {
-	display: block;
-	margin-right: auto;
-	margin-left: auto;
-	width: 1050px;
+	left: -30px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: 1050px;
+  position: relative;
 }
 .footer2 ul li {
 	display: inline;
@@ -667,6 +669,8 @@ h2 {
 	width: 450px;
 }
 .footer2 ul li a {
+	font-weight: 100 !important;
+	font-size: 15px;
 	color: #333333;
 	text-decoration: none;
 	display: block;
