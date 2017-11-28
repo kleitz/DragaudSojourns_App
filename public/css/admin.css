@@ -16011,7 +16011,7 @@ a {
   font-size: 18px;
   font-weight: 300;
   color: #4b95b7;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .admin-banner {
