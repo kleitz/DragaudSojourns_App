@@ -13299,7 +13299,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -13467,7 +13467,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       paypalErr: {
         line1: 'There was an error processing your payment.',
         line2: 'Please select another payment method or try again.'
-      }
+      },
+      paypalChecker: null
     };
   },
 
@@ -13590,6 +13591,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }, 2000);
         }
       });
+    },
+    paypalErrorCheck: function paypalErrorCheck() {
+      var payApp = this;
+      this.paypalChecker = setInterval(function () {
+        if (!$('.paypal-checkout-sandbox').length) {
+          clearInterval(payApp.paypalChecker);
+          payApp.paypalChecker = null;
+          setTimeout(function () {
+            payApp.processingErr = true;
+            zoomOut('#payment-loader');
+            slideLeft('#payment-modal');
+          }, 500);
+        }
+      }, 1000);
     }
   },
   mounted: function mounted() {
@@ -13617,6 +13632,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       },
       payment: function payment(data, actions) {
         // Initialize payment loading modal
+        payApp.paypalErrorCheck();
         payApp.updatePayment();
         zoomOut('#payment-modal');
         slideLeft('#payment-loader');
@@ -13638,6 +13654,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).then(function (data) {
           payApp.processingErr = false;
           payApp.receiptCode = data;
+          clearInterval(payApp.paypalChecker);
           $("#payment-success-button").attr("href", "/payments/receipts/" + data);
           setTimeout(function () {
             zoomOut('#payment-loader');
@@ -13648,24 +13665,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       onCancel: function onCancel(data, actions) {
         payApp.paypalErr = {
           line1: 'It looks like you closed the Paypal payment window.',
-          line2: 'Please click the paypal button to try again.'
+          line2: 'Please click the button below to try again.'
         };
-        setTimeout(function () {
-          payApp.processingErr = true;
-          zoomOut('#payment-loader');
-          slideLeft('#payment-modal');
-        }, 500);
+        clearInterval(payApp.paypalChecker);
+        if (payApp.paypalChecker != null) {
+          setTimeout(function () {
+            payApp.processingErr = true;
+            zoomOut('#payment-loader');
+            slideLeft('#payment-modal');
+          }, 500);
+        }
       },
       onError: function onError(err) {
         payApp.paypalErr = {
           line1: 'There was an error processing your payment.',
           line2: 'Please select another payment method or try again.'
         };
-        setTimeout(function () {
-          payApp.processingErr = true;
-          zoomOut('#payment-loader');
-          slideLeft('#payment-modal');
-        }, 500);
+        clearInterval(payApp.paypalChecker);
+        if (payApp.paypalChecker != null) {
+          setTimeout(function () {
+            payApp.processingErr = true;
+            zoomOut('#payment-loader');
+            slideLeft('#payment-modal');
+          }, 500);
+        }
       }
     }, '#paypal-button');
   },

@@ -1,17 +1,4 @@
 $(document).ready(function(){
-  // $.ajax({
-  //     type: "GET",
-  //     url: '/payments/update',
-  //     data: { records: 20, start_at: 5},
-  //     success: function(data){
-  //       let response = JSON.parse(data);
-  //       console.log(response);
-  //     },
-  //     error : function(error){
-  //       console.log(error);
-  //     }
-  // });
-
   // User Authenticated
   $("#loggedin-button").bind("click", function(){
     slideLeft("#login-dropdown");

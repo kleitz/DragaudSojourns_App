@@ -47,7 +47,7 @@ let authTrips = {!! json_encode($authTrips) !!};
 let tripPayment = '';
 
 let BASE_URL =  {!! "'" . url('/') . "'" !!};
-let PAYPAL_MODE = {!! "'" . env('PAYPAL_APP_MODE') . "'" !!};
+let PAYPAL_MODE = 'sandbox';
 let CREATE_URL = BASE_URL + '/payments/create';
 let EXECUTE_URL = BASE_URL + '/payments/execute';
 

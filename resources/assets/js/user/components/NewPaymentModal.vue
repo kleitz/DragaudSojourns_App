@@ -151,7 +151,8 @@ import SuccessModal from './SuccessModal.vue';
         paypalErr: {
           line1: 'There was an error processing your payment.',
           line2: 'Please select another payment method or try again.'
-        }
+        },
+        paypalChecker: null,
   		}
   	},
     methods: {
@@ -273,6 +274,20 @@ import SuccessModal from './SuccessModal.vue';
     				}
         });
       },
+      paypalErrorCheck(){
+        let payApp = this;
+        this.paypalChecker = setInterval(function(){
+          if (!$('.paypal-checkout-sandbox').length) {
+            clearInterval(payApp.paypalChecker);
+            payApp.paypalChecker = null;
+            setTimeout(function(){
+              payApp.processingErr = true;
+              zoomOut('#payment-loader');
+              slideLeft('#payment-modal');
+            },500);
+          }
+        }, 1000);
+      }
     },
     mounted() {
       this.tripDetails = tripPayment;
@@ -299,6 +314,7 @@ import SuccessModal from './SuccessModal.vue';
       		},
       		payment: function(data, actions) {
       			// Initialize payment loading modal
+              payApp.paypalErrorCheck();
               payApp.updatePayment();
               zoomOut('#payment-modal');
               slideLeft('#payment-loader');
@@ -320,6 +336,7 @@ import SuccessModal from './SuccessModal.vue';
       			}).then(function(data) {
               payApp.processingErr = false;
               payApp.receiptCode = data;
+              clearInterval(payApp.paypalChecker);
               $("#payment-success-button").attr("href", "/payments/receipts/" + data);
               setTimeout(function(){
                 zoomOut('#payment-loader');
@@ -330,24 +347,30 @@ import SuccessModal from './SuccessModal.vue';
       		onCancel: function(data, actions) {
             payApp.paypalErr = {
               line1: 'It looks like you closed the Paypal payment window.',
-              line2: 'Please click the paypal button to try again.'
+              line2: 'Please click the button below to try again.'
             };
-            setTimeout(function(){
-              payApp.processingErr = true;
-              zoomOut('#payment-loader');
-              slideLeft('#payment-modal');
-            },500);
+            clearInterval(payApp.paypalChecker);
+            if (payApp.paypalChecker != null){
+              setTimeout(function(){
+                payApp.processingErr = true;
+                zoomOut('#payment-loader');
+                slideLeft('#payment-modal');
+              },500);
+            }
       		},
       		onError: function(err) {
             payApp.paypalErr = {
               line1: 'There was an error processing your payment.',
               line2: 'Please select another payment method or try again.'
             };
-            setTimeout(function(){
-              payApp.processingErr = true;
-              zoomOut('#payment-loader');
-              slideLeft('#payment-modal');
-            },500);
+            clearInterval(payApp.paypalChecker);
+            if (payApp.paypalChecker != null){
+              setTimeout(function(){
+                payApp.processingErr = true;
+                zoomOut('#payment-loader');
+                slideLeft('#payment-modal');
+              },500);
+            }
       		}
       	}, '#paypal-button');
     },
