@@ -9,7 +9,7 @@
 	if (count($authCoords) > 0)
 	$firstGroup = App\Group::where('id', '=', $authCoords->first()->group_id)->first()->number;
 ?>
-
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
 @section('content')
 	@include('partials.user.details')
 	<div class="col-xs-9">
@@ -45,4 +45,10 @@ let authUsr = {!! json_encode($authUsr->toArray()) !!};
 let authTravs = {!! json_encode($authTravs) !!};
 let authTrips = {!! json_encode($authTrips) !!};
 let tripPayment = '';
+
+let BASE_URL =  {!! "'" . url('/') . "'" !!};
+let PAYPAL_MODE = {!! "'" . env('PAYPAL_APP_MODE') . "'" !!};
+let CREATE_URL = BASE_URL + '/payments/create';
+let EXECUTE_URL = BASE_URL + '/payments/execute';
+
 </script>

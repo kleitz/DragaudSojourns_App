@@ -4,12 +4,16 @@ $(document).ready(function(){
   let passAttempt = 0;
   // Display login button & login form
   $("#login-button").click(function(){
+    setTimeout(function(){
+      $("#login-email").focus();
+    }, 300);
     $(this).addClass('login-button-active');
     $('#login-modal').addClass('login-modal-reveal');
   });
   // Close login form
 
   function hideLoginForm(){
+    $("#login-email").blur();
     $("#login-button").removeClass('login-button-active');
     $('#login-modal').removeClass('login-modal-reveal');
     $("#login-pass").removeClass('pass-bullets');
@@ -35,6 +39,8 @@ $(document).ready(function(){
     checkValid;
 
     if (checkValid == true) {
+      $("#login-email").blur();
+      $("#login-pass").blur();
       fadeIn("#dark-overlay");
       slideLeft("#login-loader");
       $('#login-details-err').addClass('hidden');

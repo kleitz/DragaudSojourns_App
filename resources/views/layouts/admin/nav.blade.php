@@ -53,7 +53,7 @@
         <div class="admin-nav-icon">
           @include('partials.vector.system')
         </div>
-        @if (Request::is('*/settings/*'))
+        @if (Request::is('*/settings'))
         <p class="flex-col-center admin-nav-active">Settings</p>
         @else
         <p class="flex-col-center">Settings</p>

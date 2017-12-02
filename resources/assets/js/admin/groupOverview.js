@@ -11,7 +11,7 @@ const groupTravelersApp = new Vue({
       paymentType: 'discount',
       payment: {
           traveler: '', user: '',
-          method: '', paypal_id: 'Administrator Payment',
+          method: '', paypal_id: 'admin-' + Date.now(),
           user_id: '', trip_id: '',
           amount: '0.00', fee: 0,
           balance: '', balanceIn: '',

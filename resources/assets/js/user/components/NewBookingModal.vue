@@ -90,7 +90,7 @@
                 <input @change="detailsProceed" id="release-agree" type="checkbox" class="custom-control-input booking-checkbox">
                 <span class="custom-control-indicator"></span>
                 <span class="custom-control-description booking-checkbox-description">I have read and agree to the terms of Dragaud Custom Sojourn’s
-                  <a :href="'/' + groupDetails.release" target="_blank">Release of Liability and Cancellation Policy</a>
+                  <a :href="'/' + groupDetails.release" target="_blank" style="font-size: 14px; font-weight: 400">Release of Liability and Cancellation Policy</a>
                 </span>
               </div>
             </label>

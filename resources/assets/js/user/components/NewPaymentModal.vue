@@ -28,7 +28,7 @@
             <label for="amount">Payment amount</label>
             <div class="input-group payment-input-label">
               <div class="input-group-addon">$</div>
-              <input id="payment-amount" v-model="paymentDetails.amount" @keyup="updatePayment" type="text" class="form-control floats-only currency-format" value="0.00">
+              <input id="payment-amount" v-model="paymentDetails.amount" @keyup="checkPayment" @blur="updatePayment" type="text" class="form-control floats-only">
             </div>
             <div style="margin-top: 15px">
               <label for="remainigbalance">Remaining balance</label>
@@ -40,13 +40,14 @@
         <div id="paypal-option" class="panel panel-secure-inner border-panel-light hidden">
           <div v-if="processingErr == true" id="payment-details-err">
             <div class="ds-form-error ds-details-err flex-row-start" style="padding: 8px 20px !important; border-radius: 3px 3px 0 0 !important">
-              <img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>There was an error processing your payment.<br/>
-              Please select another payment method or try again.
+              <img src="/assets/images/icons/hazard_tri.png" class="input-hazard"/>{{ paypalErr.line1 }}<br/>
+              {{ paypalErr.line2 }}
             </div>
           </div>
           <p>Continue to Paypal and login</p>
-          <button @click="processPayment" type="button" v-bind:class="{'button-locked' : paymentValid == false, 'ds-button full-width button-gen waves-effect waves-light' : true}">
-            <img v-if="paymentValid == false" src="/assets/images/icons/locked-padlock.png" />Pay ${{ formatButton }}</button>
+          <button disabled v-if="paymentValid== false" type="button" v-bind:class="{'button-locked' : paymentValid == false, 'ds-button full-width button-gen waves-effect waves-light' : true}">
+            <img src="/assets/images/icons/locked-padlock.png" />Pay ${{ formatButton }}</button>
+            <div :class="{'hidden' : paymentValid == false}"  id="paypal-button"></div>
         </div>
         <!-- CREDIT CARD CONTINUE-->
         <div id="credit-option" class="panel panel-secure-inner border-panel-light">
@@ -59,11 +60,11 @@
           <form class="payment-input">
             <div class="form-group">
               <label for="cardholder">Name on card</label>
-              <input @keyup="updatePayment"  v-model="paymentDetails.cardholder" type="text" class="form-control credit-input" name="cardholder">
+              <input @keyup="updatePayment"  v-model="paymentDetails.card_holder" type="text" class="form-control credit-input" name="cardholder">
             </div>
             <div class="form-group">
-              <label for="cardnumber">Card number</label>
-              <input @keyup="updatePayment" maxlength="19" v-model="paymentDetails.cardnumber" type="text" class="form-control credit-input numbers-only credit-format" name="cardnumber">
+              <label for="card_number">Card number</label>
+              <input @keyup="updatePayment" maxlength="19" v-model="paymentDetails.card_number" type="text" class="form-control credit-input numbers-only" name="card_number">
             </div>
             <div class="flex-row-between">
               <div class="form-group" style="margin-bottom: 22px; width: 120px">
@@ -75,7 +76,7 @@
                   </select>
                   <select @change="updatePayment" v-model="paymentDetails.exp_y" class="custom-select form-control" name="expiry">
                     <option selected class='select-default'>YY</option>
-                    <option v-for="year in selectYear" :value="year" > {{ year }} </option>
+                    <option v-for="year in selectYear" :value="'20' + year" > {{ year }} </option>
                   </select>
                 </div>
               </div>
@@ -129,8 +130,28 @@ import SuccessModal from './SuccessModal.vue';
         selectYear: [],
         paymentMethod: 'credit',
         receiptCode: '',
-        paymentDetails: { amount: '0.00', cardholder: '', cardnumber: '', exp_m: '', exp_y: '', cvv2: '', method: '' },
-        paymentSave: { amount: '0.00', fee: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit'}
+        paymentDetails: {
+          user_id: authUsr.id,
+          trip_id: '',
+          amount: '0.00',
+          card_holder: '',
+          card_number: '',
+          exp_m: '',
+          exp_y: '',
+          cvv2: '',
+          type: '',
+          method: 'credit'
+        },
+        paypalDirect: {
+          user_id: authUsr.id,
+          trip_id: '',
+          amount: '0.00',
+    			method: 'paypal',
+        },
+        paypalErr: {
+          line1: 'There was an error processing your payment.',
+          line2: 'Please select another payment method or try again.'
+        }
   		}
   	},
     methods: {
@@ -143,16 +164,21 @@ import SuccessModal from './SuccessModal.vue';
         let amt = $('#payment-amount').val();
         this.getMethod();
         this.hideHelper();
+        this.processingErr = false;
         if (parseFloat(amt) > parseFloat(this.tripDetails.trip_balance))
           amt = this.tripDetails.trip_balance;
-        this.paymentDetails.amount = amt;
+        this.paymentDetails.amount = this.formatCurrency(amt);
+        this.paypalDirect.amount = this.formatCurrency(amt);
 
+        this.checkPayment();
+      },
+      checkPayment(){
         this.paymentValid = false;
         if (this.paymentMethod == 'paypal'){
           if (this.paymentDetails.amount > 0)
             this.paymentValid = true;
         } else {
-          let cardNum = this.paymentDetails.cardnumber;
+          let cardNum = this.paymentDetails.card_number;
           let cardStr = cardNum.toString().replace(/-/g, '');
           if (this.paymentDetails.amount > 0 && this.paymentDetails.cardholder != '' &&
               this.paymentDetails.exp_y != 'YY' && this.paymentDetails.exp_m != 'MM' &&
@@ -160,20 +186,21 @@ import SuccessModal from './SuccessModal.vue';
             this.paymentValid = true;
         }
       },
+      formatCurrency(val) {
+        return parseFloat(Math.round(val * 100) / 100).toFixed(2);
+      },
       getMethod(){
-        let cardNum = this.paymentDetails.cardnumber.toString().replace(/-/g, '');
-        var type = creditCardType(cardNum);
-        if (type[0].type){
-          this.paymentDetails.method = type[0].type;
+        let cardNum = this.paymentDetails.card_number.toString().replace(/-/g, '');
+        let cc_type = getMethod(cardNum);
+        this.paymentDetails.type = cc_type;
+        if (cc_type != 'amex'){
           $("#cvv2-helper").html(
             "<p>Visa, Mastercard, Discover:<br/>The 3 digits on the <i>back</i> of your card</p>"
           );
-          if (type[0].type != 'visa' && type[0].type != 'discover' &&  type[0].type != 'master-card')
-            $("#cvv2-helper").html(
-              "<p>American Express:<br/>The 4 digits on the <i>front</i> of your card</p>"
-            );
         } else {
-          this.paymentDetails.method = 'visa';
+          $("#cvv2-helper").html(
+            "<p>American Express:<br/>The 4 digits on the <i>front</i> of your card</p>"
+          );
         }
       },
       selectPaypal(event){
@@ -183,7 +210,6 @@ import SuccessModal from './SuccessModal.vue';
         $("#credit-option").addClass('hidden');
         $("#paypal-option").removeClass('hidden');
         this.updatePayment();
-        this.calculateFee();
       },
       selectCredit(event){
         this.paymentMethod = 'credit';
@@ -192,15 +218,6 @@ import SuccessModal from './SuccessModal.vue';
         $("#credit-option").removeClass('hidden');
         $("#paypal-option").addClass('hidden');
         this.updatePayment();
-        this.calculateFee();
-      },
-      calculateFee(){
-        let $amount = parseFloat(this.paymentDetails.amount);
-        if (this.paymentMethod == 'credit') {
-          this.paymentSave.fee = ($amount < 100) ? formatCurrency($amount * .2) : '20.00';
-        } else  {
-          this.paymentSave.fee = '0.00';
-        }
       },
       showHelper(){
         slideLeft("#cvv2-helper");
@@ -220,45 +237,47 @@ import SuccessModal from './SuccessModal.vue';
         }
       },
       processPaypal(){
+        this.paypalDirect.amount = this.paymentDetails.amount;
         this.savePayment();
       },
       processCredit(){
-        this.savePayment();
-      },
-      savePayment(){
-        this.paymentSave.paypal_id = Date.now();
-        this.paymentSave.method = this.paymentMethod;
-        this.paymentSave.amount = this.paymentDetails.amount;
         let payApp = this;
         $.ajax({
             type: "POST",
-            url: '/payments/store',
-            data: { payment : payApp.paymentSave},
+            url: '/payments/credit',
+            data: { payment : payApp.paymentDetails},
             success: function(data){
-              let response = JSON.parse(data);
-              if (response.status == "SUCCESS") {
-                payApp.processingErr = false;
-                payApp.receiptCode = response.verification;
-                $("#payment-success-button").attr("href", "/payments/receipts/" + response.verification);
-                setTimeout(function(){
-                  zoomOut('#payment-loader');
-                  slideLeft('#payment-success');
-                },2000);
-              } else {
+    					let response = JSON.parse(data);
+    					if (response.hasOwnProperty('message')){
                 setTimeout(function(){
                   payApp.processingErr = true;
                   zoomOut('#payment-loader');
                   slideLeft('#payment-modal');
-                },2000);
-              }
-            }
+                },500);
+    					} else {
+                payApp.processingErr = false;
+                payApp.receiptCode = response;
+                $("#payment-success-button").attr("href", "/payments/receipts/" + response);
+                setTimeout(function(){
+                  zoomOut('#payment-loader');
+                  slideLeft('#payment-success');
+                },500);
+    					}
+            },
+    				error : function(error){
+              setTimeout(function(){
+                payApp.processingErr = true;
+                zoomOut('#payment-loader');
+                slideLeft('#payment-modal');
+              },2000);
+    				}
         });
-      }
+      },
     },
     mounted() {
       this.tripDetails = tripPayment;
-      this.paymentSave.trip_id = this.tripDetails.trip_id;
-      this.paymentSave.group_id = this.tripDetails.group_id;
+      this.paymentDetails.trip_id = this.tripDetails.trip_id;
+      this.paypalDirect.trip_id = this.tripDetails.trip_id;
       let curYear = (new Date).getFullYear();
       for (let i = 0; i <= 10; i++){
         this.selectYear[i] = (curYear + i).toString().slice(-2);
@@ -266,17 +285,80 @@ import SuccessModal from './SuccessModal.vue';
       $("#payment-success-close").attr("href", window.location.href);
       $("#payment-success-button").attr("target", '_blank');
       bindFormatters();
+
+      let payApp = this;
+      paypal.Button.render({
+      		env: PAYPAL_MODE,
+      		commit: true,
+      		style: {
+      				label: 'paypal',
+      				color: 'blue',
+      				shape: 'rect',
+      				size: 'responsive',
+      				tagline: false
+      		},
+      		payment: function(data, actions) {
+      			// Initialize payment loading modal
+              payApp.updatePayment();
+              zoomOut('#payment-modal');
+              slideLeft('#payment-loader');
+      				return paypal.request.post(CREATE_URL,{
+      						user_id: payApp.paypalDirect.user_id,
+      						trip_id: payApp.paypalDirect.trip_id,
+      						amount: payApp.paypalDirect.amount,
+      						method: payApp.paypalDirect.method,
+      				}).then(function(data) {
+      						return data.id;
+      				});
+      		},
+      		onAuthorize: function(data, actions) {
+      			return paypal.request.post(EXECUTE_URL, {
+      					paymentID: data.paymentID,
+      					payerID:   data.payerID,
+      					trip_id: payApp.paypalDirect.trip_id,
+      					amount: payApp.paypalDirect.amount,
+      			}).then(function(data) {
+              payApp.processingErr = false;
+              payApp.receiptCode = data;
+              $("#payment-success-button").attr("href", "/payments/receipts/" + data);
+              setTimeout(function(){
+                zoomOut('#payment-loader');
+                slideLeft('#payment-success');
+              },500);
+      			});
+      		},
+      		onCancel: function(data, actions) {
+            payApp.paypalErr = {
+              line1: 'It looks like you closed the Paypal payment window.',
+              line2: 'Please click the paypal button to try again.'
+            };
+            setTimeout(function(){
+              payApp.processingErr = true;
+              zoomOut('#payment-loader');
+              slideLeft('#payment-modal');
+            },500);
+      		},
+      		onError: function(err) {
+            payApp.paypalErr = {
+              line1: 'There was an error processing your payment.',
+              line2: 'Please select another payment method or try again.'
+            };
+            setTimeout(function(){
+              payApp.processingErr = true;
+              zoomOut('#payment-loader');
+              slideLeft('#payment-modal');
+            },500);
+      		}
+      	}, '#paypal-button');
     },
     computed: {
       remainingBalance(){
         let val = this.tripDetails.trip_balance - this.paymentDetails.amount;
         if (parseFloat(val) < 0)
           val = 0;
-        this.paymentSave.balance = formatCurrency(val);
         return formatCurrency(val);
       },
       formatButton(){
-        this.calculateFee();
         return formatCurrency(this.paymentDetails.amount).toString();
       },
     },

@@ -55,22 +55,21 @@
     </table>
   </div>
   <div class="col-xs-5 full-height">
-    <div class="col-xs-1"></div>
-    <div class="flex-col-around full-height col-xs-11" style="padding-right: 50px">
+    <div class="flex-col-around full-height col-xs-12" style="padding-right: 50px">
       <div class="admin-panalytics-total flex-row-start">
-        <div class="col-xs-6">
-          <h4 class="ds-blue text-right">${{ number_format($analytics->total) }}</h4>
+        <div class="col-xs-7">
+          <h4 class="ds-blue text-right">${{ number_format((float)$analytics->total, 2, '.', ',') }}</h4>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-5">
           <label>Total income</label>
           <p>Over period</p>
         </div>
       </div>
       <div class="admin-panalytics-total" style='border-bottom: 0'>
-        <div class="col-xs-6">
-          <h4 class="ds-trueblue text-right">${{ number_format($analytics->fees) }}</h4>
+        <div class="col-xs-7">
+          <h4 class="ds-trueblue text-right">${{ number_format((float)$analytics->fees, 2, '.', ',') }}</h4>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-5">
           <label>Processing fees</label>
           <p>Over period</p>
         </div>

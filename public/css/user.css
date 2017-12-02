@@ -16912,8 +16912,9 @@ a {
   margin: 0 10px 0 0;
 }
 
-.coordinator-trips-table td {
-  border-top: 0px !important;
+.row-odd td,
+.row-even td {
+  border-top: 1px solid #eaeaea !important;
 }
 
 .coordinator-trips-table .row-odd {
@@ -16941,7 +16942,6 @@ a {
 .coordinator-trips-expanded .expander-content {
   background-color: #fcfcfc;
   margin: 0;
-  border-bottom: 1px solid #ddd;
   -webkit-box-shadow: inset 0px 4px 2px -2px rgba(0, 0, 0, 0.2);
           box-shadow: inset 0px 4px 2px -2px rgba(0, 0, 0, 0.2);
 }

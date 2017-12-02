@@ -36,7 +36,7 @@
           <span class="custom-control-description" style="font-size: 18px; font-weight: 300">Payment</span>
         </label>
       </div>
-      <!-- PAYPAL CONTINUE -->
+      <!-- PAYMENT CONTINUE -->
       <div class="panel panel-secure-inner border-panel-light modal-popup-form">
         <div class="form-group">
           <label for="method">Method</label>

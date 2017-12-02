@@ -8,7 +8,7 @@ class Payment extends Model
 {
 
   protected $fillable = [
-      'method', 'paypal_id', 'user_id', 'trip_id', 'amount', 'fee', 'balance', 'verification', 'created_at'
+      'attempt', 'method', 'paypal_id', 'user_id', 'trip_id', 'amount', 'fee', 'balance', 'verification', 'created_at'
   ];
 
   public function user(){

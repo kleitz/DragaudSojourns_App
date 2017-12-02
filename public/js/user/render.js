@@ -13000,6 +13000,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }), _vm._v(" "), _c('span', {
     staticClass: "custom-control-description booking-checkbox-description"
   }, [_vm._v("I have read and agree to the terms of Dragaud Custom Sojourn’s\n                "), _c('a', {
+    staticStyle: {
+      "font-size": "14px",
+      "font-weight": "400"
+    },
     attrs: {
       "href": '/' + _vm.groupDetails.release,
       "target": "_blank"
@@ -13295,7 +13299,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -13310,6 +13314,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__LoadingModal_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__SuccessModal_vue__);
+//
 //
 //
 //
@@ -13441,8 +13446,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       selectYear: [],
       paymentMethod: 'credit',
       receiptCode: '',
-      paymentDetails: { amount: '0.00', cardholder: '', cardnumber: '', exp_m: '', exp_y: '', cvv2: '', method: '' },
-      paymentSave: { amount: '0.00', fee: '0.00', balance: '', paypal_id: '', user_id: authUsr.id, trip_id: '', group_id: '', method: 'credit' }
+      paymentDetails: {
+        user_id: authUsr.id,
+        trip_id: '',
+        amount: '0.00',
+        card_holder: '',
+        card_number: '',
+        exp_m: '',
+        exp_y: '',
+        cvv2: '',
+        type: '',
+        method: 'credit'
+      },
+      paypalDirect: {
+        user_id: authUsr.id,
+        trip_id: '',
+        amount: '0.00',
+        method: 'paypal'
+      },
+      paypalErr: {
+        line1: 'There was an error processing your payment.',
+        line2: 'Please select another payment method or try again.'
+      }
     };
   },
 
@@ -13456,29 +13481,46 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       var amt = $('#payment-amount').val();
       this.getMethod();
       this.hideHelper();
+      this.processingErr = false;
       if (parseFloat(amt) > parseFloat(this.tripDetails.trip_balance)) amt = this.tripDetails.trip_balance;
-      this.paymentDetails.amount = amt;
+      this.paymentDetails.amount = this.formatCurrency(amt);
+      this.paypalDirect.amount = this.formatCurrency(amt);
 
+      this.checkPayment();
+    },
+    checkPayment: function checkPayment() {
       this.paymentValid = false;
       if (this.paymentMethod == 'paypal') {
         if (this.paymentDetails.amount > 0) this.paymentValid = true;
       } else {
-        var cardNum = this.paymentDetails.cardnumber;
+        var cardNum = this.paymentDetails.card_number;
         var cardStr = cardNum.toString().replace(/-/g, '');
         if (this.paymentDetails.amount > 0 && this.paymentDetails.cardholder != '' && this.paymentDetails.exp_y != 'YY' && this.paymentDetails.exp_m != 'MM' && this.paymentDetails.cvv2.toString().length > 2 && cardStr.length > 11) this.paymentValid = true;
       }
     },
-    getMethod: function getMethod() {
-      var cardNum = this.paymentDetails.cardnumber.toString().replace(/-/g, '');
-      var type = creditCardType(cardNum);
-      if (type[0].type) {
-        this.paymentDetails.method = type[0].type;
-        $("#cvv2-helper").html("<p>Visa, Mastercard, Discover:<br/>The 3 digits on the <i>back</i> of your card</p>");
-        if (type[0].type != 'visa' && type[0].type != 'discover' && type[0].type != 'master-card') $("#cvv2-helper").html("<p>American Express:<br/>The 4 digits on the <i>front</i> of your card</p>");
-      } else {
-        this.paymentDetails.method = 'visa';
-      }
+    formatCurrency: function formatCurrency(val) {
+      return parseFloat(Math.round(val * 100) / 100).toFixed(2);
     },
+    getMethod: function (_getMethod) {
+      function getMethod() {
+        return _getMethod.apply(this, arguments);
+      }
+
+      getMethod.toString = function () {
+        return _getMethod.toString();
+      };
+
+      return getMethod;
+    }(function () {
+      var cardNum = this.paymentDetails.card_number.toString().replace(/-/g, '');
+      var cc_type = getMethod(cardNum);
+      this.paymentDetails.type = cc_type;
+      if (cc_type != 'amex') {
+        $("#cvv2-helper").html("<p>Visa, Mastercard, Discover:<br/>The 3 digits on the <i>back</i> of your card</p>");
+      } else {
+        $("#cvv2-helper").html("<p>American Express:<br/>The 4 digits on the <i>front</i> of your card</p>");
+      }
+    }),
     selectPaypal: function selectPaypal(event) {
       this.paymentMethod = 'paypal';
       $(event.target).prop("checked", true);
@@ -13486,7 +13528,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       $("#credit-option").addClass('hidden');
       $("#paypal-option").removeClass('hidden');
       this.updatePayment();
-      this.calculateFee();
     },
     selectCredit: function selectCredit(event) {
       this.paymentMethod = 'credit';
@@ -13495,15 +13536,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       $("#credit-option").removeClass('hidden');
       $("#paypal-option").addClass('hidden');
       this.updatePayment();
-      this.calculateFee();
-    },
-    calculateFee: function calculateFee() {
-      var $amount = parseFloat(this.paymentDetails.amount);
-      if (this.paymentMethod == 'credit') {
-        this.paymentSave.fee = $amount < 100 ? formatCurrency($amount * .2) : '20.00';
-      } else {
-        this.paymentSave.fee = '0.00';
-      }
     },
     showHelper: function showHelper() {
       slideLeft("#cvv2-helper");
@@ -13523,45 +13555,47 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     processPaypal: function processPaypal() {
+      this.paypalDirect.amount = this.paymentDetails.amount;
       this.savePayment();
     },
     processCredit: function processCredit() {
-      this.savePayment();
-    },
-    savePayment: function savePayment() {
-      this.paymentSave.paypal_id = Date.now();
-      this.paymentSave.method = this.paymentMethod;
-      this.paymentSave.amount = this.paymentDetails.amount;
       var payApp = this;
       $.ajax({
         type: "POST",
-        url: '/payments/store',
-        data: { payment: payApp.paymentSave },
+        url: '/payments/credit',
+        data: { payment: payApp.paymentDetails },
         success: function success(data) {
           var response = JSON.parse(data);
-          if (response.status == "SUCCESS") {
-            payApp.processingErr = false;
-            payApp.receiptCode = response.verification;
-            $("#payment-success-button").attr("href", "/payments/receipts/" + response.verification);
-            setTimeout(function () {
-              zoomOut('#payment-loader');
-              slideLeft('#payment-success');
-            }, 2000);
-          } else {
+          if (response.hasOwnProperty('message')) {
             setTimeout(function () {
               payApp.processingErr = true;
               zoomOut('#payment-loader');
               slideLeft('#payment-modal');
-            }, 2000);
+            }, 500);
+          } else {
+            payApp.processingErr = false;
+            payApp.receiptCode = response;
+            $("#payment-success-button").attr("href", "/payments/receipts/" + response);
+            setTimeout(function () {
+              zoomOut('#payment-loader');
+              slideLeft('#payment-success');
+            }, 500);
           }
+        },
+        error: function error(_error) {
+          setTimeout(function () {
+            payApp.processingErr = true;
+            zoomOut('#payment-loader');
+            slideLeft('#payment-modal');
+          }, 2000);
         }
       });
     }
   },
   mounted: function mounted() {
     this.tripDetails = tripPayment;
-    this.paymentSave.trip_id = this.tripDetails.trip_id;
-    this.paymentSave.group_id = this.tripDetails.group_id;
+    this.paymentDetails.trip_id = this.tripDetails.trip_id;
+    this.paypalDirect.trip_id = this.tripDetails.trip_id;
     var curYear = new Date().getFullYear();
     for (var i = 0; i <= 10; i++) {
       this.selectYear[i] = (curYear + i).toString().slice(-2);
@@ -13569,17 +13603,80 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     $("#payment-success-close").attr("href", window.location.href);
     $("#payment-success-button").attr("target", '_blank');
     bindFormatters();
+
+    var payApp = this;
+    paypal.Button.render({
+      env: PAYPAL_MODE,
+      commit: true,
+      style: {
+        label: 'paypal',
+        color: 'blue',
+        shape: 'rect',
+        size: 'responsive',
+        tagline: false
+      },
+      payment: function payment(data, actions) {
+        // Initialize payment loading modal
+        payApp.updatePayment();
+        zoomOut('#payment-modal');
+        slideLeft('#payment-loader');
+        return paypal.request.post(CREATE_URL, {
+          user_id: payApp.paypalDirect.user_id,
+          trip_id: payApp.paypalDirect.trip_id,
+          amount: payApp.paypalDirect.amount,
+          method: payApp.paypalDirect.method
+        }).then(function (data) {
+          return data.id;
+        });
+      },
+      onAuthorize: function onAuthorize(data, actions) {
+        return paypal.request.post(EXECUTE_URL, {
+          paymentID: data.paymentID,
+          payerID: data.payerID,
+          trip_id: payApp.paypalDirect.trip_id,
+          amount: payApp.paypalDirect.amount
+        }).then(function (data) {
+          payApp.processingErr = false;
+          payApp.receiptCode = data;
+          $("#payment-success-button").attr("href", "/payments/receipts/" + data);
+          setTimeout(function () {
+            zoomOut('#payment-loader');
+            slideLeft('#payment-success');
+          }, 500);
+        });
+      },
+      onCancel: function onCancel(data, actions) {
+        payApp.paypalErr = {
+          line1: 'It looks like you closed the Paypal payment window.',
+          line2: 'Please click the paypal button to try again.'
+        };
+        setTimeout(function () {
+          payApp.processingErr = true;
+          zoomOut('#payment-loader');
+          slideLeft('#payment-modal');
+        }, 500);
+      },
+      onError: function onError(err) {
+        payApp.paypalErr = {
+          line1: 'There was an error processing your payment.',
+          line2: 'Please select another payment method or try again.'
+        };
+        setTimeout(function () {
+          payApp.processingErr = true;
+          zoomOut('#payment-loader');
+          slideLeft('#payment-modal');
+        }, 500);
+      }
+    }, '#paypal-button');
   },
 
   computed: {
     remainingBalance: function remainingBalance() {
       var val = this.tripDetails.trip_balance - this.paymentDetails.amount;
       if (parseFloat(val) < 0) val = 0;
-      this.paymentSave.balance = formatCurrency(val);
       return formatCurrency(val);
     },
     formatButton: function formatButton() {
-      this.calculateFee();
       return formatCurrency(this.paymentDetails.amount).toString();
     }
   },
@@ -13670,17 +13767,17 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       value: (_vm.paymentDetails.amount),
       expression: "paymentDetails.amount"
     }],
-    staticClass: "form-control floats-only currency-format",
+    staticClass: "form-control floats-only",
     attrs: {
       "id": "payment-amount",
-      "type": "text",
-      "value": "0.00"
+      "type": "text"
     },
     domProps: {
       "value": (_vm.paymentDetails.amount)
     },
     on: {
-      "keyup": _vm.updatePayment,
+      "keyup": _vm.checkPayment,
+      "blur": _vm.updatePayment,
       "input": function($event) {
         if ($event.target.composing) { return; }
         _vm.paymentDetails.amount = $event.target.value
@@ -13703,21 +13800,37 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "payment-details-err"
     }
-  }, [_vm._m(2)]) : _vm._e(), _vm._v(" "), _c('p', [_vm._v("Continue to Paypal and login")]), _vm._v(" "), _c('button', {
+  }, [_c('div', {
+    staticClass: "ds-form-error ds-details-err flex-row-start",
+    staticStyle: {
+      "padding": "8px 20px !important",
+      "border-radius": "3px 3px 0 0 !important"
+    }
+  }, [_c('img', {
+    staticClass: "input-hazard",
+    attrs: {
+      "src": "/assets/images/icons/hazard_tri.png"
+    }
+  }), _vm._v(_vm._s(_vm.paypalErr.line1)), _c('br'), _vm._v("\n            " + _vm._s(_vm.paypalErr.line2) + "\n          ")])]) : _vm._e(), _vm._v(" "), _c('p', [_vm._v("Continue to Paypal and login")]), _vm._v(" "), (_vm.paymentValid == false) ? _c('button', {
     class: {
       'button-locked': _vm.paymentValid == false, 'ds-button full-width button-gen waves-effect waves-light': true
     },
     attrs: {
+      "disabled": "",
       "type": "button"
-    },
-    on: {
-      "click": _vm.processPayment
     }
-  }, [(_vm.paymentValid == false) ? _c('img', {
+  }, [_c('img', {
     attrs: {
       "src": "/assets/images/icons/locked-padlock.png"
     }
-  }) : _vm._e(), _vm._v("Pay $" + _vm._s(_vm.formatButton))])]), _vm._v(" "), _c('div', {
+  }), _vm._v("Pay $" + _vm._s(_vm.formatButton))]) : _vm._e(), _vm._v(" "), _c('div', {
+    class: {
+      'hidden': _vm.paymentValid == false
+    },
+    attrs: {
+      "id": "paypal-button"
+    }
+  })]), _vm._v(" "), _c('div', {
     staticClass: "panel panel-secure-inner border-panel-light",
     attrs: {
       "id": "credit-option"
@@ -13726,7 +13839,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     attrs: {
       "id": "payment-details-err"
     }
-  }, [_vm._m(3)]) : _vm._e(), _vm._v(" "), _c('form', {
+  }, [_vm._m(2)]) : _vm._e(), _vm._v(" "), _c('form', {
     staticClass: "payment-input"
   }, [_c('div', {
     staticClass: "form-group"
@@ -13738,8 +13851,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.paymentDetails.cardholder),
-      expression: "paymentDetails.cardholder"
+      value: (_vm.paymentDetails.card_holder),
+      expression: "paymentDetails.card_holder"
     }],
     staticClass: "form-control credit-input",
     attrs: {
@@ -13747,42 +13860,42 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "name": "cardholder"
     },
     domProps: {
-      "value": (_vm.paymentDetails.cardholder)
+      "value": (_vm.paymentDetails.card_holder)
     },
     on: {
       "keyup": _vm.updatePayment,
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.paymentDetails.cardholder = $event.target.value
+        _vm.paymentDetails.card_holder = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
     staticClass: "form-group"
   }, [_c('label', {
     attrs: {
-      "for": "cardnumber"
+      "for": "card_number"
     }
   }, [_vm._v("Card number")]), _vm._v(" "), _c('input', {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: (_vm.paymentDetails.cardnumber),
-      expression: "paymentDetails.cardnumber"
+      value: (_vm.paymentDetails.card_number),
+      expression: "paymentDetails.card_number"
     }],
-    staticClass: "form-control credit-input numbers-only credit-format",
+    staticClass: "form-control credit-input numbers-only",
     attrs: {
       "maxlength": "19",
       "type": "text",
-      "name": "cardnumber"
+      "name": "card_number"
     },
     domProps: {
-      "value": (_vm.paymentDetails.cardnumber)
+      "value": (_vm.paymentDetails.card_number)
     },
     on: {
       "keyup": _vm.updatePayment,
       "input": function($event) {
         if ($event.target.composing) { return; }
-        _vm.paymentDetails.cardnumber = $event.target.value
+        _vm.paymentDetails.card_number = $event.target.value
       }
     }
   })]), _vm._v(" "), _c('div', {
@@ -13865,7 +13978,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_vm._v("YY")]), _vm._v(" "), _vm._l((_vm.selectYear), function(year) {
     return _c('option', {
       domProps: {
-        "value": year
+        "value": '20' + year
       }
     }, [_vm._v(" " + _vm._s(year) + " ")])
   })], 2)])]), _vm._v(" "), _c('div', {
@@ -13908,7 +14021,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.showHelper
     }
-  }, [_vm._v("?")])]), _vm._v(" "), _vm._m(4)])])]), _vm._v(" "), _c('button', {
+  }, [_vm._v("?")])]), _vm._v(" "), _vm._m(3)])])]), _vm._v(" "), _c('button', {
     class: {
       'button-locked': _vm.paymentValid == false, 'ds-button full-width button-gen waves-effect waves-light': true
     },
@@ -13988,19 +14101,6 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "height": "32px"
     }
   })])
-},function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "ds-form-error ds-details-err flex-row-start",
-    staticStyle: {
-      "padding": "8px 20px !important",
-      "border-radius": "3px 3px 0 0 !important"
-    }
-  }, [_c('img', {
-    staticClass: "input-hazard",
-    attrs: {
-      "src": "/assets/images/icons/hazard_tri.png"
-    }
-  }), _vm._v("There was an error processing your payment."), _c('br'), _vm._v("\n            Please select another payment method or try again.\n          ")])
 },function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "ds-form-error ds-details-err flex-row-start",

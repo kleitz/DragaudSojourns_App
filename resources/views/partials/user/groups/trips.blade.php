@@ -39,11 +39,7 @@
                 <div class="expander coordinator-expander">
                   <a href="javascript:;" class="expander-controller absolute">Show details</a>
                   <div class="expander-header"></div>
-                  @if ($key != count($curTrips) - 1 )
                   <div class="expander-content">
-                  @else
-                  <div class="expander-content" style="border-bottom: 1px solid #ddd">
-                  @endif
                     <div class="flex-row-start" style="padding: 10px">
                       <div style="width: 15%;">
                         <p>USER NAME:</p>

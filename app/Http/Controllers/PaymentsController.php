@@ -7,6 +7,7 @@ use App\Group;
 use App\Trip;
 use App\User;
 use App\Traveler;
+use App\Repositories\Billing as billing;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -16,6 +17,13 @@ use Elibyy\TCPDF\Facades\TCPDF;
 
 class PaymentsController extends Controller
 {
+
+    private $billing;
+
+    public function __construct(billing $billing)
+    {
+      $this->billing = $billing;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -44,36 +52,15 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        $trip = $request->input('payment.trip_id');
-        $amount = $request->input('payment.amount');
-        $verification = time();
+        $payment = $request->input('payment');
+        $attempted = $this->billing->attempted($payment);
+        $payment['attempt'] = $attempted;
+        $storedPayment = $this->billing->store($payment);
 
-        if ($request->has('payment.created_at')) {
-          $created = $request->input('payment.created_at');
-        } else {
-          $created = date("Y-m-d H:i:s");
-        }
-
-        $curTrip = Trip::find($trip);
-        $curTrip->paid = $curTrip->paid + $amount;
-        $curTrip->save();
-
-        $payment = Payment::create([
-            'method' => $request->input('payment.method'),
-            'paypal_id' => $request->input('payment.paypal_id'),
-            'user_id' => $request->input('payment.user_id'),
-            'trip_id' => $trip,
-            'amount' => $amount,
-            'fee' => $request->input('payment.fee'),
-            'balance' => $request->input('payment.balance'),
-            'verification' => $verification,
-            'created_at' => $created
-          ]);
-
-          $returnData = new \stdClass();
-          $returnData->verification = $verification;
-          $returnData->status = 'SUCCESS';
-          return json_encode($returnData);
+        $returnData = new \stdClass();
+        $returnData->verification = $storedPayment;
+        $returnData->status = 'SUCCESS';
+        return json_encode($returnData);
     }
 
     public function discount(Request $request)

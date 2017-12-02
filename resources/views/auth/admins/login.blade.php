@@ -69,7 +69,7 @@
                                       <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me
                                   </label>
                               </div>
-                              <a class="flex-col-center" href="javascript:;" id="admin-pwreset">
+                              <a style="margin-bottom: 5px; font-size: 14px" href="javascript:;" id="admin-pwreset">
                                   Forgot Your Password?
                               </a>
                             </div>

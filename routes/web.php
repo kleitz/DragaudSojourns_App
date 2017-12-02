@@ -194,6 +194,11 @@ Route::prefix('trips')->group(function(){
 
 // PAYMENTS ROUTES
 Route::prefix('payments')->group(function(){
+  Route::post('/credit', 'PaypalController@process')->name('payments.credit');
+  Route::post('/create', 'PaypalController@create')->name('payments.create');
+  Route::post('/execute', 'PaypalController@execute')->name('payments.execute');
+  Route::get('/details', 'PaypalController@details')->name('payments.details');
+  Route::get('/update', 'PaypalController@update')->name('payments.update');
   Route::post('/store', 'PaymentsController@store')->name('payments.store');
   Route::post('/discount', 'PaymentsController@discount')->name('payments.discount');
   Route::get('/receipts/{verification}', 'PaymentsController@createReceipt')->name('payments.receipt');
