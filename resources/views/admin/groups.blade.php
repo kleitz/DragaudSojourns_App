@@ -89,7 +89,7 @@
                   </div>
                   @endif
                   <div class="show-icon-container">
-                    <img src="/{{ $group->icon }}" alt="">
+									  <div class="group-icon-img" style="background: url('/{{ $group->icon }}')"></div>
                   </div>
                   <a href="/admin/{{ $authAdmin }}/group/{{ $group->number }}">{{$group->number}}</a>
                 </div>

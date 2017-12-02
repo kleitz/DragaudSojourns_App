@@ -1,7 +1,14 @@
 .admin-content {
+  transition: .3s ease;
   min-height: 100vh;
   position: relative;
   top: -120px;
+}
+
+@media screen and (max-width: 1490px) {
+  .admin-content {
+    top: 15px;
+  }
 }
 
 .admin-floating-panel {

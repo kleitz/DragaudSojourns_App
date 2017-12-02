@@ -88,7 +88,9 @@
               <!-- Expanded trip details -->
               <div class="trip-details-full hidden">
                 <div class="col-xs-4" style="padding: 0">
-                  <img src="/{{ $group->icon }}" style="width: 100%">
+                  <div class="trip-icon-img full-width">
+									  <div class="group-icon-img" style="background: url('/{{ $group->icon }}')"></div>
+                  </div>
                   <a href="/{{ $group->itinerary}}" target="_blank">Download itinerary</a>
                 </div>
                 <div class="col-xs-8">

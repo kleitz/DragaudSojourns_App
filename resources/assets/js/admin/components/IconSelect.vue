@@ -12,14 +12,26 @@
               <circle class="circle" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
             </svg>
           </div>
+          <div v-if="iconError == true" class="abs-fill flex-abs-center">
+            <div class="alert alert-danger" style="border-color:#c98484;">
+                <ul>
+                    <li>Images must be below 2 Megabites to upload!</li>
+                    <li class="flex-row-center">
+                      <button @click="removeError" type="button" class="gc-button button-cancel">Okay</button>
+                    </li>
+                </ul>
+            </div>
+          </div>
           <div v-if="iconLoading == false" class="row flex-gen">
             <div v-for="icon, index in iconList" class='col-xs-4 flex-col'>
               <label class='group-icon full-height flex-col-end'>
                 <div class='full-width relative'>
                   <div class='icon-overlay abs-fill'></div>
-                  <img :src=" '/' + icon.loc" class='full-width'>
+                  <div class="full-width popup-icon-img">
+                    <div class="group-icon-img" :style="{background: 'url(/' + icon.loc+ ')' }"></div>
+                  </div>
                 </div>
-                <div>
+                <div class="dot-dot-dot full-width">
                   <input @click='selectIcon(index, $event)' type='radio' name='icon.jpg' :value='icon.loc'>{{ icon.name }}
                 </div>
               </label>
@@ -50,6 +62,7 @@
   		return {
           newIcon: '',
           iconLoading: true,
+          iconError: false,
           deleteMode: 0,
           iconList: iconListLoaded,
   		}
@@ -113,7 +126,13 @@
                      iconApp.deleteMode = 0;
                    },1000);
                 },
+                500: function(response) {
+                  iconApp.iconError = true;
+                }
              },
+             error: function(response) {
+               iconApp.iconError = true;
+             }
           });
       },
       deleteIcon(name, index){
@@ -139,7 +158,15 @@
         } else {
           this.deleteMode = 1;
         }
-      }
+      },
+      removeError(){
+        this.iconError = false;
+        this.iconLoading = true;
+        let iconApp = this;
+        setTimeout(function() {
+          iconApp.iconLoading = false;
+        }, 1000);
+      },
     },
     mounted() {
       for (let i = 0; i < this.iconList.length; i++){

@@ -1,7 +1,9 @@
 <div class="full-card">
   <div class="row" style="margin:0">
     <div class="col-xs-3" style="padding: 0">
-      <img src="/{{ $curGroup->icon }}" style="width: 100%; border: 1px solid #ccc">
+      <div class="coord-icon-img full-width">
+        <div class="group-icon-img" style="background: url('/{{ $curGroup->icon }}')"></div>
+      </div>
     </div>
     <div class="col-xs-9">
       <div class="col-xs-12" style="padding: 0">

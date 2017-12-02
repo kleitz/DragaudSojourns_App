@@ -206,6 +206,22 @@ margin: 25px 30px 40px;
 .slider-button:last-child{
   right:-60px;
 }
+
+.coord-icon-img {
+  height: 148px;
+  overflow: hidden;
+}
+
+.trip-icon-img {
+  height: 130px;
+  overflow: hidden;
+}
+
+.booking-icon-img {
+  height: 80px;
+  overflow: hidden;
+}
+
 // Tiles
 #studenttourstile {
   background-image: url("/assets/public/img/tiles/studenttourstile.jpg");

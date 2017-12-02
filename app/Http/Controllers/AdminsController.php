@@ -421,6 +421,6 @@ class AdminsController extends Controller
        auth('admin')->logout();
        $request->session()->flush();
        $request->session()->regenerate();
-       return redirect('/');
+       return redirect('/adn');
    }
 }

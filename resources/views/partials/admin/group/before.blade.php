@@ -4,7 +4,7 @@
 <div class="gfocus-icon-container flex-row-start">
   <p class="gfocus-icon pointer" href="javascript:;">@{{ iconDisplay }}</p>
   <div id="gfocus-icon-show" class="admin-helper-modal hidden">
-    <div class="admin-helper absolute">
+    <div class="admin-helper absolute helper-icon-img">
       <img :src="'/' + groupIn.icon" width="80px" height="80px"/>
     </div>
   </div>

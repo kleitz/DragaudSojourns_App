@@ -36,9 +36,6 @@
 
 <body>
     <div class="admin-banner">
-      <div class="relative" style="z-index: 10; top: -25px">
-        @include('partials.login.button')
-      </div>
       <div class="backgroundtop">
         <img src="{{ url('/assets/public/img/dragoo-top.png') }}"/>
       </div>
@@ -48,15 +45,30 @@
     </div>
     <div class="admin-main-panel row">
       <div class="full-width admin-runner">
-        <div class="admin-username">
-          <div class="flex-row-start">
-            <div class="admin-picture-container">
-              <img src="/assets/images/icons/admin_cog.png" alt="">
+        <div class="flex-row-between" style="width: 1170px">
+          <div class="admin-username">
+            <div class="flex-row-start">
+              <div class="admin-picture-container">
+                <img src="/assets/images/icons/admin_cog.png" alt="">
+              </div>
+              <div class="flex-col-center">
+                <h5>{{ auth('admin')->user()->name }}</h5>
+                <p>{{ auth('admin')->user()->level }}</p>
+              </div>
             </div>
-            <div class="flex-col-center">
-              <h5>{{ auth('admin')->user()->name }}</h5>
-              <p>{{ auth('admin')->user()->level }}</p>
-            </div>
+          </div>
+          <div class="admin-nav-responsive">
+            <nav class="full-height">
+              <a class="@if (Request::is('*/dashboard')) {{ 'active' }}  @endif" href="/admin/{{ auth('admin')->user()->email }}/dashboard">Dashboard</a>
+              <a class="@if (Request::is('*/groups/*')) {{ 'active' }}  @endif" href="/admin/{{ auth('admin')->user()->email }}/groups/1">Groups</a>
+              <a class="@if (Request::is('*/accounts/*')) {{ 'active' }}  @endif" href="/admin/{{ auth('admin')->user()->email }}/accounts/1">Accounts</a>
+              <a class="@if (Request::is('*/payments/*')) {{ 'active' }}  @endif" href="/admin/{{ auth('admin')->user()->email }}/payments/1">Payments</a>
+              <a class="@if (Request::is('*/settings')) {{ 'active' }}  @endif" href="/admin/{{ auth('admin')->user()->email }}/settings">Settings</a>
+              <a href="/admin/logout">Logout</a>
+              @if ( auth('admin')->user()->level == 'System Administrator')
+              <button type="button" class="ds-button button-gen" onclick="window.location='/admin/{{ auth('admin')->user()->email }}/new/group'">+ Create new group</button>
+              @endif
+            </nav>
           </div>
         </div>
       </div>

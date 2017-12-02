@@ -265,6 +265,12 @@
   border: 2px solid $red-med !important;
 }
 
+.alert-danger button {
+  background: white;
+  margin-top: 10px;
+  border-color: #c98484;
+}
+
 .ds-button {
   transition: .2s;
   width: auto;

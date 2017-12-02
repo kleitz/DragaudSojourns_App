@@ -9,6 +9,9 @@ const groupCreateApp = new Vue({
     data: {
       groupExists: false,
       groupIcon: '',
+      previewIcon: {
+        background: '',
+      },
       groupDetails: false,
       groupPackages: [
         {name: 'Single', cost: ''},
@@ -38,7 +41,7 @@ const groupCreateApp = new Vue({
         if (this.group.number != '' && this.groupExists == false && this.group.destination != '' &&
             this.group.depart != '' && this.group.return != '' && this.group.school != '' &&
             this.checkPackages() == true && this.group.icon != '' && this.group.itinerary != '' &&
-            this.group.itinerary != undefined && this.group.release != undefined && this.group.release != '' && 
+            this.group.itinerary != undefined && this.group.release != undefined && this.group.release != '' &&
             this.group.message != '' )
           {
             this.groupDetails = true;
@@ -93,6 +96,11 @@ const groupCreateApp = new Vue({
       },
       updateIconLoc(data){
         this.group.icon = data;
+        if (this.group.icon == ''){
+          this.previewIcon.background = 'url(/assets/images/icons/default.jpg)';
+        } else {
+          this.previewIcon.background = 'url(/' + data + ')';
+        }
       },
       updateIconName(data){
         this.groupIcon = data;

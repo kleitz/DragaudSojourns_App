@@ -13,7 +13,7 @@ let mix = require('laravel-mix');
 
 // LOGIN MIX
 
-mix.scripts([
+mix.babel([
   'resources/assets/js/vendor/jquery.mask.min.js',
   'resources/assets/js/vendor/form_validation.js',
   'resources/assets/js/vendor/bounce.min.js',
@@ -30,7 +30,7 @@ mix.js('resources/assets/js/login/preload.js', 'public/js/login/preload.js')
 
 // USER ACCOUNT MIX
 
-mix.scripts([
+mix.babel([
   'resources/assets/js/vendor/jquery.mask.min.js',
   'resources/assets/js/vendor/form_validation.js',
   'resources/assets/js/vendor/bounce.min.js',
@@ -46,7 +46,7 @@ mix.js('resources/assets/js/user/preload.js', 'public/js/user/preload.js')
 
 // ADMIN ACCOUNTS MIX
 
-mix.scripts([
+mix.babel([
   'resources/assets/js/vendor/jquery.mask.min.js',
   'resources/assets/js/vendor/form_validation.js',
   'resources/assets/js/vendor/bounce.min.js',

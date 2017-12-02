@@ -60,7 +60,9 @@
               </div>
               <div class="booking-filled-details flex-row-between row">
                 <div class="col-xs-4" style="padding-right: 0;">
-                  <img :src="'/' + groupDetails.icon"/>
+                  <div class="booking-icon-img full-width">
+                    <div class="group-icon-img" :style="{ background: 'url(/' + groupDetails.icon + ')' }"></div>
+                  </div>
                 </div>
                 <div class="col-xs-8 flex-col-start">
                   <h5 class="full-width dot-dot-dot">{{ groupDetails.school }}</h5>

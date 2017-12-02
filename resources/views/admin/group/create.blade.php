@@ -154,7 +154,9 @@
 					<div class="panel-body">
 						<div class="row">
 							<div class="col-xs-4" style="padding-right: 0px">
-								<img :src="(group.icon != '') ? '/' + group.icon : '/assets/images/icons/default.jpg'" alt="" style="width: 100%; padding: 0; border: 1px solid #ddd; border-radius: 3px">
+								<div class="preview-icon-img full-width z-depth-custom">
+									  <div class="group-icon-img" :style="previewIcon"></div>
+								</div>
 							</div>
 							<div class="col-xs-8">
 								<div class="col-xs-12" style="padding: 0">

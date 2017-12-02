@@ -26,7 +26,7 @@
     </li>
     <li>
       <a href="/admin/{{ auth('admin')->user()->email }}/accounts/1" class="flex-row-start">
-        <div class="admin-nav-icon">
+        <div class="admin-nav-icon" style="opacity: .9;">
           @include('partials.vector.accounts')
         </div>
         @if (Request::is('*/accounts/*'))
@@ -58,6 +58,14 @@
         @else
         <p class="flex-col-center">Settings</p>
         @endif
+      </a>
+    </li>
+    <li>
+      <a href="/admin/logout" class="flex-row-start">
+        <div class="admin-nav-icon" style="opacity: .9;">
+          @include('partials.vector.logout')
+        </div>
+        <p class="flex-col-center">Logout</p>
       </a>
     </li>
   </ul>
