@@ -106,9 +106,9 @@ class PaypalController extends Controller
         $payment['fee'] = $capture->transaction_fee->value;
         $payment['paypal_id'] = $saleId;
         $payment['attempt'] = $attempted;
-        $verification = $this->billing->store($payment);
+        // $verification = $this->billing->store($payment);
 
-        return $verification;
+        return 'null';
     }  catch (PayPalConnectionException $e) {
         echo $e->getData();
         exit(1);
