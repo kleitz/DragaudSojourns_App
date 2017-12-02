@@ -7,7 +7,7 @@
 	<div class="col-xs-12" style="z-index: 20">
 		<div class="admin-split-panel z-depth-2">
 			<div class="split-panel-header">
-				<h3 class="admin-section-header" style="margin: 1.5rem 15px 2rem">Settings</h3>
+				<h3 class="admin-section-header" style="margin: 1.5rem 15px 2rem">Settings | {{ auth('admin')->user()->name }}</h3>
 			</div>
 			<div class="split-panel-content">
 				<div class="row" style="margin:0">
@@ -88,32 +88,34 @@
 						 ?>
 					@if ($authAdmin->level == 'System Administrator')
 					<div class="col-xs-6">
-							<div class="row linear-expander expanded full-width static" style="padding: 0; margin: 0; border-color: transparent">
+							<div class="row linear-expander expanded full-width static" style="padding-top: 0; margin: 0; border-color: transparent">
 							<div class="panel z-depth-custom" style="border-radius: 2px">
 								<div class="panel-body" style="padding: 20px 20px 30px">
 									<div class="form-group form-inline inline-material-large flex-row-start" style="margin-bottom: 15px !important">
 										<label for="number">View all administrators</label>
 									</div>
 										@foreach ($adminAccounts as $admin)
-										<div class="panel z-depth-custom flex-row-start" style="overflow: visible; margin-bottom: 12px; border-radius: 2px">
-											<div class="panel-body flex-row-start full-width" style="padding: 0 10px; height: 50px">
-												<div class="flex-self-centered dot-dot-dot" style="border-right: 1px solid #ccc; width: 45%; padding: 10px">
-													{{ $admin->name }}
-												</div>
-												<div class="flex-self-centered dot-dot-dot" style="border-right: 1px solid #ccc; width: 45%; padding: 10px">
-													{{ title_case($admin->level) }}
-												</div>
-												<div style="width: 10%; padding: 0 10px" class="flex-row-start show-account-user">
-													<a href="/admin/{{ $authAdmin->email }}/system/update/{{ $admin->id }}">
-														<div class="admin-nav-icon">
-															@include('partials.vector.system')
-														</div>
-													</a>
-													<div class="relative admin-helper-modal hidden">
-														<div class="admin-helper">
-															<p style="margin:0">Edit settings</p>
-														</div>
+										<div class="pointer show-account-user flex-row-start" onclick="window.location = '/admin/{{ $authAdmin->email }}/system/update/{{ $admin->id }}';">
+											<div class="panel z-depth-custom flex-row-start full-width" style="overflow: visible; margin-bottom: 12px; border-radius: 2px">
+												<div class="panel-body flex-row-start full-width" style="padding: 0 10px; height: 50px">
+													<div class="flex-self-centered dot-dot-dot" style="border-right: 1px solid #ccc; width: 45%; padding: 10px">
+														{{ $admin->name }}
 													</div>
+													<div class="flex-self-centered dot-dot-dot" style="border-right: 1px solid #ccc; width: 45%; padding: 10px">
+														{{ title_case($admin->level) }}
+													</div>
+													<div style="width: 10%; padding: 0 10px" class="flex-row-start">
+														<a href="/admin/{{ $authAdmin->email }}/system/update/{{ $admin->id }}">
+															<div class="admin-nav-icon">
+																@include('partials.vector.system')
+															</div>
+														</a>
+													</div>
+												</div>
+											</div>
+											<div class="relative admin-helper-modal hidden">
+												<div class="admin-helper">
+													<p style="margin:0">Edit settings</p>
 												</div>
 											</div>
 										</div>

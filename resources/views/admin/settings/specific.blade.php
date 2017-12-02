@@ -8,7 +8,7 @@
 <div class="col-xs-12 relative" style="z-index: 20">
 	<div class="admin-split-panel z-depth-2">
 		<div class="split-panel-header">
-			<h3 class="admin-section-header" style="margin: 1.5rem 15px 2rem">Settings / {{ $specAdmin->name }}</h3>
+			<h3 class="admin-section-header" style="margin: 1.5rem 15px 2rem">Settings | {{ $specAdmin->name }}</h3>
 		</div>
 		<div class="split-panel-content">
 			<div class="row" style="margin: 0">
